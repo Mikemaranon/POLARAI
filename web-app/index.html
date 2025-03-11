@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+
+    <link rel="stylesheet" href="/static/style/index.css">
+    <link rel="stylesheet" href="/static/style/header.css">
+    <link rel="stylesheet" href="/static/style/toggle-theme.css">
+    <link rel="stylesheet" href="/static/style/fonts.css">
+    <link id="theme-style" rel="stylesheet" href="/static/style/bright-theme.css">
+
+</head>
+<body>
+    <header>
+        <h1>Bienvenido</h1>
+        <label class="theme-toggle">
+            <input type="checkbox" id="theme-toggle-checkbox">
+            <span class="slider"></span>
+        </label>
+        <button onclick="window.location.href='/sites/user-config'">⚙️</button>
+    </header>
+
+    <main>
+        <div>
+            <h1 id="title">POLAR.AI</h1><span id="cursor">_</span>
+        </div>
+        <div class="container">
+            <div onclick="window.location.href='/sites/polaria'">
+                <p>Chatear</p>
+            </div>
+            <div onclick="window.location.href='/sites/training'">
+                <p>Entrenar</p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2025 DeepSeek-R1  |  open-source project on <a href="https://github.com/Mikemaranon?tab=repositories">GitHub</a></p>
+    </footer>
+
+    <script src="/static/JS/dynamic-title.js"></script>
+    <script src="/static/JS/toggle-theme.js"></script>
+    <script>
+        write_text(200);
+    </script>
+
+</body>
+</html>

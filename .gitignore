@@ -1,0 +1,7 @@
+# Ignorar config.py
+server/data/config.json
+
+# Ignorar archivos compilados de Python
+*.pyc
+__pycache__/
+

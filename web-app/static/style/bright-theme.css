@@ -1,0 +1,72 @@
+/* Paleta de colores */
+:root {
+    /* index.html */
+    --bg-color: #f1f1f1;
+    --header-bg-color: #ffffff;
+    --text-color: #333333;
+    --button-bg-color: #e0e0e0;
+    --button-hover-bg-color: #d0d0d0;
+    --border-color: #ccc;
+    --container-bg-color: #e4e4e4;
+    --url-color: #686868;
+    --url-color-hover: #444444;
+
+    /* polaria-chat.html */
+    --chat-box-color: #dddddd;
+    --chat-input-color: #cccccc;
+}
+
+/* Estilos para index.html */
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+header {
+    background-color: var(--header-bg-color);
+}
+
+header button {
+    background: var(--button-bg-color);
+}
+
+header button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+
+.container div {
+    border: 1px solid var(--border-color);
+    background-color: var(--container-bg-color);
+}
+
+a {
+    color: var(--url-color);
+}
+
+a:hover {
+    color: var(--url-color-hover);
+}
+
+/* Estilos para polaria-chat.html */
+
+.chat-box {
+    background-color: var(--chat-box-color);
+}
+
+.chat-container {
+    background-color: var(--bg-color);
+}
+
+.chat-input {
+    background-color: var(--chat-input-color);
+}
+
+#message-input {
+    background-color: var(--chat-input-color);
+    scrollbar-color: #4d4d4d transparent;
+}
+
+.left-menu, .right-menu {
+    background-color: var(--container-bg-color);
+}

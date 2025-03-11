@@ -1,0 +1,193 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden; /* Evita scroll en toda la página */
+}
+
+#title {
+    font-family: 'Orbitron', sans-serif;
+    top: 20px;
+    text-align: center;
+    display: inline-block;
+}
+
+#cursor {
+    display: none; /* Oculta el cursor */;
+}
+
+.general-container {
+    display: flex;
+    height: calc(100vh - 60px);
+    margin-top: 60px;
+}
+
+.left-menu, .right-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea el contenido al inicio */
+    justify-content: flex-start; /* Alinea el contenido en la parte superior */
+    height: 100%;
+    padding: 10px;
+    width: 27%;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    position: relative; /* Mantiene los elementos dentro del contenedor */
+}
+
+.left {
+    justify-content: flex-end; /* Empuja el botón a la derecha */
+}
+
+/* Contenedor para el botón de alternar */
+.toggle-container {
+    width: 100%;
+    display: flex;
+    padding: 10px; /* Espaciado desde los bordes */
+}
+
+.menu-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    text-align: center;
+    flex-grow: 1; /* Permite que el título ocupe el espacio disponible */
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    display: none; /* Oculta el botón */
+}
+
+.chat-container {
+    margin-top: 35px;
+    gap: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.chat-box {
+    border-radius: 20px;
+    flex-grow: 1;
+    width: 80%;
+    height: 100%;
+    overflow-y: hidden;
+    border: 1px solid #ccc;
+    padding: 20px;
+    align-items: center;
+}
+
+.chat-history {
+    height: 75%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 10px;
+    flex-grow: 1;
+    max-width: 1300px;
+}
+
+.chat-input {
+    display: flex;
+    flex-direction: row;
+    height: 25%;
+    position: relative;
+    border: none;
+    max-width: 1300px;
+    justify-content: flex-end;
+    left: 50%;
+    border-radius: 20px;
+    padding: 20px;
+    transform: translateX(-50%);
+}
+
+#message-input {
+    width: 90%;
+    border: 3px;
+    margin-right: 70px;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: transparent;
+    font-size: 16px;
+    outline: none;
+    overflow-y: auto;
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    scrollbar-width: thin;
+}
+
+#send-btn {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    background-color: #3f77ee;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+}
+
+#send-btn:hover {
+    background-color: #8297df;
+}
+
+.left-sidebar .toggle-btn {
+    right: -40px;
+}
+
+.right-sidebar .toggle-btn {
+    left: -40px;
+}
+
+@media (max-width: 768px) {
+    #send-btn {
+        width: 30px;
+        height: 30px;
+    }
+    #message-input {        
+        margin-right: 50px;
+    }
+    .left-menu, .right-menu{
+        width: 30px;
+    }
+    .left-menu .toggle-btn {
+        transform: translateX(17%);
+        display: flex;
+    }
+    .right-menu .toggle-btn {
+        transform: translateX(-81%);
+        display: flex;
+    }
+    .menu-title {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .chat-input input {
+        font-size: 14px;
+    }
+    .left-menu, .right-menu {
+        display: none;  
+    }
+}

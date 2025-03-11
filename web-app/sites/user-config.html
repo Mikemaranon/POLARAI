@@ -1,0 +1,60 @@
+¡<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User</title>
+    <link rel="stylesheet" href="/static/style/user-config.css">
+    <link rel="stylesheet" href="/static/style/fonts.css">
+    <link id="theme-style" rel="stylesheet" href="/static/style/bright-theme.css">
+</head>
+<body>
+    <div class="user-container">
+        <button class="back-btn" onclick="window.location.href='/'">Volver</button>
+        <div class="user-box">
+            <div class="user-info">
+                <h2>Info de usuario</h2>
+                
+                <div class="info-item">
+                    <span>Usuario:</span>
+                    <p>username123</p>
+                </div>
+                
+                <div class="info-item">
+                    <span>Contraseña:</span>
+                    <div class="password-container">
+                        <input type="password" value="********" readonly>
+                        <button id="show-password">🔒</button>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <span>Tema:</span>
+                    <select id="theme-select">
+                        <option value="light">Claro</option>
+                        <option value="dark">Oscuro</option>
+                    </select>
+                </div>
+
+                <button id="delete-data" class="danger-btn">Resetear datos de entrenamiento</button>
+                <button id="logoff-btn" onclick="window.location.href=href='/logout'">Cerrar Sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para confirmación de eliminación -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content">
+            <h3>Confirmar eliminación</h3>
+            <p>Introduce tu contraseña para confirmar la eliminación de datos:</p>
+            <input type="password" id="confirm-password">
+            <div class="modal-buttons">
+                <button id="confirm-delete">Confirmar</button>
+                <button id="cancel-delete">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/JS/toggle-theme.js"></script>
+</body>
+</html>

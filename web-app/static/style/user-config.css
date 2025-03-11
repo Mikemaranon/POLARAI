@@ -1,0 +1,185 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.user-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    padding: 2rem;
+    align-items: center;
+}
+
+.back-btn {
+    align-self: flex-start;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3f77ee;
+    color: white;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background-color: #8297df;
+}
+
+.user-box {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    padding: 40px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.info-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.password-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.password-container input {
+    border: none;
+    background: transparent;
+    text-align: right;
+}
+
+#show-password {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#theme-select {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.danger-btn {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.danger-btn:hover {
+    background-color: #ff6666;
+}
+
+#logoff-btn {
+    background-color: #3f77ee;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#logoff-btn:hover {
+    background-color: #8297df;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-content h3 {
+    margin-bottom: 15px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#confirm-delete {
+    background-color: #ff4444;
+    color: white;
+}
+
+#cancel-delete {
+    background-color: #ccc;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .user-box {
+        margin: 20px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .info-item {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

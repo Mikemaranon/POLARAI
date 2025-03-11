@@ -1,0 +1,32 @@
+header {
+    display: flex;
+    height: 90px;
+    justify-content: space-between; /* Espaciado entre los elementos */
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 1rem;
+}
+
+header h1 {
+    font-family: 'Orbitron', sans-serif;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+    white-space: nowrap; /* Evita que el título se parta en varias líneas */
+}
+
+header button {
+    border-radius: 8px;
+    margin-right: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    text-align: center;
+}
