@@ -17,3 +17,7 @@ class Database:
     def get_user(self, username: str):
         users = self.load_users()
         return users.get(username)
+    
+    def get_userdata(self, username: str):
+        users = self.load_users()
+        return users.get(username)

@@ -1,10 +1,10 @@
 import json, os
 from flask import Flask
-from database import Database
-from user_manager import UserManager
+from data.database import Database
+from usr_m.user_manager import UserManager
 from app_routes import AppRoutes
 
-DB_FILE = "data/users.json"
+DB_FILE = "users.json"
 CF_FILE = "data/config.json"
 
 class Server:

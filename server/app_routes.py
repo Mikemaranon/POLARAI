@@ -1,5 +1,5 @@
 from flask import render_template, redirect, request, url_for, session
-from user_manager import UserManager
+from usr_m.user_manager import UserManager
 from main import app
 
 class AppRoutes:
@@ -12,7 +12,7 @@ class AppRoutes:
         self.app.add_url_rule("/", "home", self.get_home)
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout)
-        self.app.add_url_rule("/sites/polaria", "get_chat", self.get_chat)
+        self.app.add_url_rule("/sites/polarai", "get_chat", self.get_chat)
         self.app.add_url_rule("/sites/training", "get_trainingIndex", self.get_trainingIndex)
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig)
 
@@ -32,7 +32,7 @@ class AppRoutes:
                 session['username'] = user # Guardamos al usuario en la sesión
                 return redirect(url_for("home"))
             else:
-                error_message = "Usuario o contraseña incorrectos"  # Mensaje de error
+                error_message = "incorrect user data, try again"  # Mensaje de error
         
         return render_template("login.html", error_message=error_message)
 
@@ -57,7 +57,7 @@ class AppRoutes:
         # the polaria chat page is only a GUI for the communication 
         # between the user and the model. No logic is implemented in here.
         
-        return render_template("sites/polaria-chat.html")
+        return render_template("sites/polarai-chat.html")
     
     def get_trainingIndex(self):
         
