@@ -13,6 +13,8 @@
     /* polaria-chat.html */
     --chat-box-color: #474747;
     --chat-input-color: #616161;
+    --user-msg: #575757;
+    --bot-msg: transparent;
 }
 
 body {
@@ -59,6 +61,14 @@ a:hover {
 
 .chat-input {
     background-color: var(--chat-input-color);
+}
+
+.user-msg {
+    background-color: var(--user-msg);
+}
+
+.bot-msg {
+    background-color: var(--bot-msg);
 }
 
 #message-input {

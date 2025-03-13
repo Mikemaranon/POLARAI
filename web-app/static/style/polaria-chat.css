@@ -14,7 +14,7 @@ body {
 
 #title {
     font-family: 'Orbitron', sans-serif;
-    top: 20px;
+    top: 25px;
     text-align: center;
     display: inline-block;
 }
@@ -82,39 +82,46 @@ body {
 }
 
 .chat-box {
+    display: flex;
+    flex-direction: column;
     border-radius: 20px;
+    overflow: hidden;
     flex-grow: 1;
     width: 80%;
     height: 100%;
-    overflow-y: hidden;
     border: 1px solid #ccc;
     padding: 20px;
-    align-items: center;
+    gap: 10px;
 }
 
 .chat-history {
-    height: 75%;
+    flex: 1;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    position: relative;
     gap: 10px;
-    flex-grow: 1;
-    max-width: 1300px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    max-height: auto; /* Ajusta según el alto del chat-input */
+    scrollbar-width: thin;
+    min-height: 0;
+    transition: height 0.2s ease-out;
 }
 
 .chat-input {
-    display: flex;
-    flex-direction: row;
-    height: 25%;
     position: relative;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: row;
+    min-height: 80px;
+    max-height: 200px;
+    overflow: hidden;
     border: none;
-    max-width: 1300px;
+    width: 100%;
     justify-content: flex-end;
-    left: 50%;
     border-radius: 20px;
     padding: 20px;
-    transform: translateX(-50%);
+    transition: height 0.2s ease-out;
 }
 
 #message-input {
@@ -127,9 +134,11 @@ body {
     font-size: 16px;
     outline: none;
     overflow-y: auto;
-    white-space: pre-wrap; 
-    word-wrap: break-word; 
+    white-space: pre-wrap;
+    word-wrap: break-word;
     scrollbar-width: thin;
+    max-height: 160px;
+    transition: height 0.2s ease-out;
 }
 
 #send-btn {
@@ -145,6 +154,7 @@ body {
     cursor: pointer;
     font-size: 16px;
     outline: none;
+    z-index: 100;
 }
 
 #send-btn:hover {
@@ -157,6 +167,26 @@ body {
 
 .right-sidebar .toggle-btn {
     left: -40px;
+}
+
+.user-msg, .bot-msg {
+    max-width: 70%;
+    width: fit-content;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.user-msg {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.bot-msg {
+    margin-left: 0;
+    margin-right: auto;
 }
 
 @media (max-width: 768px) {
@@ -181,6 +211,10 @@ body {
     .menu-title {
         display: none;
     }
+    #title {
+        font-size: 30px;
+        top: 30px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -189,5 +223,8 @@ body {
     }
     .left-menu, .right-menu {
         display: none;  
+    }
+    #title {
+        display: none;
     }
 }
