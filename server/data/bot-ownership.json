@@ -1,0 +1,21 @@
+{
+    "mike": {
+        "google-gemini" : {
+            "API_KEY": "AIzaSyD2BfXnG5ibWr9QgWj-rReWp3J0fPV5VFw",
+            "API_ENDPOINT": "https://generativelanguage.googleapis.com",
+            "chat-history": [
+                "Id19Akl2Mxmq",
+                "Ab12Cd34Ef56",
+                "Xy78Zk90Lm12"
+            ]
+        },
+        "azure-gpt-o4-mini" : {
+            "API_KEY": "1p5fvm7g0Ecpy7sAtjESEQZpUpYvspQBKyASMD0bznjBizSokSrLJQQJ99BBACYeBjFXJ3w3AAAAACOGqG5B",
+            "API_ENDPOINT": "https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview",
+            "chat-history": [
+                "Qw12Er34Ty56",
+                "Ui78Op90As12"
+            ]
+        }  
+    }
+}

@@ -20,7 +20,7 @@ function adjustInputHeight() {
     if (!content.trim()) {
         messageInput.style.height = '20px';
         const chatInput = messageInput.closest('.chat-input');
-        chatInput.style.height = '98    px';
+        chatInput.style.height = '98px';
         return;
     }
     

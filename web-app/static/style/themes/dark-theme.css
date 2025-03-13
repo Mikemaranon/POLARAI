@@ -59,6 +59,10 @@ a:hover {
     background-color: var(--bg-color);
 }
 
+.chat-history {
+    scrollbar-color: #939393 transparent;
+}
+
 .chat-input {
     background-color: var(--chat-input-color);
 }
