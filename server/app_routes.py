@@ -30,6 +30,10 @@ class AppRoutes:
             user = self.user_manager.login(username, password)
             if user:
                 session['username'] = user # Guardamos al usuario en la sesión
+                
+                # jwt_token = create_jwt_token(user)
+                # MIRAR ESTO
+                
                 return redirect(url_for("home"))
             else:
                 error_message = "incorrect user data, try again"  # Mensaje de error

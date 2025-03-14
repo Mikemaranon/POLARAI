@@ -21,7 +21,17 @@ class Database:
     def save_users(self, users):
         with open(self.db_file, "w") as f:
             json.dump(users, f, indent=4)
+            
+    def add_user(self, username: str, password: str):
+        users = self.load_users()
+        users[username] = {"password": password}
+        self.save_users(users)
 
+    def delete_user(self, username: str):
+        users = self.load_users()
+        users.pop(username)
+        self.save_users(users)
+    
     def get_user(self, username: str):
         users = self.load_users()
         return users.get(username)
@@ -39,9 +49,14 @@ class Database:
     def save_chatbots_file(self, chatbots):
         with open(self.bots_file, "w") as f:
             json.dump(chatbots, f, indent=4)
+            
+    def delete_model(self, user, bot_name):
+        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        os.remove(chat_history_path)
+        
 
     # ================= CHATS =================
-        
+
     def load_chat_history(self, user, bot_name):
         chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
         with open(chat_history_path, "r") as f:
@@ -56,3 +71,15 @@ class Database:
         chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
         with open(chat_history_path, "w") as f:
             json.dump(chat_info, f)
+            
+    def delete_chat(self, user, bot_name, id):
+        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        
+        # Remove the content of the file corresponding to the chat
+        with open(chat_history_path, "r") as f:
+            chats = json.load(f)
+            new_chats = [chat for chat in chats if chat["id"] != id]
+        with open(chat_history_path, "w") as f:
+            json.dump(new_chats, f, indent=4)
+        
+    

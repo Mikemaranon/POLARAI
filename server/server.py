@@ -5,7 +5,7 @@ from user_m.user_manager import UserManager
 from app_routes import AppRoutes
 from chat_m.chatbot_manager import ChatbotManager
 
-CF_FILE = "data/config.json"
+CF_FILE = "data_m/config.json"
 
 class Server:
     def __init__(self, app: Flask):
