@@ -4,6 +4,9 @@ from data_m.database import Database
 class UserManager:
     def __init__(self, db: Database):
         self.db = db
+    
+    def set_session(self, session):
+        self.session = session
 
     def authenticate(self, username: str, password: str):
         # auth user with username and password
@@ -18,8 +21,9 @@ class UserManager:
             return username
         return None
     
-    def logout(self, session):
-        session.clear()  # clear session
+    def logout(self):
+        self.session.clear()  # clear session
         print("User's session cleared")
         return {'status': 'success'}, 200
+
 

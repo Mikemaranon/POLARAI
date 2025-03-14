@@ -16,7 +16,7 @@ There will be a website app developed in flask that will ensure the user every a
 to start running the app execute in the terminal:
 ```shell
 source venv/bin/activate
-python server/main.py
+python3 server/main.py
 ```
 you should get an output similar to this:
 ```shell

@@ -1,11 +1,14 @@
-from flask import render_template, redirect, request, url_for, session
+from flask import render_template, redirect, request, url_for, session, Blueprint
 from user_m.user_manager import UserManager
+from chat_m.chatbot_manager import ChatbotManager
 from main import app
 
 class AppRoutes:
-    def __init__(self, app, user_manager: UserManager):
+    def __init__(self, app, api, user_manager: UserManager, chatbot_manager: ChatbotManager):
         self.app = app
+        self.api = api
         self.user_manager = user_manager
+        self.chatbot_manager = chatbot_manager
         self._register_routes()
 
     def _register_routes(self):
@@ -15,12 +18,14 @@ class AppRoutes:
         self.app.add_url_rule("/sites/polarai", "get_chat", self.get_chat)
         self.app.add_url_rule("/sites/training", "get_trainingIndex", self.get_trainingIndex)
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig)
-
+        
+        # API routes
+        self.api.register_blueprint("send-message", url_prefix="/api/send-message", view_func=self.send_message, methods=["POST"])
+        
     def get_home(self):
         if 'username' not in session:
             return redirect(url_for("login"))
         return render_template("index.html", username=session['username'])
-
 
     def get_login(self):
         error_message = None
@@ -30,6 +35,7 @@ class AppRoutes:
             user = self.user_manager.login(username, password)
             if user:
                 session['username'] = user # Guardamos al usuario en la sesión
+                self._send_session_to_managers(session)
                 
                 # jwt_token = create_jwt_token(user)
                 # MIRAR ESTO
@@ -85,3 +91,15 @@ class AppRoutes:
         # and his profile with custom parameters (wannabe like ChatGPT).
         
         return render_template("sites/user-config.html")
+    
+    def send_message(self, bot_name, context, message, chat_id):
+        
+        if 'username' not in session:
+            return redirect(url_for("login"))
+        
+        self.chatbot_manager._send_message(bot_name, context, message, chat_id)
+        
+    
+    def _send_session_to_managers(self, session):
+        self.user_manager.set_session(session)
+        self.chatbot_manager.set_session(session)

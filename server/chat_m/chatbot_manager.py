@@ -4,9 +4,26 @@ from chat_m.chatbot import Chatbot
 from data_m.database import Database
 
 class ChatbotManager:
-    def __init__(self, user):
-        self.user = user
-        self.chatbots = self.load_chatbots(user)
+    def __init__(self, db: Database):
+        self.session = None
+        self.user = None
+        self.chatbots = {}
+        self.db = db
+        
+    def set_session(self, session):
+        self.session = session
+        self.user = self.get_user()
+        self.chatbots = self.load_chatbots(self.user)
+
+    def get_user(self):
+         
+        # Gets the username from the session.
+        #
+        # :return: Username if it exists, otherwise `None`.
+         
+        if 'username' in self.session:
+            return self.session['username']
+        return None
 
     def load_chatbots(self, user):
          
@@ -15,7 +32,7 @@ class ChatbotManager:
         # :param user: Name of the user.
         # :return: Dictionary with the chatbots available for the user.
 
-        bot_ownership = Database.load_chatbots_file()
+        bot_ownership = self.db.load_chatbots_file()
 
         # Checks if the user has configured chatbots
         if user not in bot_ownership:
@@ -31,7 +48,7 @@ class ChatbotManager:
                 name=bot_name,
                 api_key=bot_data["API_KEY"],
                 endpoint=bot_data["API_ENDPOINT"],
-                chat_history=bot_data["chat-history"]
+                db=self.db
             )
 
         return chatbots
@@ -47,7 +64,7 @@ class ChatbotManager:
             return self.chatbots[bot_name]
         return None
 
-    def send_message(self, bot_name, message):
+    def _send_message(self, bot_name, context, message, chat_id):
          
         # Sends a message to a chatbot and returns the response.
         #
@@ -57,6 +74,8 @@ class ChatbotManager:
          
         chatbot = self.get_chatbot(bot_name)
         if chatbot:
-            return chatbot.send_message(message)
+            return chatbot.send_message(context, message, chat_id)
         else:
             return f"El chatbot '{bot_name}' no está disponible para el usuario '{self.user}'."
+
+    

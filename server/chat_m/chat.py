@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 
 class Chat:
-    def __init__(self, chat_id=None, timestamp=None, messages=None):
+    def __init__(self, chat_id, timestamp, messages):
          
         # Initialize a Chat object to manage a single chat session.
         # 
@@ -26,6 +26,13 @@ class Chat:
             "sender": sender,
             "content": content
         })
+        
+    def save_messages(self, user, bot_name):
+         
+        # Save new messages to the chat history.
+        
+        self.messages.extend(self.new_messages)
+        self.new_messages = []
 
     @staticmethod
     def _generate_chat_id():
