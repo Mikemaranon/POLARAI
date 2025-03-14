@@ -48,7 +48,7 @@ class AppRoutes:
 
     def get_logout(self):
         
-        self.user_manager.logout(session)
+        self.user_manager.logout()
         # force a refresh
         response = redirect(url_for("login"))
         response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
