@@ -1,10 +1,10 @@
 import json, os
 from flask import Flask
-from data.database import Database
+from database.database import Database
 from usr_m.user_manager import UserManager
 from app_routes import AppRoutes
+from chat_m.chatbot_manager import ChatbotManager
 
-DB_FILE = "users.json"
 CF_FILE = "data/config.json"
 
 class Server:
@@ -31,10 +31,13 @@ class Server:
             return json.load(f)
 
     def ini_database(self):
-        return Database(DB_FILE)
+        return Database()
 
     def ini_user_manager(self):
         return UserManager(self.database)
     
     def ini_app_routes(self):
         return AppRoutes(self.app, self.user_manager)
+    
+    def ini_chatbot_manager(self):
+        return ChatbotManager(self.database)

@@ -2,6 +2,7 @@ import os
 import json
 import requests
 from datetime import datetime
+from chat import Chat
 
 DATA_PATH = "server/data/chat-history/"  # Ubicación de los historiales de chat
 
@@ -21,7 +22,30 @@ class Chatbot:
         self.endpoint = endpoint
         self.chat_history_path = os.path.join(DATA_PATH, user, f"{name}.json")
         os.makedirs(os.path.dirname(self.chat_history_path), exist_ok=True)
-
+        
+        self.chats = self.load_chat_history()
+        
+    def load_chat_history(self):
+        
+        # Loads the chat history from the JSON file.
+        
+        # :return: List of Chat objects with the data from the JSON file.
+        
+        chat_list = []
+        
+        if os.path.exists(self.chat_history_path):
+            with open(self.chat_history_path, "r") as file:
+                chats_file = json.load(file)      
+                
+        for chat in chats_file:
+            chat_list.append(Chat (
+                id = chat["id"],
+                timestamp = chat["timestamp"],
+                messages = chat["messages"]
+            ))
+        
+        return []
+        
     def send_message(self, message):
         
         # Sends a message to the chatbot and saves the conversation in the history.
@@ -40,15 +64,12 @@ class Chatbot:
             bot_response = f"Error: {str(e)}"
 
         # Guardar mensaje en historial
-        self.save_chat(message, bot_response)
+        self.update_chat(bot_response)
         return bot_response
 
-    def save_chat(self, user_message, bot_message):
+    def new_chat(self, user_message, bot_message):
         
-        # ESTA FUNCION HAY QUE CAMBIARLA
-        
-        
-        # Saves a new message in the chat history.
+        # Saves a new chat.
 
         # :param user_message: User's message.
         # :param bot_message: Chatbot's response.
@@ -71,20 +92,26 @@ class Chatbot:
         with open(self.chat_history_path, "w") as file:
             json.dump(history, file, indent=4)
 
-    def load_chat_history(self):
-         
-        # Loads the chat history from the JSON file.
+    def update_chat(self, chat_id, bot_message):
+        
+        # Updates an existing chat with the chatbot's response.
 
-        # :return: List of previous conversations.
-         
-        if os.path.exists(self.chat_history_path):
-            with open(self.chat_history_path, "r") as file:
-                return json.load(file)
-        return []
+        # :param chat_id: Unique ID of the chat.
+        # :param bot_message: Chatbot's response.
+        
+        history = self.load_chat_history()
+
+        for chat in history:
+            if chat["id"] == chat_id:
+                chat["messages"].append({"sender": "bot", "content": bot_message})
+                break
+
+        with open(self.chat_history_path, "w") as file:
+            json.dump(history, file, indent=4)
 
     @staticmethod
     def generate_chat_id():
-        """Genera un ID único basado en la fecha y hora."""
+        # Genera un ID único basado en la fecha y hora.
         return datetime.now().strftime("Chat-%Y%m%d%H%M%S")
 
     def __repr__(self):
