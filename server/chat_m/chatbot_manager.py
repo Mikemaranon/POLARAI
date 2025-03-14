@@ -1,7 +1,7 @@
 import os
 import json
 from chat_m.chatbot import Chatbot
-from database.database import Database
+from data_m.database import Database
 
 class ChatbotManager:
     def __init__(self, user):

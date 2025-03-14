@@ -1,7 +1,7 @@
 import json, os
 from flask import Flask
-from database.database import Database
-from usr_m.user_manager import UserManager
+from data_m.database import Database
+from user_m.user_manager import UserManager
 from app_routes import AppRoutes
 from chat_m.chatbot_manager import ChatbotManager
 

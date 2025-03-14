@@ -1,5 +1,5 @@
 from flask import render_template, redirect, request, url_for, session
-from usr_m.user_manager import UserManager
+from user_m.user_manager import UserManager
 from main import app
 
 class AppRoutes:

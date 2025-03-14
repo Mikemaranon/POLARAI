@@ -3,7 +3,7 @@ import json
 import requests
 from datetime import datetime
 from chat import Chat
-from database.database import Database
+from data_m.database import Database
 
 DATA_PATH = "server/data/chat-history/"  # Ubicación de los historiales de chat
 
