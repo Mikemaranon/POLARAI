@@ -3,12 +3,14 @@ import json
 
 DB_FILE = "users.json"
 BOTS_FILE = "bot-ownership.json"
+DATA_PATH = "chat-history/"
 
 class Database:
-    
     def __init__(self):
         self.db_file = os.path.join(os.path.dirname(__file__), DB_FILE)
         self.bots_file = os.path.join(os.path.dirname(__file__), BOTS_FILE)
+        self.data_path = os.path.join(os.path.dirname(__file__), DATA_PATH)
+        self.chat_history_path = None
     
     # ================= USERS =================
     
@@ -39,3 +41,18 @@ class Database:
             json.dump(chatbots, f, indent=4)
 
     # ================= CHATS =================
+        
+    def load_chat_history(self, user, bot_name):
+        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        with open(chat_history_path, "r") as f:
+            return json.load(f)
+        
+    def save_chat_history(self, user, bot_name, new_messages):
+        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        with open(chat_history_path, "w") as f:
+            json.dump(new_messages, f, indent=4)
+    
+    def create_new_chat(self,  user, bot_name, chat_info):
+        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        with open(chat_history_path, "w") as f:
+            json.dump(chat_info, f)

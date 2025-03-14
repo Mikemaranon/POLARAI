@@ -3,6 +3,7 @@ import json
 import requests
 from datetime import datetime
 from chat import Chat
+from database.database import Database
 
 DATA_PATH = "server/data/chat-history/"  # Ubicación de los historiales de chat
 
@@ -32,10 +33,7 @@ class Chatbot:
         # :return: List of Chat objects with the data from the JSON file.
         
         chat_list = []
-        
-        if os.path.exists(self.chat_history_path):
-            with open(self.chat_history_path, "r") as file:
-                chats_file = json.load(file)      
+        chats_file = Database.load_chat_history(self.user, self.name)
                 
         for chat in chats_file:
             chat_list.append(Chat (
@@ -44,7 +42,7 @@ class Chatbot:
                 messages = chat["messages"]
             ))
         
-        return []
+        return chat_list
         
     def send_message(self, message):
         
@@ -86,12 +84,8 @@ class Chatbot:
             ]
         }
 
-        history = self.load_chat_history()
-        history.append(chat_entry)
-
-        with open(self.chat_history_path, "w") as file:
-            json.dump(history, file, indent=4)
-
+        Database.create_new_chat(self.user, self.name, chat_entry)
+        
     def update_chat(self, chat_id, bot_message):
         
         # Updates an existing chat with the chatbot's response.

@@ -13,6 +13,7 @@ class Chat:
         self.id = chat_id or self._generate_chat_id()
         self.timestamp = timestamp or datetime.now().isoformat()
         self.messages = messages or []
+        self.new_messages = []
 
     def add_message(self, sender, content):
          
@@ -20,28 +21,11 @@ class Chat:
         # 
         # :param sender: Either 'user' or 'bot'
         # :param content: Content of the message
-         
-        self.messages.append({
+        
+        self.new_messages.append({
             "sender": sender,
             "content": content
         })
-
-    def to_dict(self):
-        # Convert chat to dictionary format for storage. 
-        return {
-            "id": self.id,
-            "timestamp": self.timestamp,
-            "messages": self.messages
-        }
-
-    @classmethod
-    def from_dict(cls, chat_dict):
-        # Create a Chat instance from a dictionary. 
-        return cls(
-            chat_id=chat_dict["id"],
-            timestamp=chat_dict["timestamp"],
-            messages=chat_dict["messages"]
-        )
 
     @staticmethod
     def _generate_chat_id():

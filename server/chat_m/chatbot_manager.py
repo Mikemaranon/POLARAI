@@ -1,8 +1,7 @@
 import os
 import json
 from chat_m.chatbot import Chatbot
-
-BOT_OWNERSHIP_PATH = "server/data/bot-ownership.json"
+from database.database import Database
 
 class ChatbotManager:
     def __init__(self, user):
@@ -15,12 +14,8 @@ class ChatbotManager:
         # 
         # :param user: Name of the user.
         # :return: Dictionary with the chatbots available for the user.
-         
-        if not os.path.exists(BOT_OWNERSHIP_PATH):
-            return {}
 
-        with open(BOT_OWNERSHIP_PATH, "r") as file:
-            bot_ownership = json.load(file)
+        bot_ownership = Database.load_chatbots_file()
 
         # Checks if the user has configured chatbots
         if user not in bot_ownership:
