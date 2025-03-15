@@ -1,6 +1,6 @@
 # Ignorar config.py
-server/data/config.json
-server/client_chat/*.env
+server/data_m/config.json
+server/chat_m/*.env
 init.sh
 
 # Ignorar archivos compilados de Python

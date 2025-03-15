@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from data_m.database import Database
 
 class Chat:
     def __init__(self, chat_id, timestamp, messages):
@@ -14,6 +15,8 @@ class Chat:
         self.timestamp = timestamp or datetime.now().isoformat()
         self.messages = messages or []
         self.new_messages = []
+        
+        self.db = Database()
 
     def add_message(self, sender, content):
          
@@ -27,10 +30,10 @@ class Chat:
             "content": content
         })
         
-    def save_messages(self, user, bot_name):
+    def save_messages(self):
          
         # Save new messages to the chat history.
-        
+        self.db.save_chat_history(self.id, self.new_messages)
         self.messages.extend(self.new_messages)
         self.new_messages = []
 

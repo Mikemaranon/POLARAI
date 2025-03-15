@@ -2,8 +2,8 @@ from werkzeug.security import check_password_hash
 from data_m.database import Database
 
 class UserManager:
-    def __init__(self, db: Database):
-        self.db = db
+    def __init__(self):
+        self.db = Database()
     
     def set_session(self, session):
         self.session = session

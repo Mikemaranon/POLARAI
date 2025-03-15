@@ -4,11 +4,11 @@ from chat_m.chatbot import Chatbot
 from data_m.database import Database
 
 class ChatbotManager:
-    def __init__(self, db: Database):
+    def __init__(self):
         self.session = None
         self.user = None
         self.chatbots = {}
-        self.db = db
+        self.db = Database()
         
     def set_session(self, session):
         self.session = session
@@ -64,7 +64,7 @@ class ChatbotManager:
             return self.chatbots[bot_name]
         return None
 
-    def _send_message(self, bot_name, context, message, chat_id):
+    def manager_send_message(self, bot_name, context, message, chat_id):
          
         # Sends a message to a chatbot and returns the response.
         #

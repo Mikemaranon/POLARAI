@@ -36,10 +36,10 @@ class Server:
         return Database()
 
     def ini_user_manager(self):
-        return UserManager(self.database)
+        return UserManager()
     
     def ini_app_routes(self):
         return AppRoutes(self.app, self.api, self.user_manager, self.chatbot_manager)
     
     def ini_chatbot_manager(self):
-        return ChatbotManager(self.database)
+        return ChatbotManager()

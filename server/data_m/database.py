@@ -1,25 +1,37 @@
 import os
 import json
 
-DB_FILE = "users.json"
-BOTS_FILE = "bot-ownership.json"
-DATA_PATH = "chat-history/"
+USER_FILE = "users.json"
+BOTS_FILE = "chatbots/bot_ownership.json"
+CHAT_PATH = "chat_history/"
+PROV_CONF = "chatbots/provider_config.json"
 
 class Database:
+    
+    # Inicialización estática
+    _instance = None
+    
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(Database, cls).__new__(cls, *args, **kwargs)
+            cls._instance.__init__(*args, **kwargs)
+        return cls._instance
+    
     def __init__(self):
-        self.db_file = os.path.join(os.path.dirname(__file__), DB_FILE)
+        self.users_file = os.path.join(os.path.dirname(__file__), USER_FILE)
         self.bots_file = os.path.join(os.path.dirname(__file__), BOTS_FILE)
-        self.data_path = os.path.join(os.path.dirname(__file__), DATA_PATH)
+        self.chat_path = os.path.join(os.path.dirname(__file__), CHAT_PATH)
+        self.provs_file = os.path.join(os.path.dirname(__file__), PROV_CONF)
         self.chat_history_path = None
     
     # ================= USERS =================
     
     def load_users(self):
-        with open(self.db_file, "r") as f:
+        with open(self.users_file, "r") as f:
             return json.load(f)
 
     def save_users(self, users):
-        with open(self.db_file, "w") as f:
+        with open(self.users_file, "w") as f:
             json.dump(users, f, indent=4)
             
     def add_user(self, username: str, password: str):
@@ -51,29 +63,37 @@ class Database:
             json.dump(chatbots, f, indent=4)
             
     def delete_model(self, user, bot_name):
-        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
         os.remove(chat_history_path)
         
+    def get_provider_config(self, provider_name):
+        # Este método debe devolver el diccionario con API_KEY y API_ENDPOINT
+        # Ejemplo de retorno:
+        # return {
+        #     "API_KEY": "Tu_API_KEY_aqui",
+        #     "API_ENDPOINT": "https://api-del-proveedor.com/endpoint"
+        # }
+        return 0
 
     # ================= CHATS =================
 
     def load_chat_history(self, user, bot_name):
-        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
         with open(chat_history_path, "r") as f:
             return json.load(f)
         
     def save_chat_history(self, user, bot_name, new_messages):
-        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
         with open(chat_history_path, "w") as f:
             json.dump(new_messages, f, indent=4)
     
     def create_new_chat(self,  user, bot_name, chat_info):
-        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
         with open(chat_history_path, "w") as f:
             json.dump(chat_info, f)
             
     def delete_chat(self, user, bot_name, id):
-        chat_history_path = os.path.join(self.data_path, user, f"{bot_name}.json")
+        chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
         
         # Remove the content of the file corresponding to the chat
         with open(chat_history_path, "r") as f:

@@ -97,7 +97,7 @@ class AppRoutes:
         if 'username' not in session:
             return redirect(url_for("login"))
         
-        self.chatbot_manager._send_message(bot_name, context, message, chat_id)
+        return self.chatbot_manager.manager_send_message(bot_name, context, message, chat_id)
         
     
     def _send_session_to_managers(self, session):

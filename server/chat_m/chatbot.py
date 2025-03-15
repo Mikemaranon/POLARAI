@@ -8,7 +8,7 @@ from data_m.database import Database
 DATA_PATH = "server/data/chat-history/"  # Ubicación de los historiales de chat
 
 class Chatbot:
-    def __init__(self, user, name, api_key, endpoint, db):
+    def __init__(self, user, name, api_key, endpoint):
         
         # Initializes a Chatbot object with its name, API key, endpoint, and owning user.
         
@@ -21,7 +21,7 @@ class Chatbot:
         self.name = name
         self.api_key = api_key
         self.endpoint = endpoint 
-        self.db = db       
+        self.db = Database()     
         
         self.chats = self.load_chats()
         
@@ -60,7 +60,7 @@ class Chatbot:
 
         target_chat.add_message("user", message)
         
-        try:
+        try:            
             response = requests.post(self.endpoint, headers=headers, json=payload)
             response.raise_for_status()
             bot_response = response.json().get("response", "Error: No se recibió respuesta.")
