@@ -52,6 +52,14 @@ class Database:
         users = self.load_users()
         return users.get(username)
 
+    def get_user_bots_list(self, user):
+        bots_file = self.load_chatbots_file()
+        
+        if user in bots_file:
+            bots = list(bots_file[user].keys())
+        
+        return bots
+    
     # ================= CHATBOTS =================
     
     def load_chatbots_file(self):

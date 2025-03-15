@@ -110,12 +110,11 @@ main h1 {
 @media (max-width: 480px) {
     header {
         padding: 1rem;
-        flex-direction: column;
         align-items: flex-start;
     }
 
-    header button {
-        margin-top: 1rem;
+    header h1 {
+        display: none;
     }
 
     .container {

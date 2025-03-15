@@ -70,7 +70,7 @@ let aaa = 0;
 
 async function sendMessageToServer(message) {
     try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch('/api/send-message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -87,14 +87,7 @@ async function sendMessageToServer(message) {
 
     } catch (error) {
         console.error('Error:', error);
-        if (aaa < 5) {
-            aaa++;
-            return 'Lo siento, hubo un error al procesar tu mensaje.';
-        } else {
-            aaa = 0;
-            return 'callate ya jdr';
-        }
-        
+        return 'Lo siento, hubo un error al procesar tu mensaje.';
     }
 }
 

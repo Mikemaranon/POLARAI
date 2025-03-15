@@ -1,0 +1,158 @@
+.fade-background {
+    display: none;
+    position: fixed;
+    z-index: 1; /* Asegura que el fondo esté detrás del modal */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.3s ease-in-out; /* Solo opacidad para el fundido */
+}
+
+/* Cuando el modal se muestra, el fondo opaco también se vuelve visible */
+.fade-background.show {
+    display: block;
+    opacity: 1; /* Fondo opaco visible */
+}
+
+/* Estilo para el modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 4;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 1rem;
+
+    transform: translateY(100%); /* Empieza desde abajo */
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+    visibility: hidden; /* Inicialmente oculto */
+    opacity: 0; /* Inicialmente invisible */
+}
+
+.modal.show {
+    transform: translateY(0); /* Desliza hacia su posición final */
+    visibility: visible; /* Hacemos visible el modal */
+    opacity: 1; /* Lo hacemos completamente visible */
+}
+
+/* Capa de fondo */
+.modal-background {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
+    opacity: 0; /* Comienza invisible */
+    transition: opacity 0.3s ease-in-out; /* Animación de opacidad */
+}
+
+/* Estilo para el contenido del modal */
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto;
+    margin-top: 140px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content h2 {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* Botón de cerrar */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: relative;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+}
+
+/* Estilos del contenedor de los bots */
+.bots-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+/* Estilos de las tarjetas de los bots */
+.bot-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    width: 200px;
+    text-align: center;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bot-card:hover {
+    transform: scale(1.05);
+}
+
+.bot-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.bot-card p {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Estilos responsive */
+@media (max-width: 1200px) {
+    .modal-content {
+        max-width: 500px;
+    }
+
+    .bot-card {
+        width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        max-width: 400px;
+    }
+
+    .bot-card {
+        width: 150px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        max-width: 90%;
+    }
+
+    .bot-card {
+        width: 100%;
+    }
+}

@@ -48,7 +48,6 @@ class ChatbotManager:
                 name=bot_name,
                 api_key=bot_data["API_KEY"],
                 endpoint=bot_data["API_ENDPOINT"],
-                db=self.db
             )
 
         return chatbots
@@ -78,4 +77,10 @@ class ChatbotManager:
         else:
             return f"El chatbot '{bot_name}' no está disponible para el usuario '{self.user}'."
 
-    
+    def set_user_bots(self):
+        self.session["user_bots"] = self.db.get_user_bots_list(self.user)
+
+    def get_user_bots(self):
+        if "user_bots" not in self.session:
+            self.set_user_bots()  # Si no están en la sesión, los carga
+        return self.session["user_bots"]
