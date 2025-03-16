@@ -88,6 +88,20 @@
     color: black;
 }
 
+.create-model {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+    width: 415px;
+    text-align: center;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 13%;
+}
+
 /* Estilos del contenedor de los bots */
 .bots-container {
     display: flex;
@@ -114,6 +128,11 @@
     transform: scale(1.05);
 }
 
+.create-model:hover {
+    transform: scale(1.05);
+}
+
+
 .bot-card h3 {
     margin: 0;
     font-size: 1.2rem;
@@ -135,6 +154,11 @@
     .bot-card {
         width: 180px;
     }
+
+    .create-model {
+        margin-left: 9%;
+        width: 375px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -145,6 +169,11 @@
     .bot-card {
         width: 150px;
     }
+
+    .create-model {
+        margin-left: 6%;
+        width: 316px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -153,6 +182,11 @@
     }
 
     .bot-card {
+        width: 100%;
+    }
+
+    .create-model {
+        margin-left: 0;
         width: 100%;
     }
 }

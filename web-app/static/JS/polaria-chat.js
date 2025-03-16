@@ -5,6 +5,7 @@ const chatHistory = document.getElementById('chat-history');
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', initializeChat);
+document.addEventListener("DOMContentLoaded", fetchChats);
 
 function initializeChat() {
     sendButton.addEventListener('click', handleSendMessage);
@@ -70,12 +71,14 @@ let aaa = 0;
 
 async function sendMessageToServer(message) {
     try {
+        const context = getChatContext()
+
         const response = await fetch('/api/send-message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message: message })
+            body: JSON.stringify({ context: context, message: message })
         });
 
         if (!response.ok) {
@@ -103,3 +106,48 @@ async function handleSendMessage() {
     const aiResponse = await sendMessageToServer(message);
     addMessageToChat(aiResponse, false);
 }
+
+function getChatContext() {
+    
+    // READ FAST CONFIG SECTION
+    
+    return ''
+}
+
+async function fetchChats() {
+
+    try {
+        const response = await fetch("/api/get-chats");
+        if (!response.ok) throw new Error("Error al obtener los chats");
+
+        const chats = await response.json();
+        localStorage.setItem("chats", JSON.stringify(chats)); // Guarda en localStorage
+        renderChats(chats); // Renderiza los chats en la UI
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+function renderChats(chats) {
+    const container = document.getElementById("left-menu-content");
+    container.innerHTML = ""; // Limpia el contenido anterior
+
+    if (!chats || chats.length === 0) {
+        container.innerHTML = "<p class='empty-message'>No hay chats disponibles</p>";
+        return;
+    }
+
+    chats.forEach(chat => {
+        const chatDiv = document.createElement("div");
+        chatDiv.classList.add("chat-item");
+        chatDiv.textContent = `${chat.topic}`; // Muestra el ID del chat
+
+        // Agregar un evento para cargar el chat al hacer clic
+        chatDiv.addEventListener("click", () => {
+            window.location.href = `/chat/${chat.id}`; // Ajusta la URL según tu estructura
+        });
+
+        container.appendChild(chatDiv);
+    });
+}
+

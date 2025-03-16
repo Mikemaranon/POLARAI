@@ -90,12 +90,24 @@ class Database:
         with open(chat_history_path, "r") as f:
             return json.load(f)
         
-    def save_chat_history(self, user, bot_name, new_messages):
+    def save_chat_history(self, id, user, bot_name, new_messages):
         chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
+        
+        # Read existing chats
+        chats = self.load_chat_history(user, bot_name)
+            
+        # Update messages for the specific chat ID
+        for chat in chats:
+            if chat["id"] == id:
+                chat["messages"] = new_messages
+                break
+        
+        # Save updated chats back to file
         with open(chat_history_path, "w") as f:
-            json.dump(new_messages, f, indent=4)
-    
-    def create_new_chat(self,  user, bot_name, chat_info):
+            json.dump(chats, f, indent=4)
+                   
+
+    def create_new_chat(self, user, bot_name, chat_info):
         chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
         with open(chat_history_path, "w") as f:
             json.dump(chat_info, f)

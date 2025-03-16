@@ -1,6 +1,7 @@
 [
     {
         "id": "Id19Akl2Mxmq",
+        "topic": "first chat (prueba)",
         "timestamp": "2022-03-01T12:00:00",
         "messages": [
             {
@@ -15,6 +16,7 @@
     },
     {
         "id": "Ab12Cd34Ef56",
+        "topic": "second chat (prueba)",
         "timestamp": "2022-03-01T12:01:00",
         "messages": [
             {
@@ -29,6 +31,7 @@
     },
     {
         "id": "Xy78Zk90Lm12",
+        "topic": "third chat (prueba)",
         "timestamp": "2022-03-01T12:04:00",
         "messages": [
             {

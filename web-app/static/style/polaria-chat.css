@@ -42,6 +42,27 @@ body {
     position: relative; /* Mantiene los elementos dentro del contenedor */
 }
 
+.chat-item {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    background: #f4f4f4;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.chat-item:hover {
+    background: #ddd;
+}
+
+.empty-message {
+    text-align: center;
+    color: gray;
+    font-style: italic;
+}
+
+
 .left {
     justify-content: flex-end; /* Empuja el botón a la derecha */
 }

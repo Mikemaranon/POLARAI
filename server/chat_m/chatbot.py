@@ -37,6 +37,7 @@ class Chatbot:
         for chat in chats_file:
             chat_list.append(Chat (
                 chat_id = chat["id"],
+                topic = chat["topic"],
                 timestamp = chat["timestamp"],
                 messages = chat["messages"]
             ))
@@ -56,7 +57,13 @@ class Chatbot:
         for chat in self.chats:
             if chat.id == chat_id:
                 target_chat = chat
+                new = False
                 break
+            
+        if target_chat == None:
+            target_chat = Chat()
+            self.chats.append(target_chat)
+            new = True
 
         target_chat.add_message("user", message)
         
@@ -71,11 +78,11 @@ class Chatbot:
         except requests.exceptions.RequestException as e:
             bot_response = f"Error: {str(e)}"
 
-        Database.save_chat_history(
+        self.db.save_chat_history(
             self.user, self.name, 
             target_chat.new_messages            
         )
-        target_chat.save_messages(self.user, self.name)
+        target_chat.save_messages(self.user, self.name, new)
         
         return bot_response
 

@@ -65,7 +65,7 @@ async function fetchBots() {
         const data = await response.json();
 
         // Llama a la función para insertar los bots en la interfaz
-        displayBots(data.bots);
+        chat_displayBots(data.bots);
 
     } catch (error) {
         console.error('Error al obtener los bots:', error);
@@ -74,7 +74,7 @@ async function fetchBots() {
 }
 
 // Función para insertar los bots en el HTML como divs
-function displayBots(bots) {
+function chat_displayBots(bots) {
     const container = document.getElementById('bots-container'); // Asegúrate de tener un contenedor con este id en tu HTML
 
     // Limpia el contenedor antes de agregar nuevos elementos
@@ -97,14 +97,32 @@ function displayBots(bots) {
         // Agregar el manejador de eventos para redirigir al usuario
         botDiv.addEventListener('click', () => {
             // Construir la URL con el nombre del bot como parámetro
-            const url = `/sites/polarai?bot=${bot}`;
-            
-            // Redirigir a la URL construida
-            window.location.href = url;
+            goToModelChat(bot)
         });
     
         // Agregar el div creado al contenedor
         container.appendChild(botDiv);
     });
-    
+}
+
+async function goToModelChat(bot) {
+    try {
+        const response = await fetch('/sites/polarai', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ model: bot })
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        window.location.href = response.url;
+
+    } catch (error) {
+        console.error('Error:', error);
+        return 'Lo siento, hubo un error al procesar tu mensaje.';
+    }
 }

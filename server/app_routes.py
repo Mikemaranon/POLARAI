@@ -15,17 +15,22 @@ class AppRoutes:
         self.app.add_url_rule("/", "home", self.get_home)
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout)
-        self.app.add_url_rule("/sites/polarai", "get_chat", self.get_chat)
-        self.app.add_url_rule("/sites/training", "get_trainingIndex", self.get_trainingIndex)
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig)
         
         # API routes
-        self.app.add_url_rule("/api/send-message", "send-message", self.API_send_message, methods=["POST"])
-        self.app.add_url_rule("/api/get-models", "get-models", self.API_get_models, methods=["POST"])
+        self.app.add_url_rule("/sites/training", "get_trainingIndex", self.API_get_trainingIndex, methods=["GET", "POST"])
+        self.app.add_url_rule("/sites/polarai", "polarai_chat", self.API_get_model_to_chat, methods=["GET", "POST"])
+        self.app.add_url_rule("/api/get-chats", "get_chats", self.API_get_chats, methods=["GET"])
+        self.app.add_url_rule("/api/send-message", "send_message", self.API_send_message, methods=["POST"])
+        self.app.add_url_rule("/api/get-models", "get_models", self.API_get_models, methods=["POST"])
         
     def get_home(self):
         if 'username' not in session:
             return redirect(url_for("login"))
+        
+        session["model"] = None
+        session["chat-id"] = None
+        
         return render_template("index.html", username=session['username'])
 
     def get_login(self):
@@ -35,7 +40,7 @@ class AppRoutes:
             password = request.form["password"]
             user = self.user_manager.login(username, password)
             if user:
-                session['username'] = user # Guardamos al usuario en la sesión
+                session['username'] = user 
                 self._send_session_to_managers(session)
                 self.chatbot_manager.set_user_bots()
                 
@@ -44,7 +49,7 @@ class AppRoutes:
                 
                 return redirect(url_for("home"))
             else:
-                error_message = "incorrect user data, try again"  # Mensaje de error
+                error_message = "incorrect user data, try again"  # error message
         
         return render_template("login.html", error_message=error_message)
 
@@ -57,32 +62,6 @@ class AppRoutes:
         response.headers["Pragma"] = "no-cache"
         response.headers["Expires"] = "0"
         return response
-
-    def get_chat(self):
-        
-        if 'username' not in session:
-            return redirect(url_for("login"))
-        
-        # get logic for personal user model instance
-        # if non-existent, create new model instance
-        
-        # the polaria chat page is only a GUI for the communication 
-        # between the user and the model. No logic is implemented in here.
-        
-        return render_template("sites/polarai-chat.html")
-    
-    def get_trainingIndex(self):
-        
-        if 'username' not in session:
-            return redirect(url_for("login"))
-        
-        # get logic for personal user model instance
-        # if non-existent, create new model instance
-        
-        # the training page must implement direct interaction with the model
-        # by allowing the user to train the model with custom data.
-        
-        return render_template("sites/training-index.html")
     
     def get_userConfig(self):
         
@@ -94,17 +73,74 @@ class AppRoutes:
         
         return render_template("sites/user-config.html")
     
-    def API_send_message(self, bot_name, context, message, chat_id):
+    def API_get_trainingIndex(self):
+        
+        if 'username' not in session:
+            return redirect(url_for("login"))
+
+        if request.method == "POST":
+            # Asegura que el request es JSON
+            if request.content_type != "application/json":
+                return "Unsupported Media Type", 415
+            
+            data = request.get_json()
+            session["model"] = data.get('model')
+            session["chat-id"] = None  # training does not require chats
+
+            # Redirige a la versión GET con el modelo
+            return redirect(url_for("get_trainingIndex", model=data.get('model')))
+
+        elif request.method == "GET":
+            model = request.args.get("model", "default_model")  # Si no hay modelo, usa uno por defecto
+            return render_template("sites/training-index.html", bot_name=model)
+    
+    def API_get_model_to_chat(self):
+        
+        if 'username' not in session:
+            return redirect(url_for("login"))
+
+        if request.method == "POST":
+            # Asegura que el request es JSON
+            if request.content_type != "application/json":
+                return "Unsupported Media Type", 415
+            
+            data = request.get_json()
+            session["model"] = data.get('model')
+            session["chat-id"] = None  # Entra en un nuevo chat
+
+            # Redirige a la versión GET con el modelo
+            return redirect(url_for("polarai_chat", model=data.get('model')))
+
+        elif request.method == "GET":
+            model = request.args.get("model", "default_model")  # Si no hay modelo, usa uno por defecto
+            return render_template("/sites/polarai-chat.html", bot_name=model)
+    
+    def API_get_chats(self):
+        
+        if 'username' not in session:
+            return redirect(url_for("login"))
+        
+        chatbot = self.chatbot_manager.get_chatbot(session["model"])
+        chats = chatbot.load_chats()
+        
+        chats_dict = [chat.to_dict() for chat in chats]  # Convierte cada chat
+        
+        print("Historial de chats: \n", chats)
+        
+        return jsonify(chats_dict)
+    
+    
+    def API_send_message(self, context, message, chat_id):
         
         if 'username' not in session:
             return jsonify({"message": "Usuario no autenticado"}), 401  # 401 = Unauthorized
         
         data = request.get_json()
     
-        bot_name = data.get('bot_name')
+        bot_name = session["bot-name"]
         context = data.get('context')
         message = data.get('message')
-        chat_id = data.get('chat_id')
+        chat_id = session["chat-id"]
         
         if not bot_name or not message or not chat_id:
             return jsonify({"message": "Faltan parámetros necesarios"}), 400
