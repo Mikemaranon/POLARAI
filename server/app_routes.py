@@ -1,6 +1,7 @@
 from flask import render_template, redirect, request, url_for, session, Blueprint, jsonify
 from user_m.user_manager import UserManager
 from chat_m.chatbot_manager import ChatbotManager
+from data_m.database import USERNAME, PASSWORD, MODEL, CHAT_ID
 from main import app
 
 class AppRoutes:
@@ -24,14 +25,16 @@ class AppRoutes:
         self.app.add_url_rule("/api/send-message", "send_message", self.API_send_message, methods=["POST"])
         self.app.add_url_rule("/api/get-models", "get_models", self.API_get_models, methods=["POST"])
         
+        self.app.add_url_rule("/api/set-chatId", "set_chatId", self.API_set_chatId, methods=["POST"])
+        
     def get_home(self):
         if 'username' not in session:
             return redirect(url_for("login"))
         
-        session["model"] = None
-        session["chat-id"] = None
+        session[MODEL] = None
+        session[CHAT_ID] = None
         
-        return render_template("index.html", username=session['username'])
+        return render_template("index.html", username=session[USERNAME])
 
     def get_login(self):
         error_message = None
@@ -40,7 +43,7 @@ class AppRoutes:
             password = request.form["password"]
             user = self.user_manager.login(username, password)
             if user:
-                session['username'] = user 
+                session[USERNAME] = user 
                 self._send_session_to_managers(session)
                 self.chatbot_manager.set_user_bots()
                 
@@ -73,6 +76,16 @@ class AppRoutes:
         
         return render_template("sites/user-config.html")
     
+    def _send_session_to_managers(self, session):
+        self.user_manager.set_session(session)
+        self.chatbot_manager.set_session(session)
+    
+    
+    
+    # =========================================
+    #       API protocols start from here
+    # =========================================
+    
     def API_get_trainingIndex(self):
         
         if 'username' not in session:
@@ -84,8 +97,8 @@ class AppRoutes:
                 return "Unsupported Media Type", 415
             
             data = request.get_json()
-            session["model"] = data.get('model')
-            session["chat-id"] = None  # training does not require chats
+            session[MODEL] = data.get('model')
+            session[CHAT_ID] = None  # training does not require chats
 
             # Redirige a la versión GET con el modelo
             return redirect(url_for("get_trainingIndex", model=data.get('model')))
@@ -105,8 +118,8 @@ class AppRoutes:
                 return "Unsupported Media Type", 415
             
             data = request.get_json()
-            session["model"] = data.get('model')
-            session["chat-id"] = None  # Entra en un nuevo chat
+            session[MODEL] = data.get('model')
+            session[CHAT_ID] = None  # Entra en un nuevo chat
 
             # Redirige a la versión GET con el modelo
             return redirect(url_for("polarai_chat", model=data.get('model')))
@@ -120,7 +133,7 @@ class AppRoutes:
         if 'username' not in session:
             return redirect(url_for("login"))
         
-        chatbot = self.chatbot_manager.get_chatbot(session["model"])
+        chatbot = self.chatbot_manager.get_chatbot(session[MODEL])
         chats = chatbot.load_chats()
         
         chats_dict = [chat.to_dict() for chat in chats]  # Convierte cada chat
@@ -130,17 +143,17 @@ class AppRoutes:
         return jsonify(chats_dict)
     
     
-    def API_send_message(self, context, message, chat_id):
+    def API_send_message(self):
         
         if 'username' not in session:
             return jsonify({"message": "Usuario no autenticado"}), 401  # 401 = Unauthorized
         
         data = request.get_json()
     
-        bot_name = session["bot-name"]
+        bot_name = session[MODEL]
         context = data.get('context')
         message = data.get('message')
-        chat_id = session["chat-id"]
+        chat_id = session[CHAT_ID]
         
         if not bot_name or not message or not chat_id:
             return jsonify({"message": "Faltan parámetros necesarios"}), 400
@@ -162,6 +175,12 @@ class AppRoutes:
         except Exception as e:
             return jsonify({"message": str(e)}), 500  # En caso de un error del servidor
     
-    def _send_session_to_managers(self, session):
-        self.user_manager.set_session(session)
-        self.chatbot_manager.set_session(session)
+    def API_set_chatId(self):
+        
+        data = request.get_json()
+        chat_id = data.get("chatId")
+    
+        # Aquí guardas el chatId en la sesión o base de datos
+        session[CHAT_ID] = chat_id
+    
+        return jsonify({"success": True}), 200

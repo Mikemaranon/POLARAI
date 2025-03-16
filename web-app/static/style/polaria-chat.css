@@ -239,6 +239,10 @@ body {
         font-size: 30px;
         top: 30px;
     }
+
+    .chat-item {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {

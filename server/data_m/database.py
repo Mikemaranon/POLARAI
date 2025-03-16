@@ -6,6 +6,12 @@ BOTS_FILE = "chatbots/bot_ownership.json"
 CHAT_PATH = "chat_history/"
 PROV_CONF = "chatbots/provider_config.json"
 
+# SESSION PARAMS
+USERNAME = 'username'
+PASSWORD = 'password'
+MODEL = 'model'
+CHAT_ID = 'chat-id'
+
 class Database:
     
     # Inicialización estática

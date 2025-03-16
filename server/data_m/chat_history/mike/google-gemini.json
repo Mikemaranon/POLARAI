@@ -6,11 +6,11 @@
         "messages": [
             {
                 "sender": "user",
-                "content": "Hello, how are you?"
+                "content": "This is the first chat of all :DDD"
             },
             {
                 "sender": "bot",
-                "content": "I'm fine, thank you. How can I help you?"
+                "content": "Daaamn nigga thats dope"
             }
         ]
     },
@@ -21,11 +21,11 @@
         "messages": [
             {
                 "sender": "user",
-                "content": "Hello, how are you?"
+                "content": "Fuck you"
             },
             {
                 "sender": "bot",
-                "content": "I'm fine, thank you. How can I help you?"
+                "content": "yo momma"
             }
         ]
     },

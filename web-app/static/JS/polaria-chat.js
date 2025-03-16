@@ -144,10 +144,37 @@ function renderChats(chats) {
 
         // Agregar un evento para cargar el chat al hacer clic
         chatDiv.addEventListener("click", () => {
-            window.location.href = `/chat/${chat.id}`; // Ajusta la URL según tu estructura
+            loadChatHistory(chat.messages, chat.id)
         });
 
         container.appendChild(chatDiv);
     });
+}
+
+async function loadChatHistory(messages, id) {
+    // Paso 1: Limpiar el historial del chat
+    const chatHistory = document.getElementById("chat-history");
+    chatHistory.innerHTML = ""; // Limpiar todos los mensajes previos
+
+    // Paso 2: Enviar el `chatId` al servidor
+    try {
+        const response = await fetch("/api/set-chatId", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ chatId: id })
+        });
+        if (!response.ok) {
+            throw new Error("Error al establecer el chatId");
+        }
+
+        // Paso 3: Cargar los mensajes del historial
+        messages.forEach((message) => {
+            addMessageToChat(message.content, message.sender === 'user');
+        });
+    } catch (error) {
+        console.error("Error al cargar el historial del chat:", error);
+    }
 }
 
