@@ -38,8 +38,8 @@ class Chatbot:
                 
         for chat in chats_file:
             chat_list.append(Chat (
-                chat_id = chat["id"],
                 topic = chat["topic"],
+                chat_id = chat["id"],
                 timestamp = chat["timestamp"],
                 messages = chat["messages"]
             ))
@@ -67,7 +67,7 @@ class Chatbot:
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": context + '\n\n' + message}
             ],
-            "max_tokens": 100,
+            "max_tokens": 1000,
             "temperature": 1.0
         })
 
@@ -82,10 +82,8 @@ class Chatbot:
                 break
 
         if target_chat is None:
-            target_chat = Chat()
+            target_chat = self.new_chat(chat_id)
             self.chats.append(target_chat)
-
-        target_chat.add_message("user", message)
 
         # Establecer conexión con Azure
         conn = http.client.HTTPSConnection(self.endpoint)
@@ -101,11 +99,11 @@ class Chatbot:
             bot_response = response_data.get("choices", [{}])[0].get("message", {}).get("content", "Error: No se recibió respuesta.")
 
             # Guardar mensaje en historial
+            target_chat.add_message("user", message)
             target_chat.add_message("bot", bot_response)
 
         except Exception as e:
             bot_response = f"Error: {str(e)}"
-            target_chat.add_message("bot", bot_response)
 
         finally:
             conn.close()
@@ -114,26 +112,18 @@ class Chatbot:
 
         return bot_response
 
-    def new_chat(self, user_message, bot_message):
+    def new_chat(self, chat_id):
         
         # Saves a new chat.
 
         # :param user_message: User's message.
         # :param bot_message: Chatbot's response.
         
-        new_chat = Chat()
-        self.chats.append(new_chat)
-
-        chat_entry = {
-            "id": new_chat.id,
-            "timestamp": new_chat.timestamp,
-            "messages": [
-                {"sender": "user", "content": user_message},
-                {"sender": "bot", "content": bot_message}
-            ]
-        }
-
-        Database.create_new_chat(self.user, self.name, chat_entry)
+        new_chat = Chat (
+            chat_id = chat_id,
+        )
+        
+        return new_chat
 
     def __repr__(self):
         return f"Chatbot(user={self.user}, name={self.name}, endpoint={self.endpoint})"

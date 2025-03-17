@@ -1,6 +1,7 @@
 from flask import render_template, redirect, request, url_for, session, Blueprint, jsonify
 from user_m.user_manager import UserManager
 from chat_m.chatbot_manager import ChatbotManager
+from chat_m.chat import Chat
 from data_m.database import USERNAME, PASSWORD, MODEL, CHAT_ID
 from main import app
 
@@ -24,8 +25,9 @@ class AppRoutes:
         self.app.add_url_rule("/api/get-chats", "get_chats", self.API_get_chats, methods=["GET"])
         self.app.add_url_rule("/api/send-message", "send_message", self.API_send_message, methods=["POST"])
         self.app.add_url_rule("/api/get-models", "get_models", self.API_get_models, methods=["POST"])
-        
         self.app.add_url_rule("/api/set-chatId", "set_chatId", self.API_set_chatId, methods=["POST"])
+        
+        self.app.add_url_rule("/api/create-chat", "create_chat", self.API_create_chat, methods=["GET"])
         
     def get_home(self):
         if 'username' not in session:
@@ -183,4 +185,9 @@ class AppRoutes:
         # Aquí guardas el chatId en la sesión o base de datos
         session[CHAT_ID] = chat_id
     
+        return jsonify({"success": True}), 200
+    
+    def API_create_chat(self):
+        
+        session[CHAT_ID] = Chat._generate_chat_id()
         return jsonify({"success": True}), 200

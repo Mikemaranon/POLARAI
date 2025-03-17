@@ -6,6 +6,7 @@ const chatHistory = document.getElementById('chat-history');
 // Event Listeners
 document.addEventListener('DOMContentLoaded', initializeChat);
 document.addEventListener("DOMContentLoaded", fetchChats);
+document.addEventListener("DOMContentLoaded", setNewChatId);
 
 function initializeChat() {
     sendButton.addEventListener('click', handleSendMessage);
@@ -133,6 +134,15 @@ function renderChats(chats) {
         return;
     }
 
+    const addChat = document.createElement("div");
+    addChat.classList.add("add-chat");
+    addChat.textContent = `new chat`;
+    addChat.addEventListener("click", () => {
+        clearChat()
+        setNewChatId()
+    });
+    container.appendChild(addChat);
+
     chats.forEach(chat => {
         const chatDiv = document.createElement("div");
         chatDiv.classList.add("chat-item");
@@ -149,8 +159,7 @@ function renderChats(chats) {
 
 async function loadChatHistory(messages, id) {
     // Paso 1: Limpiar el historial del chat
-    const chatHistory = document.getElementById("chat-history");
-    chatHistory.innerHTML = ""; // Limpiar todos los mensajes previos
+    clearChat()
 
     // Paso 2: Enviar el `chatId` al servidor
     try {
@@ -174,3 +183,23 @@ async function loadChatHistory(messages, id) {
     }
 }
 
+async function setNewChatId() {
+    try {
+        const response = await fetch("/api/create-chat", {
+            method: "GET"
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al establecer nuevo chat");
+        } else {
+            console.log("Nuevo chat creado con éxito");
+        }
+    } catch (error) {
+        console.error("Error al cargar el historial del chat:", error);
+    }
+}
+
+function clearChat() {
+    const chatHistory = document.getElementById("chat-history");
+    chatHistory.innerHTML = ""; // Limpiar todos los mensajes previos
+}

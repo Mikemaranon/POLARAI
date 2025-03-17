@@ -3,16 +3,16 @@ from datetime import datetime
 from data_m.database import Database
 
 class Chat:
-    def __init__(self, chat_id, topic, timestamp, messages):
+    def __init__(self, topic=None, chat_id=None, timestamp=None, messages=None):
          
         # Initialize a Chat object to manage a single chat session.
         # 
         # :param chat_id: Unique identifier for the chat
         # :param timestamp: Creation time of the chat
         # :param messages: List of message dictionaries
-         
+        
+        self.topic = topic or "__NONE__"
         self.id = chat_id or self._generate_chat_id()
-        self.topic = topic
         self.timestamp = timestamp or datetime.now().isoformat()
         self.messages = messages or []
         self.new_messages = []
@@ -36,17 +36,19 @@ class Chat:
         if new == True:
             info = {
                 "id": self.id,
+                "topic": None,
                 "timestamp": self.timestamp,
                 "messages": self.messages
             }
             self.db.create_new_chat(user, name, info)
+            self.save_messages(user, name, False)
             
         else: 
             # Save new messages to the chat history.
             self.db.save_chat_history(self.id, user, name, self.new_messages)
         
-        self.messages.extend(self.new_messages)
-        self.new_messages = []
+            self.messages.extend(self.new_messages)
+            self.new_messages = []
 
     def to_dict(self):
         return {

@@ -6,70 +6,6 @@
         "messages": [
             {
                 "sender": "user",
-                "content": "HEEy"
-            },
-            {
-                "sender": "bot",
-                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
-            },
-            {
-                "sender": "user",
-                "content": "que tal"
-            },
-            {
-                "sender": "bot",
-                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
-            },
-            {
-                "sender": "user",
-                "content": "hola hola"
-            },
-            {
-                "sender": "bot",
-                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
-            },
-            {
-                "sender": "user",
-                "content": "aho"
-            },
-            {
-                "sender": "bot",
-                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
-            },
-            {
-                "sender": "user",
-                "content": "asjgd jasgvfkhfbfjanh"
-            },
-            {
-                "sender": "bot",
-                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
-            },
-            {
-                "sender": "user",
-                "content": "ds\nasd\nasd\nasda"
-            },
-            {
-                "sender": "bot",
-                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
-            },
-            {
-                "sender": "user",
-                "content": "Mira que guapooooooooooooooooooo"
-            },
-            {
-                "sender": "bot",
-                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
-            },
-            {
-                "sender": "user",
-                "content": "kelokee manin"
-            },
-            {
-                "sender": "bot",
-                "content": "It seems like your message might be incomplete or unclear. Could you please provide more information or clarify what you would like to know or discuss? I'm here to help!"
-            },
-            {
-                "sender": "user",
                 "content": "necesito ayuda con python"
             },
             {
@@ -107,6 +43,30 @@
             {
                 "sender": "bot",
                 "content": "No he dicho nada espec\u00edfico antes de tu pregunta. \u00bfHay algo en particular de lo que te gustar\u00eda hablar o preguntar? Estoy aqu\u00ed para ayudarte."
+            },
+            {
+                "sender": "user",
+                "content": "que tengo que hacer para que tu integraci\u00f3n en una aplicaci\u00f3n simule una conversaci\u00f3n a lo largo de distintos mensajes?"
+            },
+            {
+                "sender": "bot",
+                "content": "Para integrar una inteligencia artificial como yo en una aplicaci\u00f3n y simular una conversaci\u00f3n a lo largo de distintos mensajes, puedes seguir varios pasos:\n\n1. **Elegir una API o SDK**: Aseg\u00farate de que tienes acceso a una API de IA que permita manejar conversaciones. Por ejemplo, OpenAI ofrece una API que puedes utilizar para interactuar con modelos de lenguaje.\n\n2. **Configuraci\u00f3n del entorno**:\n   - **Registro y obtenci\u00f3n de claves**: Si usas una API"
+            },
+            {
+                "sender": "user",
+                "content": "dame un videojuego snake en C, el c\u00f3digo entero"
+            },
+            {
+                "sender": "bot",
+                "content": "\u00a1Claro! Aqu\u00ed te presento un ejemplo simple de un videojuego de Snake en C utilizando la biblioteca `ncurses` para la interfaz de texto en la consola. Aseg\u00farate de tener `ncurses` instalado en tu sistema antes de compilar el c\u00f3digo.\n\nAqu\u00ed est\u00e1 el c\u00f3digo completo del juego:\n\n```c\n#include <stdio.h>\n#include <stdlib.h>\n#include <conio.h>\n#include <ncurses.h>\n#include <time.h>\n\n#define WIDTH 20\n#define HEIGHT"
+            },
+            {
+                "sender": "user",
+                "content": "dame un videojuego snake en C. el c\u00f3digo entero"
+            },
+            {
+                "sender": "bot",
+                "content": "Por supuesto, a continuaci\u00f3n te muestro un ejemplo b\u00e1sico de un juego de Snake en C. Este es un juego de consola, as\u00ed que funciona en sistemas que tengan la biblioteca est\u00e1ndar de C. Los controles son las teclas de direcci\u00f3n para mover la serpiente.\n\nTen en cuenta que este es un ejemplo simple y puede no ser el m\u00e1s optimizado. Para compilarlo, necesitar\u00e1s tener una terminal que soporte ANSI, y este c\u00f3digo deber\u00eda ejecutarse en un sistema Unix/Linux. Aqu\u00ed te dejo el c\u00f3digo:\n\n```c\n#include <stdio.h>\n#include <conio.h>\n#include <stdlib.h>\n#include <windows.h>\n\n#define WIDTH 20\n#define HEIGHT 10\n\nint x, y, fruitX, fruitY, score;\nint tailX[100], tailY[100];\nint nTail;\nenum eDirection { STOP = 0, LEFT, RIGHT, UP, DOWN };\nenum eDirection dir;\n\nvoid setup() {\n    dir = STOP;\n    x = WIDTH / 2;\n    y = HEIGHT / 2;\n    fruitX = rand() % WIDTH;\n    fruitY = rand() % HEIGHT;\n    score = 0;\n    nTail = 0;\n}\n\nvoid draw() {\n    system(\"cls\"); // limpiar la consola\n    for (int i = 0; i < WIDTH + 2; i++)\n        printf(\"#\");\n    printf(\"\\n\");\n\n    for (int i = 0; i < HEIGHT; i++) {\n        for (int j = 0; j < WIDTH; j++) {\n            if (j == 0)\n                printf(\"#\");\n            if (i == y && j == x)\n                printf(\"O\");\n            else if (i == fruitY && j == fruitX)\n                printf(\"F\");\n            else {\n                int isTail = 0;\n                for (int k = 0; k < nTail; k++) {\n                    if (tailX[k] == j && tailY[k] == i) {\n                        printf(\"o\");\n                        isTail = 1;\n                    }\n                }\n                if (!isTail)\n                    printf(\" \");\n            }\n            if (j == WIDTH - 1)\n                printf(\"#\");\n        }\n        printf(\"\\n\");\n    }\n\n    for (int i = 0; i < WIDTH + 2; i++)\n        printf(\"#\");\n    printf(\"\\n\");\n    printf(\"Score: %d\\n\", score);\n}\n\nvoid input() {\n    if (_kbhit()) {\n        switch (_getch()) {\n            case 'a':\n                dir = LEFT;\n                break;\n            case 'd':\n                dir = RIGHT;\n                break;\n            case 'w':\n                dir = UP;\n                break;\n            case 's':\n                dir = DOWN;\n                break;\n            case 'x':\n                dir = STOP;\n                break;\n        }\n    }\n}\n\nvoid logic() {\n    int prevX = tailX[0];\n    int prevY = tailY[0];\n    int prev2X, prev2Y;\n    tailX[0] = x;\n    tailY[0] = y;\n\n    for (int i = 1; i < nTail; i++) {\n        prev2X = tailX[i];\n        prev2Y = tailY[i];\n        tailX[i] = prevX;\n        tailY[i] = prevY;\n        prevX = prev2X;\n        prevY = prev2Y;\n    }\n\n    switch (dir) {\n        case LEFT:\n            x--;\n            break;\n        case RIGHT:\n            x++;\n            break;\n        case UP:\n            y--;\n            break;\n        case DOWN:\n            y++;\n            break;\n        default:\n            break;\n    }\n\n    if (x >= WIDTH) x = 0; else if (x < 0) x = WIDTH - 1;\n    if (y >= HEIGHT) y = 0; else if (y < 0) y = HEIGHT - 1;\n\n    for (int i = 0; i < nTail; i++) {\n        if (tailX[i] == x && tailY[i] == y)\n            dir = STOP; // colisi\u00f3n con la cola\n    }\n\n    if (x == fruitX && y == fruitY) {\n        score += 10;\n        fruitX = rand() % WIDTH;\n        fruitY = rand() % HEIGHT;\n        nTail++;\n    }\n}\n\nint main() {\n    setup();\n    while (dir != STOP) {\n        draw();\n        input();\n        logic();\n        Sleep(10); // controla la velocidad del juego\n    }\n    return 0;\n}\n```\n\n### Instrucciones para ejecutar el juego:\n1. Copia el c\u00f3digo anterior en un archivo llamado `snake.c`.\n2. Abre una terminal o s\u00edmbolo del sistema.\n3. Compila el programa"
             }
         ]
     },
@@ -125,7 +85,7 @@
             },
             {
                 "sender": "user",
-                "content": "yo               so fat she makes de message deeper\n\n\n\n\n\n\n\n\n\n\n\n\n      mama"
+                "content": "yo               so fat she makes the message deeper\n\n\n\n\n\n\n\n\n\n\n\n\n      mama"
             },
             {
                 "sender": "bot",
@@ -161,6 +121,21 @@
             {
                 "sender": "bot",
                 "content": "I'm fine, thank you. How can I help you?"
+            }
+        ]
+    },
+    {
+        "id": "Chat-20250317181950",
+        "topic": null,
+        "timestamp": "2025-03-17T18:19:51.732561",
+        "messages": [
+            {
+                "sender": "user",
+                "content": "heey"
+            },
+            {
+                "sender": "bot",
+                "content": "Hey! How can I assist you today?"
             }
         ]
     }
