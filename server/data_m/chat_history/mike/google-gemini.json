@@ -11,6 +11,14 @@
             {
                 "sender": "bot",
                 "content": "Daaamn nigga thats dope"
+            },
+            {
+                "sender": "user",
+                "content": "helou"
+            },
+            {
+                "sender": "bot",
+                "content": "Error: 404 Client Error: Not Found for url: https://generativelanguage.googleapis.com/"
             }
         ]
     },

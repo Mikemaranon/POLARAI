@@ -35,6 +35,22 @@
             {
                 "sender": "bot",
                 "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
+            },
+            {
+                "sender": "user",
+                "content": "asjgd jasgvfkhfbfjanh"
+            },
+            {
+                "sender": "bot",
+                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
+            },
+            {
+                "sender": "user",
+                "content": "ds\nasd\nasd\nasda"
+            },
+            {
+                "sender": "bot",
+                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
             }
         ]
     },
