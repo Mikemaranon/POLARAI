@@ -151,7 +151,7 @@ class AppRoutes:
         data = request.get_json()
     
         bot_name = session[MODEL]
-        context = data.get('context')
+        context = data.get('context') or "none"
         message = data.get('message')
         chat_id = session[CHAT_ID]
         
@@ -160,9 +160,9 @@ class AppRoutes:
         
         # Llamada al chatbot manager para procesar el mensaje
         response = self.chatbot_manager.manager_send_message(bot_name, context, message, chat_id)
-    
+        
         # Aquí puedes retornar la respuesta que desee el bot
-        return jsonify({"response": response})
+        return jsonify({"response": response, "data": bot_name + chat_id})
         
     def API_get_models(self):
         

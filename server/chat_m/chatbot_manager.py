@@ -1,7 +1,7 @@
 import os
 import json
 from chat_m.chatbot import Chatbot
-from data_m.database import Database
+from data_m.database import Database, USERNAME, PASSWORD, MODEL, CHAT_ID
 
 class ChatbotManager:
     def __init__(self):
@@ -73,7 +73,7 @@ class ChatbotManager:
          
         chatbot = self.get_chatbot(bot_name)
         if chatbot:
-            return chatbot.send_message(context, message, chat_id)
+            return chatbot.send_message(self.session[USERNAME], context, message, chat_id)
         else:
             return f"El chatbot '{bot_name}' no está disponible para el usuario '{self.user}'."
 

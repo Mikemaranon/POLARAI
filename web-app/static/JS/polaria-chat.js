@@ -35,16 +35,14 @@ function adjustInputHeight() {
     
     // Ajustar contenedor
     const chatInput = messageInput.closest('.chat-input');
-    const containerHeight = newHeight + 40; // 40px para los paddings
+    const containerHeight = newHeight + 40; // 40px for paddingss
     chatInput.style.height = Math.max(80, containerHeight) + 'px';
 }
 
 function clearInput() {
     messageInput.textContent = '';
-    adjustInputHeight(); // Usar adjustInputHeight para manejar el reseteo
+    adjustInputHeight();
 }
-
-// Eliminar la función resetInputHeight ya que no es necesaria
 
 function handleKeyPress(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -66,8 +64,6 @@ function addMessageToChat(message, isUser = true) {
     chatHistory.appendChild(createMessageElement(message, isUser));
     chatHistory.scrollTop = chatHistory.scrollHeight;
 }
-
-let aaa = 0;
 
 async function sendMessageToServer(message) {
     try {

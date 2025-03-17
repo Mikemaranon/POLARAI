@@ -12,6 +12,9 @@ PASSWORD = 'password'
 MODEL = 'model'
 CHAT_ID = 'chat-id'
 
+# DB PARAMS
+MESSAGES = "messages"
+
 class Database:
     
     # Inicialización estática
@@ -105,7 +108,8 @@ class Database:
         # Update messages for the specific chat ID
         for chat in chats:
             if chat["id"] == id:
-                chat["messages"] = new_messages
+                for message in new_messages:
+                    chat[MESSAGES].append(message)
                 break
         
         # Save updated chats back to file

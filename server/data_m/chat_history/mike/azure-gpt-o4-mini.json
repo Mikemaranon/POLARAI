@@ -1,37 +1,42 @@
 [
     {
         "id": "Id19Akl2Mxmq",
-        "topic": "first chat (prueba)",
+        "topic": "Aqui haremos todo jdr",
         "timestamp": "2022-03-01T12:00:00",
         "messages": [
-            {"sender": "user", "content": "Hello, how are you?"},
-            {"sender": "bot", "content": "I'm fine, thank you. How can I help you?"},
-            {"sender": "user", "content": "I need some assistance with my order."},
-            {"sender": "bot", "content": "Sure! Can you provide your order ID?"},
-            {"sender": "user", "content": "Yes, it's 12345."},
-            {"sender": "bot", "content": "Thanks! Let me check the status of your order."},
-            {"sender": "user", "content": "I appreciate it."},
-            {"sender": "bot", "content": "Your order is being processed and should ship soon."},
-            {"sender": "user", "content": "When should I expect it to arrive?"},
-            {"sender": "bot", "content": "It should arrive within 3 to 5 business days."},
-            {"sender": "user", "content": "Great, thanks for the info."},
-            {"sender": "bot", "content": "You're welcome! Let me know if you need anything else."},
-            {"sender": "user", "content": "Can you help me track a package?"}, 
-            {"sender": "bot", "content": "Of course! Please provide the tracking number."},
-            {"sender": "user", "content": "Tracking number is 67890."},
-            {"sender": "bot", "content": "I found it! Your package is out for delivery."},
-            {"sender": "user", "content": "Awesome, thanks for the update."},
-            {"sender": "bot", "content": "You're welcome! Anything else I can help with?"}, 
-            {"sender": "user", "content": "No, that will be all for now."},
-            {"sender": "bot", "content": "Alright, have a great day!"},
-            {"sender": "user", "content": "Thank you! You too."},
-            {"sender": "bot", "content": "You're welcome! Feel free to reach out anytime."},
-            {"sender": "user", "content": "Actually, I have one more question."},
-            {"sender": "bot", "content": "Sure! What's your question?"}, 
-            {"sender": "user", "content": "I need to change my shipping address."},
-            {"sender": "bot", "content": "I can help with that. Can you provide the new address?"}
+            {
+                "sender": "user",
+                "content": "HEEy"
+            },
+            {
+                "sender": "bot",
+                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
+            },
+            {
+                "sender": "user",
+                "content": "que tal"
+            },
+            {
+                "sender": "bot",
+                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
+            },
+            {
+                "sender": "user",
+                "content": "hola hola"
+            },
+            {
+                "sender": "bot",
+                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
+            },
+            {
+                "sender": "user",
+                "content": "aho"
+            },
+            {
+                "sender": "bot",
+                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
+            }
         ]
-        
     },
     {
         "id": "Ab12Cd34Ef56",
@@ -40,11 +45,11 @@
         "messages": [
             {
                 "sender": "user",
-                "content": "Hello, how are you?"
+                "content": "Fuck you"
             },
             {
                 "sender": "bot",
-                "content": "I'm fine, thank you. How can I help you?"
+                "content": "yo momma so fat"
             }
         ]
     },

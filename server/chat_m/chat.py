@@ -40,6 +40,7 @@ class Chat:
                 "messages": self.messages
             }
             self.db.create_new_chat(user, name, info)
+            
         else: 
             # Save new messages to the chat history.
             self.db.save_chat_history(self.id, user, name, self.new_messages)

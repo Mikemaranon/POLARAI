@@ -1,5 +1,5 @@
 from werkzeug.security import check_password_hash
-from data_m.database import Database
+from data_m.database import Database, USERNAME, PASSWORD, MODEL, CHAT_ID
 
 class UserManager:
     def __init__(self):
