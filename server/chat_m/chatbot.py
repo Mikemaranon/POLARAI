@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import http.client
 from datetime import datetime
 from chat_m.chat import Chat
 from data_m.database import Database
@@ -8,7 +9,7 @@ from data_m.database import Database
 DATA_PATH = "server/data/chat-history/"  # Ubicación de los historiales de chat
 
 class Chatbot:
-    def __init__(self, user, name, api_key, endpoint):
+    def __init__(self, user, name, api_key, endpoint, path):
         
         # Initializes a Chatbot object with its name, API key, endpoint, and owning user.
         
@@ -21,6 +22,7 @@ class Chatbot:
         self.name = name
         self.api_key = api_key
         self.endpoint = endpoint 
+        self.path = path
         self.db = Database()     
         
         self.chats = self.load_chats()
@@ -55,42 +57,61 @@ class Chatbot:
         #   TODO: crear archivo para cada modelo
         #   TODO: crear método en la base de datos
         
-        headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
-        payload = {"input": context + '\n\n' + message}
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+
+        payload = json.dumps({
+            "messages": [
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": context + '\n\n' + message}
+            ],
+            "max_tokens": 100,
+            "temperature": 1.0
+        })
+
+        # Buscar el chat correspondiente o crear uno nuevo
+        target_chat = None
+        new = True
 
         for chat in self.chats:
             if chat.id == chat_id:
                 target_chat = chat
                 new = False
                 break
-            
-        if target_chat == None:
+
+        if target_chat is None:
             target_chat = Chat()
             self.chats.append(target_chat)
-            new = True
 
         target_chat.add_message("user", message)
-        
-        try:            
-            response = requests.post(self.endpoint, headers=headers, json=payload)
-            response.raise_for_status()
-            bot_response = response.json().get("response", "Error: No se recibió respuesta.")
-            
+
+        # Establecer conexión con Azure
+        conn = http.client.HTTPSConnection(self.endpoint)
+
+        try:
+            conn.request("POST", self.path, body=payload, headers=headers)
+            response = conn.getresponse()
+
+            if response.status != 200:
+                raise Exception(f"Error {response.status}: {response.reason}")
+
+            response_data = json.loads(response.read().decode())
+            bot_response = response_data.get("choices", [{}])[0].get("message", {}).get("content", "Error: No se recibió respuesta.")
+
             # Guardar mensaje en historial
             target_chat.add_message("bot", bot_response)
-            
-        except requests.exceptions.RequestException as e:
+
+        except Exception as e:
             bot_response = f"Error: {str(e)}"
-            # Guardar mensaje en historial
             target_chat.add_message("bot", bot_response)
+
+        finally:
+            conn.close()
 
         target_chat.save_messages(user, self.name, new)
 
-        # self.db.save_chat_history(
-        #     chat_id, self.user, self.name, 
-        #     target_chat.new_messages            
-        # )
-        
         return bot_response
 
     def new_chat(self, user_message, bot_message):

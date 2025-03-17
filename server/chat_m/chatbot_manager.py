@@ -48,6 +48,7 @@ class ChatbotManager:
                 name=bot_name,
                 api_key=bot_data["API_KEY"],
                 endpoint=bot_data["API_ENDPOINT"],
+                path=bot_data["API_PATH"]
             )
 
         return chatbots
