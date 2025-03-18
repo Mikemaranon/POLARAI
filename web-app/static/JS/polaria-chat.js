@@ -150,32 +150,45 @@ function renderChats(chats) {
 
         // Agregar un evento para cargar el chat al hacer clic
         chatDiv.addEventListener("click", () => {
-            loadChatHistory(chat.messages, chat.id)
+            loadChatHistory(chat.id)
         });
 
         container.appendChild(chatDiv);
     });
 }
 
-async function loadChatHistory(messages, id) {
+async function loadChatHistory(id) {
     // Paso 1: Limpiar el historial del chat
     clearChat()
 
     // Paso 2: Enviar el `chatId` al servidor
     try {
-        const response = await fetch("/api/set-chatId", {
+        const response_1 = await fetch("/api/set-chatId", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ chatId: id })
         });
-        if (!response.ok) {
+        if (!response_1.ok) {
             throw new Error("Error al establecer el chatId");
         }
 
+        const response_2 = await fetch("/api/get-singleChat", {
+            method: "GET",
+        });
+        if (!response_2.ok) {
+            throw new Error("Error al establecer el chatId");
+        }
+
+        const data = await response_2.json();
+
+        if (!data.messages || !Array.isArray(data.messages)) {
+            throw new Error("La respuesta del servidor no contiene un historial de mensajes válido");
+        }
+
         // Paso 3: Cargar los mensajes del historial
-        messages.forEach((message) => {
+        data.messages.forEach((message) => {
             addMessageToChat(message.content, message.sender === 'user');
         });
     } catch (error) {

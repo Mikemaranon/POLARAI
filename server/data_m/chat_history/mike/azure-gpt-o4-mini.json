@@ -138,5 +138,36 @@
                 "content": "Hey! How can I assist you today?"
             }
         ]
+    },
+    {
+        "id": "Chat-20250318090553",
+        "topic": null,
+        "timestamp": "2025-03-18T09:05:56.627806",
+        "messages": [
+            {
+                "sender": "user",
+                "content": "Hablame de donald trump"
+            },
+            {
+                "sender": "bot",
+                "content": "Donald Trump es un empresario, inversor y pol\u00edtico estadounidense que fue el 45\u00ba presidente de los Estados Unidos, ocupando el cargo desde enero de 2017 hasta enero de 2021. Naci\u00f3 el 14 de junio de 1946 en Queens, Nueva York, y es conocido por su carrera en el sector inmobiliario y por su personalidad medi\u00e1tica.\n\nAntes de convertirse en presidente, Trump fue un prominente empresario en el sector de bienes ra\u00edces y el entretenimiento. Dirigi\u00f3 la Organizaci\u00f3n Trump, una compa\u00f1\u00eda que desarrolla, negocia y administra propiedades inmobiliarias, as\u00ed como productos y servicios relacionados. Tambi\u00e9n gan\u00f3 notoriedad como presentador del programa de televisi\u00f3n \"The Apprentice\".\n\nTrump se postul\u00f3 como candidato del Partido Republicano en las elecciones presidenciales de 2016 y gan\u00f3 en una sorpresiva victoria contra la candidata dem\u00f3crata Hillary Clinton. Su campa\u00f1a se centr\u00f3 en temas como la inmigraci\u00f3n, el nacionalismo econ\u00f3mico y la promesa de \"hacer a Estados Unidos grande de nuevo\". Su ret\u00f3rica a menudo polarizadora y su estilo directo lo convirtieron en una figura controvertida.\n\nDurante su presidencia, Trump implement\u00f3 una serie de pol\u00edticas, incluyendo recortes de impuestos, desregulaci\u00f3n y una pol\u00edtica exterior m\u00e1s aislacionista. Tambi\u00e9n fue conocido por su enfoque en la inmigraci\u00f3n, incluyendo la construcci\u00f3n de un muro en la frontera con M\u00e9xico y la restricci\u00f3n de la entrada de ciudadanos de ciertos pa\u00edses musulmanes.\n\nTrump fue impeached dos veces por la C\u00e1mara de Representantes, una vez en 2019 por abuso de poder y obstrucci\u00f3n al Congreso y otra vez en 2021 por incitaci\u00f3n a la insurrecci\u00f3n despu\u00e9s del asalto al Capitolio de EE.UU. el 6 de enero de 2021. En ambos juicios, fue absuelto por el Senado.\n\nDespu\u00e9s de dejar la presidencia, Trump ha continuado siendo influyente en la pol\u00edtica republicana y ha insinuado su inter\u00e9s en postularse nuevamente en futuras elecciones. Su figura sigue siendo polarizante, generando tanto fervorosos seguidores como cr\u00edticos ac\u00e9rrimos."
+            },
+            {
+                "sender": "user",
+                "content": "hola"
+            },
+            {
+                "sender": "bot",
+                "content": "\u00a1Hola! \u00bfC\u00f3mo puedo ayudarte hoy?"
+            },
+            {
+                "sender": "user",
+                "content": "prueba"
+            },
+            {
+                "sender": "bot",
+                "content": "\u00a1Hola! \u00bfEn qu\u00e9 puedo ayudarte hoy?"
+            }
+        ]
     }
 ]

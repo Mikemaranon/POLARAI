@@ -26,6 +26,7 @@ class AppRoutes:
         self.app.add_url_rule("/api/send-message", "send_message", self.API_send_message, methods=["POST"])
         self.app.add_url_rule("/api/get-models", "get_models", self.API_get_models, methods=["POST"])
         self.app.add_url_rule("/api/set-chatId", "set_chatId", self.API_set_chatId, methods=["POST"])
+        self.app.add_url_rule("/api/get-singleChat", "get_singleChat", self.API_get_singleChat, methods=["GET"])
         
         self.app.add_url_rule("/api/create-chat", "create_chat", self.API_create_chat, methods=["GET"])
         
@@ -82,7 +83,10 @@ class AppRoutes:
         self.user_manager.set_session(session)
         self.chatbot_manager.set_session(session)
     
-    
+    def get_chats_in_chatbot(self):
+        chatbot = self.chatbot_manager.get_chatbot(session[MODEL])
+        chats = chatbot.load_chats()
+        return chats
     
     # =========================================
     #       API protocols start from here
@@ -131,19 +135,15 @@ class AppRoutes:
             return render_template("/sites/polarai-chat.html", bot_name=model)
     
     def API_get_chats(self):
-        
         if 'username' not in session:
             return redirect(url_for("login"))
         
-        chatbot = self.chatbot_manager.get_chatbot(session[MODEL])
-        chats = chatbot.load_chats()
-        
-        chats_dict = [chat.to_dict() for chat in chats]  # Convierte cada chat
-        
-        print("Historial de chats: \n", chats)
-        
-        return jsonify(chats_dict)
-    
+        chats = self.get_chats_in_chatbot()
+
+        # Extraer solo 'id' y 'topic' de cada chat
+        chats_list = [{"id": chat.id, "topic": chat.topic} for chat in chats]
+
+        return jsonify(chats_list)  # Devolver solo la información necesaria
     
     def API_send_message(self):
         
@@ -184,8 +184,18 @@ class AppRoutes:
     
         # Aquí guardas el chatId en la sesión o base de datos
         session[CHAT_ID] = chat_id
-    
+        
         return jsonify({"success": True}), 200
+    
+    def API_get_singleChat(self):
+        
+        chats = self.get_chats_in_chatbot()
+        
+        for chat in chats:
+            if chat.id == session[CHAT_ID]:
+                return jsonify({"messages": chat.messages})
+        
+        return jsonify({"error": "Chat no encontrado"}), 404
     
     def API_create_chat(self):
         
