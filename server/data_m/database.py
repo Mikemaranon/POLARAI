@@ -2,9 +2,8 @@ import os
 import json
 
 USER_FILE = "users.json"
-BOTS_FILE = "chatbots/bot_ownership.json"
+BOTS_FILE = "bots_ownership/"
 CHAT_PATH = "chat_history/"
-PROV_CONF = "chatbots/provider_config.json"
 
 BOTS_PATH = "chatbots/bot_ownership/"
 
@@ -32,7 +31,6 @@ class Database:
         self.users_file = os.path.join(os.path.dirname(__file__), USER_FILE)
         self.bots_file = os.path.join(os.path.dirname(__file__), BOTS_FILE)
         self.chat_path = os.path.join(os.path.dirname(__file__), CHAT_PATH)
-        self.provs_file = os.path.join(os.path.dirname(__file__), PROV_CONF)
         self.chat_history_path = None
     
     # ================= USERS =================
@@ -64,7 +62,7 @@ class Database:
         return users.get(username)
 
     def get_user_bots_list(self, user):
-        bots_file = self.load_chatbots_file()
+        bots_file = self.load_chatbots_file(user)
         
         if user in bots_file:
             bots = list(bots_file[user].keys())
@@ -73,27 +71,24 @@ class Database:
     
     # ================= CHATBOTS =================
     
-    def load_chatbots_file(self):
-        with open(self.bots_file, "r") as f:
-            return json.load(f)
+    # def load_chatbots_file(self):
+    #     with open(self.bots_file, "r") as f:
+    #         return json.load(f)
         
-    def save_chatbots_file(self, chatbots):
-        with open(self.bots_file, "w") as f:
+    def load_chatbots_file(self, user):
+        chatbot_file = os.path.join(self.bots_file, f"{user}.json")
+        with open(chatbot_file, "r") as f:
+            return json.load(f)    
+        
+    def save_chatbots_file(self, user, chatbots):
+        chatbot_file = os.path.join(self.bots_file, f"{user}.json")
+        with open(chatbot_file, "w") as f:
             json.dump(chatbots, f, indent=4)
             
     def delete_model(self, user, bot_name):
         chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
         os.remove(chat_history_path)
         
-    def get_provider_config(self, provider_name):
-        # Este método debe devolver el diccionario con API_KEY y API_ENDPOINT
-        # Ejemplo de retorno:
-        # return {
-        #     "API_KEY": "Tu_API_KEY_aqui",
-        #     "API_ENDPOINT": "https://api-del-proveedor.com/endpoint"
-        # }
-        return 0
-
     # ================= CHATS =================
                        
     def create_new_chat(self, user, bot_name, chat_info):
@@ -154,5 +149,28 @@ class Database:
             new_chats = [chat for chat in chats if chat["id"] != id]
         with open(chat_history_path, "w") as f:
             json.dump(new_chats, f, indent=4)
+        
+           
+    def load_summary_list(self, user, bot_name, chat_id):
+        chats = self.load_chat_history(user, bot_name)
+        for chat in chats:
+            if chat["id"] == chat_id:
+                return chat["summary"]
+        
+    def save_summary_list(self, id, user, bot_name, new_sum_list):
+        chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
+        
+        # Read existing chats
+        chats = self.load_chat_history(user, bot_name)
+            
+        # Update messages for the specific chat ID
+        for chat in chats:
+            if chat["id"] == id:
+                chat["summary"] = new_sum_list
+                break
+        
+        # Save updated chats back to file
+        with open(chat_history_path, "w") as f:
+            json.dump(chats, f, indent=4)
         
     

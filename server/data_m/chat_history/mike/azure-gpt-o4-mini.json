@@ -71,77 +71,8 @@
         ]
     },
     {
-        "id": "Ab12Cd34Ef56",
-        "topic": "second chat (prueba)",
-        "timestamp": "2022-03-01T12:01:00",
-        "messages": [
-            {
-                "sender": "user",
-                "content": "Fuck you"
-            },
-            {
-                "sender": "bot",
-                "content": "yo momma so fat"
-            },
-            {
-                "sender": "user",
-                "content": "yo               so fat she makes the message deeper\n\n\n\n\n\n\n\n\n\n\n\n\n      mama"
-            },
-            {
-                "sender": "bot",
-                "content": "Error: 400 Client Error: model_error for url: https://azure-ai-mike-tajamar.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview"
-            },
-            {
-                "sender": "user",
-                "content": "holaaaa, con que me estabas ayudando antes?"
-            },
-            {
-                "sender": "bot",
-                "content": "\u00a1Hola! Estoy aqu\u00ed para ayudarte con cualquier pregunta o tema que necesites. \u00bfHay algo espec\u00edfico en lo que te gustar\u00eda que te ayude hoy?"
-            },
-            {
-                "sender": "user",
-                "content": "tengo otra conversaci\u00f3n contigo, dime de que era"
-            },
-            {
-                "sender": "bot",
-                "content": "Lo siento, pero no tengo la capacidad de acceder a conversaciones pasadas o recordar informaci\u00f3n personal. Cada sesi\u00f3n es independiente, as\u00ed que no puedo saber de qu\u00e9 hablaste anteriormente. Sin embargo, estoy aqu\u00ed para ayudarte con cualquier pregunta o tema que desees discutir. \u00a1Cu\u00e9ntame en qu\u00e9 puedo asistirte hoy!"
-            }
-        ]
-    },
-    {
-        "id": "Xy78Zk90Lm12",
-        "topic": "third chat (prueba)",
-        "timestamp": "2022-03-01T12:04:00",
-        "messages": [
-            {
-                "sender": "user",
-                "content": "Hello, how are you?"
-            },
-            {
-                "sender": "bot",
-                "content": "I'm fine, thank you. How can I help you?"
-            }
-        ]
-    },
-    {
-        "id": "Chat-20250317181950",
-        "topic": null,
-        "timestamp": "2025-03-17T18:19:51.732561",
-        "messages": [
-            {
-                "sender": "user",
-                "content": "heey"
-            },
-            {
-                "sender": "bot",
-                "content": "Hey! How can I assist you today?"
-            }
-        ]
-    },
-    {
         "id": "Chat-20250318090553",
-        "topic": null,
+        "topic": "EEUU",
         "timestamp": "2025-03-18T09:05:56.627806",
         "messages": [
             {
@@ -168,12 +99,13 @@
                 "sender": "bot",
                 "content": "\u00a1Hola! \u00bfEn qu\u00e9 puedo ayudarte hoy?"
             }
+        ],
+        "summary": [
+            {
+                "id": 1,
+                "content": "the user is asking about Donald Trump, model answers. Later the user says hi and sends a testing message",
+                "activated": "true"
+            }
         ]
-    },
-    {
-        "id": "Chat-20250318125537",
-        "topic": null,
-        "timestamp": "2025-03-18T12:56:13.316006",
-        "messages": []
     }
 ]

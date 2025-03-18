@@ -1,7 +1,7 @@
 {
     "mike": {
         "google-gemini" : {
-            "API_KEY": "",
+            "API_KEY": "AIzaSyD2BfXnG5ibWr9QgWj-rReWp3J0fPV5VFw",
             "API_ENDPOINT": "https://generativelanguage.googleapis.com",
             "API_PATH": "",
             "SYS_MSG": "",
@@ -9,10 +9,18 @@
         },
         "azure-gpt-o4-mini" : {
             "API_KEY": "",
-            "API_ENDPOINT": "azure-ai-mike-tajamar.cognitiveservices.azure.com",
+            "API_ENDPOINT": "azure-ai-mike-tajamar.openai.azure.com",
             "API_PATH": "/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-10-21",
             "SYS_MSG": "",
             "TEMP": 0.8
         }  
+    },
+
+    "smry": {
+        "API_KEY": "",
+        "API_ENDPOINT": "",
+        "API_PATH": "",
+        "SYS_MSG": "",
+        "TEMP": 0.9
     }
 }

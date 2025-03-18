@@ -1,14 +1,16 @@
 import os
 import json
 from chat_m.chatbot import Chatbot
+from chat_m.summary_maker import SummaryMaker
 from data_m.database import Database, USERNAME, PASSWORD, MODEL, CHAT_ID
 
 class ChatbotManager:
     def __init__(self):
-        self.session = None
-        self.user = None
         self.chatbots = {}
         self.db = Database()
+        
+        # TODO: integrate in the module to be uses only by ChatbotManager
+        self.summary_maker = SummaryMaker()
         
     def set_session(self, session):
         self.session = session
@@ -32,7 +34,9 @@ class ChatbotManager:
         # :param user: Name of the user.
         # :return: Dictionary with the chatbots available for the user.
 
-        bot_ownership = self.db.load_chatbots_file()
+        # bot_ownership = self.db.load_chatbots_file()
+        
+        bot_ownership = self.db.load_chatbots_file(user)
 
         # Checks if the user has configured chatbots
         if user not in bot_ownership:
@@ -52,6 +56,12 @@ class ChatbotManager:
             )
 
         return chatbots
+    
+    def update_chatbot(self):
+        
+        # update the user/chatbot.json file using Database module
+        
+        return 0
 
     def get_chatbot(self, bot_name):
          
@@ -85,3 +95,8 @@ class ChatbotManager:
         if "user_bots" not in self.session:
             self.set_user_bots()  # Si no están en la sesión, los carga
         return self.session["user_bots"]
+    
+    # TODO: CREAR API PARA GESTIONAR LOS RESÚMENES
+    def add_message_to_summary_buffer(self, sender, content, model, chat_id):
+        self.summary_maker.set_session_info(self.user, model, chat_id)
+        self.summary_maker.add_message(sender, content)
