@@ -14,6 +14,11 @@
     position: relative; /* Mantiene los elementos dentro del contenedor */
 }
 
+.add-chat {
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
 .chat-item, .add-chat {
     position: relative;
     flex-grow: 1;
@@ -24,6 +29,10 @@
     border-radius: 10px;
     cursor: pointer;
     transition: background 0.3s;
+}
+
+.chat-item span {
+    margin-right: 30px;
 }
 
 .opt-button {
@@ -42,6 +51,7 @@
 
 .options-menu {
     position: absolute;
+    width: 200px;
     left: calc(100% + 5px); /* Posiciona el menú 5px a la derecha del botón */
     top: 50%;
     transform: translateY(-50%); /* Centra verticalmente el menú */
