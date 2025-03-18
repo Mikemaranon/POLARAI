@@ -1,0 +1,143 @@
+
+.left-menu, .right-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start; /* Alinea el contenido en la parte superior */
+    height: 100%;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 27%;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    position: relative; /* Mantiene los elementos dentro del contenedor */
+}
+
+.chat-item, .add-chat {
+    position: relative;
+    flex-grow: 1;
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    background: #f4f4f4;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.opt-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.options-menu {
+    position: absolute;
+    left: calc(100% + 5px); /* Posiciona el menú 5px a la derecha del botón */
+    top: 50%;
+    transform: translateY(-50%); /* Centra verticalmente el menú */
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 1000;
+    min-width: 150px;
+}
+
+.options-menu.active {
+    display: block;
+}
+
+.menu-button {
+    width: 100%;
+    padding: 8px 15px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.menu-button:hover {
+    background: #f0f0f0;
+}
+
+.menu-button:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.menu-button:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.menu-button.delete {
+    color: #dc3545;
+}
+
+.menu-button.delete:hover {
+    background: #ffebee;
+}
+
+.opt-button::before {
+    content: "⋮";
+    font-size: 20px;
+    color: #666;
+}
+
+.chat-item:hover .opt-button {
+    opacity: 1;
+}
+
+.opt-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+}
+
+.add-chat:hover, .chat-item:hover {
+    background: #ddd;
+}
+
+.left-sidebar .toggle-btn {
+    right: -40px;
+}
+
+.right-sidebar .toggle-btn {
+    left: -40px;
+}
+
+@media (max-width: 768px) {
+    .left-menu, .right-menu{
+        width: 30px;
+    }
+    .left-menu .toggle-btn {
+        transform: translateX(17%);
+        display: flex;
+    }
+    .right-menu .toggle-btn {
+        transform: translateX(-81%);
+        display: flex;
+    }
+    .menu-title {
+        display: none;
+    }
+    .chat-item, .add-chat {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .left-menu, .right-menu {
+        display: none;  
+    }
+}

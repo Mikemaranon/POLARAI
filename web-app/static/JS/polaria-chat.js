@@ -7,6 +7,13 @@ const chatHistory = document.getElementById('chat-history');
 document.addEventListener('DOMContentLoaded', initializeChat);
 document.addEventListener("DOMContentLoaded", fetchChats);
 document.addEventListener("DOMContentLoaded", setNewChatId);
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.opt-button') && !e.target.closest('.options-menu')) {
+        document.querySelectorAll('.options-menu.active').forEach(menu => {
+            menu.classList.remove('active');
+        });
+    }
+});
 
 function initializeChat() {
     sendButton.addEventListener('click', handleSendMessage);
@@ -146,11 +153,69 @@ function renderChats(chats) {
     chats.forEach(chat => {
         const chatDiv = document.createElement("div");
         chatDiv.classList.add("chat-item");
-        chatDiv.textContent = `${chat.topic}`; // Muestra el ID del chat
+        
+        const chatContent = document.createElement("span");
+        chatContent.textContent = `${chat.topic}`;
+        chatDiv.appendChild(chatContent);
+        
+        // Crear el menú de opciones
+        const optionsMenu = document.createElement("div");
+        optionsMenu.classList.add("options-menu");
+        
+        // Crear botones del menú
+        const summaryButton = document.createElement("button");
+        summaryButton.classList.add("menu-button");
+        summaryButton.textContent = "Hacer resumen de chat";
+        summaryButton.onclick = (e) => {
+            e.stopPropagation();
+            console.log("Resumen del chat:", chat.id);
+            optionsMenu.classList.remove('active');
+        };
 
-        // Agregar un evento para cargar el chat al hacer clic
+        const renameButton = document.createElement("button");
+        renameButton.classList.add("menu-button");
+        renameButton.textContent = "Cambiar título";
+        renameButton.onclick = (e) => {
+            e.stopPropagation();
+            console.log("Cambiar título del chat:", chat.id);
+            optionsMenu.classList.remove('active');
+        };
+
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("menu-button", "delete");
+        deleteButton.textContent = "Eliminar chat";
+        deleteButton.onclick = (e) => {
+            e.stopPropagation();
+            console.log("Eliminar chat:", chat.id);
+            optionsMenu.classList.remove('active');
+        };
+
+        // Agregar botones al menú
+        optionsMenu.appendChild(summaryButton);
+        optionsMenu.appendChild(renameButton);
+        optionsMenu.appendChild(deleteButton);
+        
+        // Crear el botón de opciones (tres puntos)
+        const optButton = document.createElement("button");
+        optButton.classList.add("opt-button");
+        optButton.addEventListener("click", (e) => {
+            e.stopPropagation();
+            // Cerrar otros menús abiertos
+            document.querySelectorAll('.options-menu.active').forEach(menu => {
+                if (menu !== optionsMenu) {
+                    menu.classList.remove('active');
+                }
+            });
+            // Toggle del menú actual
+            optionsMenu.classList.toggle('active');
+        });
+
+        chatDiv.appendChild(optButton);
+        chatDiv.appendChild(optionsMenu);
+        
+        // Evento click para el chat-item
         chatDiv.addEventListener("click", () => {
-            loadChatHistory(chat.id)
+            loadChatHistory(chat.id);
         });
 
         container.appendChild(chatDiv);
