@@ -16,6 +16,17 @@
     --chat-input-color: #cccccc;
     --user-msg: #e3f2fd;
     --bot-msg: transparent;
+
+    /* chat elements */
+    --items-bg-color: #f4f4f4;
+    --items-hover: #ddd;
+    --button-hover: #f0f0f0;
+
+    /* modal elements */
+    --modal-color: #aaa;
+    --modal-border: #ccc;
+    --modal-cont-bg: #f9f9f9;
+    --modal-bg-color: #fff;
 }
 
 /* Estilos para index.html */
@@ -84,3 +95,49 @@ a:hover {
 .left-menu, .right-menu {
     background-color: var(--container-bg-color);
 }
+
+/* Menu elements */
+
+.chat-item, .add-chat {
+    background: var(--items-bg-color);
+}
+
+.options-menu {
+    background: white;
+    border: 1px solid #ccc;
+}
+
+.menu-button:hover,
+.menu-button.delete:hover {
+    background: var(--button-hover);
+}
+
+.opt-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.add-chat:hover, .chat-item:hover {
+    background: var(--items-hover);
+}
+
+/* Modal in index.html */
+
+.modal-content {
+    border: 1px solid var(--modal-border);
+    background-color: var(--modal-bg-color);
+}
+
+.close {
+    color: var(--modal-color);
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+}
+
+.create-model, .bot-card {
+    border: 1px solid var(--modal-border);
+    background-color: var(--modal-cont-bg);
+}
+

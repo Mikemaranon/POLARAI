@@ -4,7 +4,7 @@
     --header-bg-color: #424242;
     --text-color: #e0e0e0;
     --button-bg-color: #797979;
-    --button-hover-bg-color: #8d8d8d;
+    --button-hover-bg-color: #a7a7a7;
     --border-color: #555555;
     --container-bg-color: #575757;
     --url-color: #7b7b7b;
@@ -15,6 +15,16 @@
     --chat-input-color: #616161;
     --user-msg: #575757;
     --bot-msg: transparent;
+
+    /* chat elements */
+    --items-bg-color: #6f6f6f;
+    --items-hover: #9c9c9c;
+    
+    /* modal elements */
+    --modal-color: #d2d2d2;
+    --modal-border: #505050;
+    --modal-cont-bg: #6c6c6c;
+    --modal-bg-color: #434343;
 }
 
 body {
@@ -83,4 +93,55 @@ a:hover {
 .left-menu, .right-menu {
     background-color: var(--container-bg-color);
     border: 1px solid var(--border-color);
+}
+
+/* Menu elements */
+
+.chat-item, .add-chat {
+    background: var(--items-bg-color);
+}
+
+.menu-button {
+    border-color: var(--container-bg-color);
+    background-color: var(--container-bg-color);
+    color: white;
+}
+
+.options-menu {
+    background: white;
+    border: 1px solid #ccc;
+}
+
+.menu-button:hover,
+.menu-button.delete:hover {
+    background: var(--button-hover-bg-color);
+}
+
+.opt-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.add-chat:hover, .chat-item:hover {
+    background: var(--items-hover);
+}
+
+/* Modal in index.html */
+
+.modal-content {
+    border: 1px solid var(--modal-border);
+    background-color: var(--modal-bg-color);
+}
+
+.close {
+    color: var(--modal-color);
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+}
+
+.create-model, .bot-card {
+    border: 1px solid var(--modal-border);
+    background-color: var(--modal-cont-bg);
 }

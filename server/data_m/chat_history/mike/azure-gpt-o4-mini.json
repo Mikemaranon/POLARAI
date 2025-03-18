@@ -169,5 +169,11 @@
                 "content": "\u00a1Hola! \u00bfEn qu\u00e9 puedo ayudarte hoy?"
             }
         ]
+    },
+    {
+        "id": "Chat-20250318125537",
+        "topic": null,
+        "timestamp": "2025-03-18T12:56:13.316006",
+        "messages": []
     }
 ]

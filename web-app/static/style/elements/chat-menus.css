@@ -25,7 +25,6 @@
     width: 100%;
     padding: 10px;
     margin: 5px 0;
-    background: #f4f4f4;
     border-radius: 10px;
     cursor: pointer;
     transition: background 0.3s;
@@ -79,10 +78,6 @@
     transition: background 0.2s;
 }
 
-.menu-button:hover {
-    background: #f0f0f0;
-}
-
 .menu-button:first-child {
     border-radius: 8px 8px 0 0;
 }
@@ -93,10 +88,6 @@
 
 .menu-button.delete {
     color: #dc3545;
-}
-
-.menu-button.delete:hover {
-    background: #ffebee;
 }
 
 .opt-button::before {
@@ -112,10 +103,6 @@
 .opt-button:hover {
     background: rgba(0, 0, 0, 0.1);
     border-radius: 50%;
-}
-
-.add-chat:hover, .chat-item:hover {
-    background: #ddd;
 }
 
 .left-sidebar .toggle-btn {
