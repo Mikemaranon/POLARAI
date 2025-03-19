@@ -1,4 +1,5 @@
 import json
+from chat_m.chat import Chat
 from data_m.database import Database  # Importar la instancia del gestor de base de datos
 
 class SummaryMaker:
@@ -19,6 +20,8 @@ class SummaryMaker:
         # Verificar si se han acumulado 6 mensajes (3 del usuario y 3 del bot)
         if len(self.buffer) == 6:
             self.generate_summary()
+        else:
+            return 0
 
     def generate_summary(self):
         # Crear un texto con los mensajes para enviar al modelo
@@ -33,6 +36,9 @@ class SummaryMaker:
 
         # Limpiar el buffer después de generar el resumen
         self.reset_buffer()
+        
+        # Return the content for the chat to save it
+        return summary[0]['summary_text']
 
     def save_summary(self, summary_text):
         
@@ -50,7 +56,3 @@ class SummaryMaker:
         self.buffer = []
         
     # TODO: método para guardar el estado activo de los resumenes
-    def save_active_states(self, ids_states):
-        
-        current_sum_list = self.db.load_summary_list(self.user, self.bot_name, self.chat_id)
-        return 0 

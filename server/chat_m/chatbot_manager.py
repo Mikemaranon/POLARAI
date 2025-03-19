@@ -1,7 +1,6 @@
 import os
 import json
 from chat_m.chatbot import Chatbot
-from chat_m.summary_maker import SummaryMaker
 from data_m.database import Database, USERNAME, PASSWORD, MODEL, CHAT_ID
 
 class ChatbotManager:
@@ -10,7 +9,7 @@ class ChatbotManager:
         self.db = Database()
         
         # TODO: integrate in the module to be uses only by ChatbotManager
-        self.summary_maker = SummaryMaker()
+        # self.summary_maker = SummaryMaker()
         
     def set_session(self, session):
         self.session = session
@@ -97,6 +96,8 @@ class ChatbotManager:
         return self.session["user_bots"]
     
     # TODO: CREAR API PARA GESTIONAR LOS RESÚMENES
-    def add_message_to_summary_buffer(self, sender, content, model, chat_id):
-        self.summary_maker.set_session_info(self.user, model, chat_id)
-        self.summary_maker.add_message(sender, content)
+    def is_summary(self, model, chat_id):        
+        return self.get_chatbot(model).is_summary(chat_id)
+    
+    def get_last_summary(self, model, chat_id):
+        return self.get_chatbot(model).get_last_summary(chat_id)

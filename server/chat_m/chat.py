@@ -3,7 +3,7 @@ from datetime import datetime
 from data_m.database import Database
 
 class Chat:
-    def __init__(self, topic=None, chat_id=None, timestamp=None, messages=None):
+    def __init__(self, topic=None, chat_id=None, timestamp=None, messages=None, summary=None):
          
         # Initialize a Chat object to manage a single chat session.
         # 
@@ -15,7 +15,10 @@ class Chat:
         self.id = chat_id or self._generate_chat_id()
         self.timestamp = timestamp or datetime.now().isoformat()
         self.messages = messages or []
+        self.summary = summary or []
+        self.last_summary = []
         self.new_messages = []
+        self.is_summary = False
         
         self.db = Database()
 
@@ -31,6 +34,15 @@ class Chat:
             "content": content
         })
         
+    def add_summary(self, summary):
+        self.is_summary = True
+        self.summary.append(self.last_summary)
+        self.last_summary = []
+        self.last_summary.append(summary)
+        
+    def get_last_summary(self):
+        return self.last_summary[0]
+    
     def save_messages(self, user, name, new):
         
         if new == True:
@@ -57,6 +69,11 @@ class Chat:
             "timestamp": self.timestamp,
             "messages": self.messages
         }
+        
+    def get_is_summary(self):
+        sum = self.is_summary
+        self.is_summary = False
+        return sum
 
     @staticmethod
     def _generate_chat_id():

@@ -162,9 +162,25 @@ class AppRoutes:
         
         # Llamada al chatbot manager para procesar el mensaje
         response = self.chatbot_manager.manager_send_message(bot_name, context, message, chat_id)
+        is_summary = self.chatbot_manager.is_summary(bot_name, chat_id)
         
         # Aquí puedes retornar la respuesta que desee el bot
-        return jsonify({"response": response, "data": bot_name + chat_id})
+        return jsonify({
+            "response": response, 
+            "sum": is_summary
+        })
+        
+    def API_get_last_summary(self):
+         
+        if 'username' not in session:
+            return jsonify({"message": "Usuario no autenticado"}), 401  # 401 = Unauthorized
+    
+        bot_name = session[MODEL]
+        chat_id = session[CHAT_ID]
+        
+        summary = self.chatbot_manager.get_last_summary(bot_name, chat_id)
+        
+        return jsonify({summary})
         
     def API_get_models(self):
         
@@ -193,7 +209,10 @@ class AppRoutes:
         
         for chat in chats:
             if chat.id == session[CHAT_ID]:
-                return jsonify({"messages": chat.messages})
+                return jsonify({
+                    "messages": chat.messages,
+                    "summary": chat.summary
+                })
         
         return jsonify({"error": "Chat no encontrado"}), 404
     

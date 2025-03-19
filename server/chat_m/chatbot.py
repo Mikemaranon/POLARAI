@@ -4,6 +4,7 @@ import requests
 import http.client
 from datetime import datetime
 from chat_m.chat import Chat
+from chat_m.summary_maker import SummaryMaker
 from data_m.database import Database
 
 DATA_PATH = "server/data/chat-history/"  # Ubicación de los historiales de chat
@@ -24,6 +25,7 @@ class Chatbot:
         self.endpoint = endpoint 
         self.path = path
         self.db = Database()     
+        self.summary_maker = SummaryMaker()
         
         self.chats = self.load_chats()
         
@@ -85,7 +87,7 @@ class Chatbot:
             target_chat = self.new_chat(chat_id)
             self.chats.append(target_chat)
 
-        # Establecer conexión con Azure
+        # Establecer conexión con modelo
         conn = http.client.HTTPSConnection(self.endpoint)
 
         try:
@@ -98,10 +100,18 @@ class Chatbot:
             response_data = json.loads(response.read().decode())
             bot_response = response_data.get("choices", [{}])[0].get("message", {}).get("content", "Error: No se recibió respuesta.")
 
+            self.summary_maker.set_session_info(self.user, self.name, chat_id)
+
             # Guardar mensaje en historial
             target_chat.add_message("user", message)
             target_chat.add_message("bot", bot_response)
-
+            
+            self.summary_maker.add_message("user", message, target_chat)
+            sum = self.summary_maker.add_message("bot", bot_response, target_chat)
+            
+            if sum != 0:
+                target_chat.add_summary(sum)
+                
         except Exception as e:
             bot_response = f"Error: {str(e)}"
 
@@ -111,6 +121,7 @@ class Chatbot:
         target_chat.save_messages(user, self.name, new)
 
         return bot_response
+    
 
     def new_chat(self, chat_id):
         
@@ -124,6 +135,12 @@ class Chatbot:
         )
         
         return new_chat
+
+    def is_summary(self, chat_id):
+        return self.chats[chat_id].get_is_summary()
+
+    def get_last_summary(self, chat_id):
+        return self.chats[chat_id].get_last_summary()
 
     def __repr__(self):
         return f"Chatbot(user={self.user}, name={self.name}, endpoint={self.endpoint})"
