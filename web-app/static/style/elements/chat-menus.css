@@ -14,6 +14,10 @@
     position: relative; /* Mantiene los elementos dentro del contenedor */
 }
 
+.right-menu {
+    align-items: center;
+}
+
 .add-chat {
     text-align: center;
     font-family: 'Poppins', sans-serif;
@@ -111,6 +115,132 @@
 
 .right-sidebar .toggle-btn {
     left: -40px;
+}
+
+#right-menu-content {
+    margin-top: 15px;
+    
+    max-height: 300px;
+    gap: 20px;
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: white;
+    padding: 1rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    border-radius: 20px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#right-menu-content > div {
+    width: 100%;
+}
+
+.save-sum-list {
+    background-color: #3f77ee;
+    color: white;
+    border: none;
+    width: 100px;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 10px;
+    outline: none;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.save-sum-list:hover {
+    background-color: #8297df;
+}
+
+.summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100% ;
+    padding: 10px;
+    border-radius: 10px;
+    background: #f9f9f9;
+}
+
+#model-config {
+    width: 100%;
+    height: 330px;
+    padding: 20px;
+    background: #f0f0f0;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 30px;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.slider-container label {
+    flex-shrink: 0;
+    font-weight: bold;
+}
+
+input[type="range"] {
+    width: 150px; /* Tamaño fijo */
+    height: 8px;
+    appearance: none;
+    background: #ddd;
+    border-radius: 10px; /* Bordes redondeados */
+    outline: none;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #007bff;
+    border-radius: 50%; /* Hace el punto completamente redondo */
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#temperature-value {
+    width: 40px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.system-message-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+textarea {
+    margin-top: 20px;
+    resize: none;
+    width: 100%;    
+    border-radius: 20px;
+    height: 90%;
+    padding: 15px;
+    border: 1px solid #ccc;
+    font-size: 14px;
 }
 
 @media (max-width: 768px) {

@@ -34,16 +34,17 @@ class Chatbot:
         # Loads the chat history from the JSON file.
         
         # :return: List of Chat objects with the data from the JSON file.
-        
+         
         chat_list = []
         chats_file = self.db.load_chat_history(self.user, self.name)
                 
         for chat in chats_file:
             chat_list.append(Chat (
-                topic = chat["topic"],
                 chat_id = chat["id"],
+                topic = chat["topic"],
                 timestamp = chat["timestamp"],
-                messages = chat["messages"]
+                messages = chat["messages"],
+                summary = chat.get("summary", "")
             ))
         
         return chat_list

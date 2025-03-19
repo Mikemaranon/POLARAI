@@ -2,6 +2,12 @@
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-btn');
 const chatHistory = document.getElementById('chat-history');
+const sumList = document.getElementById('right-menu-content')
+
+const tempSlider = document.getElementById('temperature-slider');
+const tempValue = document.getElementById('temperature-value');
+
+
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', initializeChat);
@@ -13,6 +19,9 @@ document.addEventListener('click', (e) => {
             menu.classList.remove('active');
         });
     }
+});
+tempSlider.addEventListener('input', function() {
+    tempValue.textContent = this.value;
 });
 
 function initializeChat() {
@@ -59,6 +68,7 @@ function handleKeyPress(e) {
     }
 }
 
+
 function createMessageElement(message, isUser = true) {
     const messageDiv = document.createElement('div');
     messageDiv.className = isUser ? 'user-msg' : 'bot-msg';
@@ -68,9 +78,23 @@ function createMessageElement(message, isUser = true) {
     return messageDiv;
 }
 
+function createSummaryElement(summary, isActivated = true) {
+    const sumDiv = document.createElement('div');
+    sumDiv.className = isActivated ? 'summary-list active' : 'summary-list deactive';
+    sumDiv.style.whiteSpace = 'pre-wrap';
+    sumDiv.style.wordBreak = 'break-word';
+    sumDiv.textContent = summary;
+    return sumDiv;
+}
+
 function addMessageToChat(message, isUser = true) {
     chatHistory.appendChild(createMessageElement(message, isUser));
     chatHistory.scrollTop = chatHistory.scrollHeight;
+}
+
+function addSummaryToList(summary, isActivated = true) {
+    sumList.appendChild(createSummaryElement(summary, isActivated));
+    sumList.scrollTop = chatHistory.scrollHeight;
 }
 
 async function sendMessageToServer(message) {
@@ -90,6 +114,9 @@ async function sendMessageToServer(message) {
         }
 
         const data = await response.json();
+        if (data.sum == true) {
+            getLatestSummary()
+        }
         return data.response;
 
     } catch (error) {
@@ -109,6 +136,24 @@ async function handleSendMessage() {
     // Get and add AI response
     const aiResponse = await sendMessageToServer(message);
     addMessageToChat(aiResponse, false);
+}
+
+async function getLatestSummary() {
+    try {
+        const response = await fetch('/api/get-last-summary', {
+            method: 'GET'
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        } else {
+            const summary = await response.json()
+            addSummaryToList(summary, true)
+        }
+    }
+    catch (error) {
+        console.error(error)
+    }
 }
 
 function getChatContext() {
@@ -224,6 +269,7 @@ function renderChats(chats) {
 
 async function loadChatHistory(id) {
     // Paso 1: Limpiar el historial del chat
+    clearSumList()
     clearChat()
 
     // Paso 2: Enviar el `chatId` al servidor
@@ -252,10 +298,17 @@ async function loadChatHistory(id) {
             throw new Error("La respuesta del servidor no contiene un historial de mensajes válido");
         }
 
-        // Paso 3: Cargar los mensajes del historial
+        // Paso 3: Cargar los mensajes del historial y los resumenes
         data.messages.forEach((message) => {
             addMessageToChat(message.content, message.sender === 'user');
         });
+        console.log("mensages cargados")
+        data.summary.forEach((sum) => {
+            addSummaryToList(sum.content, sum.activated);
+            console.log("resumenes")
+        });
+        console.log("historial cargado")
+
     } catch (error) {
         console.error("Error al cargar el historial del chat:", error);
     }
@@ -278,6 +331,9 @@ async function setNewChatId() {
 }
 
 function clearChat() {
-    const chatHistory = document.getElementById("chat-history");
-    chatHistory.innerHTML = ""; // Limpiar todos los mensajes previos
+    chatHistory.innerHTML = "";
+}
+
+function clearSumList() {
+    sumList.innerHTML = ""; 
 }

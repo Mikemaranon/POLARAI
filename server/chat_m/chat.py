@@ -3,7 +3,7 @@ from datetime import datetime
 from data_m.database import Database
 
 class Chat:
-    def __init__(self, topic=None, chat_id=None, timestamp=None, messages=None, summary=None):
+    def __init__(self, chat_id=None, topic=None, timestamp=None, messages=None, summary=None):
          
         # Initialize a Chat object to manage a single chat session.
         # 

@@ -48,8 +48,19 @@
                     <h2 class="menu-title">Fast Config</h2>
                     <button class="toggle-btn" id="toggle-right-menu">☰</button>
                 </div>
+                <button class="save-sum-list">Save</button>
                 <div class="content" id="right-menu-content">
-                    <!-- dynamic generation -->
+                    <div class="summary-list" id="summary-list-1">
+                        <!-- dynamic generation -->
+                    </div>
+                </div>
+                <div id="model-config">
+                    <div class="slider-container">
+                        <label for="temperature-slider">Temp: </label>
+                        <input type="range" id="temperature-slider" min="0" max="1" step="0.01" value="0.7">
+                        <span id="temperature-value">0.7</span>
+                    </div>
+                    <textarea id="system-message" placeholder="Enter system instructions..."></textarea>
                 </div>
             </div>
         </main>

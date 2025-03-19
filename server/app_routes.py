@@ -29,6 +29,8 @@ class AppRoutes:
         self.app.add_url_rule("/api/get-singleChat", "get_singleChat", self.API_get_singleChat, methods=["GET"])
         
         self.app.add_url_rule("/api/create-chat", "create_chat", self.API_create_chat, methods=["GET"])
+        # TODO: api para recibir el ultimo resumen
+        self.app.add_url_rule("/api/get-last-summary", "get_lastSummary", self.API_get_last_summary, methods=["GET"])
         
     def get_home(self):
         if 'username' not in session:
@@ -209,6 +211,8 @@ class AppRoutes:
         
         for chat in chats:
             if chat.id == session[CHAT_ID]:
+                print(chat.summary)
+                
                 return jsonify({
                     "messages": chat.messages,
                     "summary": chat.summary
