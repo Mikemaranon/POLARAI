@@ -3,7 +3,8 @@ from datetime import datetime
 from data_m.database import Database
 
 class Chat:
-    def __init__(self, chat_id=None, topic=None, timestamp=None, messages=None, summary=None):
+    def __init__(self, chat_id=None, topic=None, timestamp=None, messages=None, 
+                 summary=None, temperature=None, system_msg=None):
          
         # Initialize a Chat object to manage a single chat session.
         # 
@@ -16,7 +17,10 @@ class Chat:
         self.timestamp = timestamp or datetime.now().isoformat()
         self.messages = messages or []
         self.summary = summary or []
-        self.last_summary = []
+        self.temperature = temperature or "0.7"
+        self.system_msg = system_msg or "none"
+                
+        self.last_summary = ""
         self.new_messages = []
         self.is_summary = False
         
@@ -37,21 +41,16 @@ class Chat:
     def add_summary(self, summary):
         self.is_summary = True
         self.summary.append(self.last_summary)
-        self.last_summary = []
-        self.last_summary.append(summary)
+        self.last_summary = ""
+        self.last_summary = summary
         
     def get_last_summary(self):
-        return self.last_summary[0]
+        return self.last_summary
     
     def save_messages(self, user, name, new):
         
         if new == True:
-            info = {
-                "id": self.id,
-                "topic": None,
-                "timestamp": self.timestamp,
-                "messages": self.messages
-            }
+            info = self.to_dict()
             self.db.create_new_chat(user, name, info)
             self.save_messages(user, name, False)
             
@@ -67,9 +66,12 @@ class Chat:
             "id": self.id,
             "topic": self.topic,
             "timestamp": self.timestamp,
-            "messages": self.messages
+            "messages": self.messages,
+            "summary": self.summary,
+            "temperature": self.temperature,
+            "system_msg": self.system_msg
         }
-        
+
     def get_is_summary(self):
         sum = self.is_summary
         self.is_summary = False

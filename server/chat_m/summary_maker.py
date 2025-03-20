@@ -28,7 +28,11 @@ class SummaryMaker:
         chat_text = "\n".join([f"{msg['sender']}: {msg['content']}" for msg in self.buffer])
 
         # Generar el resumen llamando a la API
-        summary = "?" #FIXME
+        summary = [
+            {
+                "summary_text": "?"
+            }           
+        ] #FIXME
 
         # Guardar el resumen en la base de datos
         # TODO: REVISAR FORMATO GUARDADO

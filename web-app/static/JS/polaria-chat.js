@@ -6,8 +6,7 @@ const sumList = document.getElementById('right-menu-content')
 
 const tempSlider = document.getElementById('temperature-slider');
 const tempValue = document.getElementById('temperature-value');
-
-
+const sysMsg = document.getElementById('system-message');
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', initializeChat);
@@ -97,13 +96,17 @@ function addSummaryToList(summary, isActivated = true) {
     sumList.scrollTop = chatHistory.scrollHeight;
 }
 
+function addSystemMessage(msg) {
+    sysMsg.innerHTML = msg;
+}
+
 async function sendMessageToServer(message) {
     try {
         const context = getChatContext()
 
         const response = await fetch('/api/send-message', {
             method: 'POST',
-            headers: {
+            headers: {  
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ context: context, message: message })
@@ -125,19 +128,6 @@ async function sendMessageToServer(message) {
     }
 }
 
-async function handleSendMessage() {
-    const message = messageInput.textContent.trim();
-    if (!message) return;
-
-    // Add user message
-    addMessageToChat(message, true);
-    clearInput();
-
-    // Get and add AI response
-    const aiResponse = await sendMessageToServer(message);
-    addMessageToChat(aiResponse, false);
-}
-
 async function getLatestSummary() {
     try {
         const response = await fetch('/api/get-last-summary', {
@@ -154,6 +144,19 @@ async function getLatestSummary() {
     catch (error) {
         console.error(error)
     }
+}
+
+async function handleSendMessage() {
+    const message = messageInput.textContent.trim();
+    if (!message) return;
+
+    // Add user message
+    addMessageToChat(message, true);
+    clearInput();
+
+    // Get and add AI response
+    const aiResponse = await sendMessageToServer(message);
+    addMessageToChat(aiResponse, false);
 }
 
 function getChatContext() {
@@ -270,9 +273,38 @@ function renderChats(chats) {
 async function loadChatHistory(id) {
     // Paso 1: Limpiar el historial del chat
     clearSumList()
+    clearSysMsg()
     clearChat()
 
-    // Paso 2: Enviar el `chatId` al servidor
+    // Paso 2: Enviar el `chatId` al servidor y recibir el chat
+    try {
+        // Enviar el chatId al servidor
+        await setChatId(id);
+
+        // Paso 3: Obtener la información del chat
+        const data = await getChatInfo();  // Usamos await para esperar la respuesta
+
+        // Paso 4: Cargar los mensajes del historial y los resúmenes
+        data.messages.forEach((message) => {
+            addMessageToChat(message.content, message.sender === 'user');
+        });
+        console.log("mensajes cargados");
+
+        data.summary.forEach((sum) => {
+            addSummaryToList(sum.content, sum.activated);
+            console.log("resúmenes cargados");
+        });
+
+        addSystemMessage(data.system_msg);
+
+        console.log("historial cargado");
+
+    } catch (error) {
+        console.error("Error al cargar el historial del chat:", error);
+    }
+}
+
+async function setChatId(id) {
     try {
         const response_1 = await fetch("/api/set-chatId", {
             method: "POST",
@@ -283,13 +315,19 @@ async function loadChatHistory(id) {
         });
         if (!response_1.ok) {
             throw new Error("Error al establecer el chatId");
-        }
+        }  
+    } catch (error) {
+        console.error(error);
+    }
+}
 
+async function getChatInfo() {
+    try {
         const response_2 = await fetch("/api/get-singleChat", {
             method: "GET",
         });
         if (!response_2.ok) {
-            throw new Error("Error al establecer el chatId");
+            throw new Error("Error al obtener la información del chat");
         }
 
         const data = await response_2.json();
@@ -297,20 +335,11 @@ async function loadChatHistory(id) {
         if (!data.messages || !Array.isArray(data.messages)) {
             throw new Error("La respuesta del servidor no contiene un historial de mensajes válido");
         }
-
-        // Paso 3: Cargar los mensajes del historial y los resumenes
-        data.messages.forEach((message) => {
-            addMessageToChat(message.content, message.sender === 'user');
-        });
-        console.log("mensages cargados")
-        data.summary.forEach((sum) => {
-            addSummaryToList(sum.content, sum.activated);
-            console.log("resumenes")
-        });
-        console.log("historial cargado")
+        return data;
 
     } catch (error) {
-        console.error("Error al cargar el historial del chat:", error);
+        console.error(error);
+        return { messages: [], summary: [] };  // Retornar valores vacíos en caso de error
     }
 }
 
@@ -336,4 +365,8 @@ function clearChat() {
 
 function clearSumList() {
     sumList.innerHTML = ""; 
+}
+
+function clearSysMsg() {
+    sysMsg.innerHTML = "";
 }

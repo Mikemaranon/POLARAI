@@ -29,7 +29,6 @@ class AppRoutes:
         self.app.add_url_rule("/api/get-singleChat", "get_singleChat", self.API_get_singleChat, methods=["GET"])
         
         self.app.add_url_rule("/api/create-chat", "create_chat", self.API_create_chat, methods=["GET"])
-        # TODO: api para recibir el ultimo resumen
         self.app.add_url_rule("/api/get-last-summary", "get_lastSummary", self.API_get_last_summary, methods=["GET"])
         
     def get_home(self):
@@ -173,10 +172,10 @@ class AppRoutes:
         })
         
     def API_get_last_summary(self):
-         
+        
         if 'username' not in session:
             return jsonify({"message": "Usuario no autenticado"}), 401  # 401 = Unauthorized
-    
+        
         bot_name = session[MODEL]
         chat_id = session[CHAT_ID]
         
@@ -200,7 +199,6 @@ class AppRoutes:
         data = request.get_json()
         chat_id = data.get("chatId")
     
-        # Aquí guardas el chatId en la sesión o base de datos
         session[CHAT_ID] = chat_id
         
         return jsonify({"success": True}), 200
@@ -208,14 +206,15 @@ class AppRoutes:
     def API_get_singleChat(self):
         
         chats = self.get_chats_in_chatbot()
+        print(chats)
         
         for chat in chats:
-            if chat.id == session[CHAT_ID]:
-                print(chat.summary)
-                
+            if chat.id == session[CHAT_ID]:                
                 return jsonify({
                     "messages": chat.messages,
-                    "summary": chat.summary
+                    "summary": chat.summary,
+                    "temperature": chat.temperature,
+                    "system_msg": chat.system_msg
                 })
         
         return jsonify({"error": "Chat no encontrado"}), 404

@@ -8,7 +8,7 @@
             "TEMP": 0.9
         },
         "azure-gpt-o4-mini" : {
-            "API_KEY": "",
+            "API_KEY": "47lgMZsJ9J8VMWbclfgpGV9Mohjc7H63fTuIXThAxPyVByXVum0QJQQJ99BCACYeBjFXJ3w3AAAAACOGlazA",
             "API_ENDPOINT": "azure-ai-mike-tajamar.openai.azure.com",
             "API_PATH": "/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-10-21",
             "SYS_MSG": "",

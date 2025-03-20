@@ -44,9 +44,11 @@ class Chatbot:
                 topic = chat["topic"],
                 timestamp = chat["timestamp"],
                 messages = chat["messages"],
-                summary = chat.get("summary", "")
+                summary = chat.get("summary", ""),
+                temperature = chat.get("temperature", "0.7"),
+                system_msg = chat.get("system_msg", "")
             ))
-        
+            
         return chat_list
         
     def send_message(self, user, context, message, chat_id):
@@ -107,8 +109,9 @@ class Chatbot:
             target_chat.add_message("user", message)
             target_chat.add_message("bot", bot_response)
             
-            self.summary_maker.add_message("user", message, target_chat)
-            sum = self.summary_maker.add_message("bot", bot_response, target_chat)
+            self.summary_maker.add_message("user", message)
+            sum = self.summary_maker.add_message("bot", bot_response)
+            print(f"Tipo de sum: {type(sum)} - Contenido: {sum}")
             
             if sum != 0:
                 target_chat.add_summary(sum)
@@ -138,7 +141,12 @@ class Chatbot:
         return new_chat
 
     def is_summary(self, chat_id):
-        return self.chats[chat_id].get_is_summary()
+        for chat in self.chats:
+            if chat.id == chat_id:
+                return chat.get_is_summary()
+        # return False if no chat is found
+        return False 
+
 
     def get_last_summary(self, chat_id):
         return self.chats[chat_id].get_last_summary()
