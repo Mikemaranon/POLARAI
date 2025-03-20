@@ -2,6 +2,7 @@
 server/data_m/config.json
 server/chat_m/*.env
 init.sh
+enviroment/
 
 # Ignorar archivos compilados de Python
 *.pyc
