@@ -69,11 +69,9 @@
                 "content": "Por supuesto, a continuaci\u00f3n te muestro un ejemplo b\u00e1sico de un juego de Snake en C. Este es un juego de consola, as\u00ed que funciona en sistemas que tengan la biblioteca est\u00e1ndar de C. Los controles son las teclas de direcci\u00f3n para mover la serpiente.\n\nTen en cuenta que este es un ejemplo simple y puede no ser el m\u00e1s optimizado. Para compilarlo, necesitar\u00e1s tener una terminal que soporte ANSI, y este c\u00f3digo deber\u00eda ejecutarse en un sistema Unix/Linux. Aqu\u00ed te dejo el c\u00f3digo:\n\n```c\n#include <stdio.h>\n#include <conio.h>\n#include <stdlib.h>\n#include <windows.h>\n\n#define WIDTH 20\n#define HEIGHT 10\n\nint x, y, fruitX, fruitY, score;\nint tailX[100], tailY[100];\nint nTail;\nenum eDirection { STOP = 0, LEFT, RIGHT, UP, DOWN };\nenum eDirection dir;\n\nvoid setup() {\n    dir = STOP;\n    x = WIDTH / 2;\n    y = HEIGHT / 2;\n    fruitX = rand() % WIDTH;\n    fruitY = rand() % HEIGHT;\n    score = 0;\n    nTail = 0;\n}\n\nvoid draw() {\n    system(\"cls\"); // limpiar la consola\n    for (int i = 0; i < WIDTH + 2; i++)\n        printf(\"#\");\n    printf(\"\\n\");\n\n    for (int i = 0; i < HEIGHT; i++) {\n        for (int j = 0; j < WIDTH; j++) {\n            if (j == 0)\n                printf(\"#\");\n            if (i == y && j == x)\n                printf(\"O\");\n            else if (i == fruitY && j == fruitX)\n                printf(\"F\");\n            else {\n                int isTail = 0;\n                for (int k = 0; k < nTail; k++) {\n                    if (tailX[k] == j && tailY[k] == i) {\n                        printf(\"o\");\n                        isTail = 1;\n                    }\n                }\n                if (!isTail)\n                    printf(\" \");\n            }\n            if (j == WIDTH - 1)\n                printf(\"#\");\n        }\n        printf(\"\\n\");\n    }\n\n    for (int i = 0; i < WIDTH + 2; i++)\n        printf(\"#\");\n    printf(\"\\n\");\n    printf(\"Score: %d\\n\", score);\n}\n\nvoid input() {\n    if (_kbhit()) {\n        switch (_getch()) {\n            case 'a':\n                dir = LEFT;\n                break;\n            case 'd':\n                dir = RIGHT;\n                break;\n            case 'w':\n                dir = UP;\n                break;\n            case 's':\n                dir = DOWN;\n                break;\n            case 'x':\n                dir = STOP;\n                break;\n        }\n    }\n}\n\nvoid logic() {\n    int prevX = tailX[0];\n    int prevY = tailY[0];\n    int prev2X, prev2Y;\n    tailX[0] = x;\n    tailY[0] = y;\n\n    for (int i = 1; i < nTail; i++) {\n        prev2X = tailX[i];\n        prev2Y = tailY[i];\n        tailX[i] = prevX;\n        tailY[i] = prevY;\n        prevX = prev2X;\n        prevY = prev2Y;\n    }\n\n    switch (dir) {\n        case LEFT:\n            x--;\n            break;\n        case RIGHT:\n            x++;\n            break;\n        case UP:\n            y--;\n            break;\n        case DOWN:\n            y++;\n            break;\n        default:\n            break;\n    }\n\n    if (x >= WIDTH) x = 0; else if (x < 0) x = WIDTH - 1;\n    if (y >= HEIGHT) y = 0; else if (y < 0) y = HEIGHT - 1;\n\n    for (int i = 0; i < nTail; i++) {\n        if (tailX[i] == x && tailY[i] == y)\n            dir = STOP; // colisi\u00f3n con la cola\n    }\n\n    if (x == fruitX && y == fruitY) {\n        score += 10;\n        fruitX = rand() % WIDTH;\n        fruitY = rand() % HEIGHT;\n        nTail++;\n    }\n}\n\nint main() {\n    setup();\n    while (dir != STOP) {\n        draw();\n        input();\n        logic();\n        Sleep(10); // controla la velocidad del juego\n    }\n    return 0;\n}\n```\n\n### Instrucciones para ejecutar el juego:\n1. Copia el c\u00f3digo anterior en un archivo llamado `snake.c`.\n2. Abre una terminal o s\u00edmbolo del sistema.\n3. Compila el programa"
             }
         ],
-        "summary": [
-            
-        ],
+        "summary": [],
         "temperature": "0.6",
-        "system_msg":"you are a programmer with years of experience"
+        "system_msg": "you are a programmer with years of experience"
     },
     {
         "id": "Chat-20250318090553",
@@ -103,6 +101,14 @@
             {
                 "sender": "bot",
                 "content": "\u00a1Hola! \u00bfEn qu\u00e9 puedo ayudarte hoy?"
+            },
+            {
+                "sender": "user",
+                "content": "Helooou"
+            },
+            {
+                "sender": "bot",
+                "content": "Hello! How can I assist you today?"
             }
         ],
         "summary": [

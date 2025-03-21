@@ -6,9 +6,8 @@ from data_m.database import USERNAME, PASSWORD, MODEL, CHAT_ID
 from main import app
 
 class AppRoutes:
-    def __init__(self, app, api, user_manager: UserManager, chatbot_manager: ChatbotManager):
+    def __init__(self, app, user_manager: UserManager, chatbot_manager: ChatbotManager):
         self.app = app
-        self.api = api
         self.user_manager = user_manager
         self.chatbot_manager = chatbot_manager
         self._register_routes()

@@ -8,9 +8,8 @@ from chat_m.chatbot_manager import ChatbotManager
 CF_FILE = "data_m/config.json"
 
 class Server:
-    def __init__(self, app: Flask, api):
+    def __init__(self, app: Flask):
         self.app = app
-        self.api = api
         self.app.secret_key = os.urandom(24)
         self.config = self.load_config()
         self.PORT = int(self.config["PORT"])
@@ -39,7 +38,7 @@ class Server:
         return UserManager()
     
     def ini_app_routes(self):
-        return AppRoutes(self.app, self.api, self.user_manager, self.chatbot_manager)
+        return AppRoutes(self.app, self.user_manager, self.chatbot_manager)
     
     def ini_chatbot_manager(self):
         return ChatbotManager()
