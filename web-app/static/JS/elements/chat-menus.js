@@ -20,9 +20,9 @@ function toggleSection(sectionId) {
         section.classList.toggle("small-width-active");
 
         if (leftSection.classList.contains("small-width-active") || rightSection.classList.contains("small-width-active")) {
-            chatContainer.classList.add("hide")
+            chatContainer.classList.add("hide");
         } else {
-            chatContainer.classList.remove("hide")
+            chatContainer.classList.remove("hide");
         }
 
     } else {
@@ -38,6 +38,8 @@ function updateLayout() {
 
         leftSection.classList.add("active");
         rightSection.classList.add("active");
+
+        chatContainer.classList.remove("hide");
     } else {
         leftSection.classList.remove("active");
         rightSection.classList.remove("active");
