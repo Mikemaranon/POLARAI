@@ -70,6 +70,9 @@ function handleKeyPress(e) {
     }
 }
 
+// ==================================================
+//        FUNCTIONS TO CREATE ELEMENTS IN HTML
+// ==================================================
 
 function createMessageElement(message, isUser = true) {
     const messageDiv = document.createElement('div');
@@ -80,12 +83,18 @@ function createMessageElement(message, isUser = true) {
     return messageDiv;
 }
 
-function createSummaryElement(summary, isActivated = true) {
+function createSummaryElement(summary, isActivated) {
     const sumDiv = document.createElement('div');
-    sumDiv.className = isActivated ? 'summary-list active' : 'summary-list deactive';
+    sumDiv.className = isActivated ? 'summary-list active-summary' : 'summary-list deactive';
     sumDiv.style.whiteSpace = 'pre-wrap';
     sumDiv.style.wordBreak = 'break-word';
     sumDiv.textContent = summary;
+
+    sumDiv.addEventListener("click", function () {
+        sumDiv.classList.toggle("active-summary");
+        sumDiv.classList.toggle("deactive");
+    });
+
     return sumDiv;
 }
 
@@ -94,7 +103,7 @@ function addMessageToChat(message, isUser = true) {
     chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 
-function addSummaryToList(summary, isActivated = true) {
+function addSummaryToList(summary, isActivated) {
     sumList.appendChild(createSummaryElement(summary, isActivated));
     sumList.scrollTop = chatHistory.scrollHeight;
 }
@@ -102,6 +111,11 @@ function addSummaryToList(summary, isActivated = true) {
 function addSystemMessage(msg) {
     sysMsg.innerHTML = msg;
 }
+
+// ==========================================================
+//        FUNCTIONS TO SEND INFORMATION TO THE SERVER
+//                  SUCH AS A NEW MESSAGE
+// ==========================================================
 
 async function sendMessageToServer(message) {
     try {
@@ -112,7 +126,11 @@ async function sendMessageToServer(message) {
             headers: {  
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ context: context, message: message })
+            body: JSON.stringify({ 
+                temperature: context.temperature,
+                system_msg: context.system_msg,
+                context: context.summaries, 
+                message: message })
         });
 
         if (!response.ok) {
@@ -164,10 +182,25 @@ async function handleSendMessage() {
 
 function getChatContext() {
     
-    // READ FAST CONFIG SECTION
+    const system_msg = document.getElementById("system-message").value;
+    const temperature = parseFloat(document.getElementById("temperature-slider").value);
+    const summaryElements = document.querySelectorAll("#right-menu-content #summary-list.active-summary");
+    const summaries = Array.from(summaryElements).map(el => el.textContent.trim());
     
-    return ''
+    // Construir el JSON
+    const configData = {
+        system_msg: system_msg,
+        temperature: temperature,
+        summaries: summaries
+    };
+    
+    return configData;
 }
+
+// ======================================================================
+//           FUNCTIONS TO GET THE CHATS FROM THE SERVER AND
+//                  HANDLE THE INFORMATION CONTANIED
+// ======================================================================
 
 async function fetchChats() {
 
@@ -363,7 +396,9 @@ async function setNewChatId() {
     }
 }
 
-// CLEAR FUNCTIONS
+// ==========================
+//      CLEAR FUNCTIONS
+// ==========================
 
 function clearChat() {
     chatHistory.innerHTML = "";

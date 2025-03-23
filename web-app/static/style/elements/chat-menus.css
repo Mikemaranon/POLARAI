@@ -184,7 +184,18 @@
     width: 100% ;
     padding: 10px;
     border-radius: 10px;
+    cursor: pointer;
+}
+
+.active-summary {
+    background: #91cdff;
+}
+
+.deactive {
     background: #f9f9f9;
+    opacity: 0.5;  /* Reduce la opacidad al 50% */
+    transition: opacity 0.3s ease-in-out; /* Suaviza el cambio */
+    transition: background 0.3s ease-in-out; /* Suaviza el cambio */
 }
 
 #model-config {
