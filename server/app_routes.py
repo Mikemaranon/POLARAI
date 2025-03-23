@@ -235,6 +235,7 @@ class AppRoutes:
         system_msg = data.get("system_msg")
         
         chat = self.chatbot_manager.get_chatbot(session[MODEL]).get_target_chat(session[CHAT_ID])
+        print("[INFO]: chat object loaded - ", chat)
         chat.save_chat_config(session[USERNAME], session[MODEL], summary_list, temperature, system_msg)
         
         return jsonify({"success": True}), 200

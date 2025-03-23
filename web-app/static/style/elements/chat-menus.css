@@ -191,6 +191,10 @@
     background: #91cdff;
 }
 
+.summary-id {
+    display: none;
+}
+
 .deactive {
     background: #f9f9f9;
     opacity: 0.5;  /* Reduce la opacidad al 50% */

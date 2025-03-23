@@ -61,9 +61,8 @@ class Chat:
             self.messages.extend(self.new_messages)
             self.new_messages = []
 
-    def save_chat_config(self, user, name, summary_list, temperature, system_msg):
-        
-        return 0
+    def save_chat_config(self, user, bot_name, summary_list, temperature, system_msg):
+        self.db.save_chat_config(self.id, user, bot_name, summary_list, temperature, system_msg)
 
     def to_dict(self):
         return {

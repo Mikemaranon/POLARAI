@@ -2,7 +2,8 @@
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-btn');
 const chatHistory = document.getElementById('chat-history');
-const sumList = document.getElementById('right-menu-content')
+const sumList = document.getElementById('right-menu-content');
+const saveSumList = document.getElementById('save-sum-list');
 
 const tempSlider = document.getElementById('temperature-slider');
 const tempValue = document.getElementById('temperature-value');
@@ -22,6 +23,7 @@ document.addEventListener('click', (e) => {
         });
     }
 });
+saveSumList.addEventListener('click', f_saveConfig)
 tempSlider.addEventListener('input', function() {
     tempValue.textContent = this.value;
 });
@@ -83,12 +85,14 @@ function createMessageElement(message, isUser = true) {
     return messageDiv;
 }
 
-function createSummaryElement(summary, isActivated) {
+function createSummaryElement(summary, isActivated, id) {
     const sumDiv = document.createElement('div');
-    sumDiv.className = isActivated ? 'summary-list active-summary' : 'summary-list deactive';
+    const activated = isActivated === "true" || isActivated === true;
+
+    sumDiv.className = activated ? 'summary-list active-summary' : 'summary-list deactive';
     sumDiv.style.whiteSpace = 'pre-wrap';
     sumDiv.style.wordBreak = 'break-word';
-    sumDiv.textContent = summary;
+    sumDiv.innerHTML = `<span class='summary-id'>${id}</span> ${summary}`;
 
     sumDiv.addEventListener("click", function () {
         sumDiv.classList.toggle("active-summary");
@@ -103,8 +107,8 @@ function addMessageToChat(message, isUser = true) {
     chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 
-function addSummaryToList(summary, isActivated) {
-    sumList.appendChild(createSummaryElement(summary, isActivated));
+function addSummaryToList(summary, isActivated, id) {
+    sumList.appendChild(createSummaryElement(summary, isActivated, id));
     sumList.scrollTop = chatHistory.scrollHeight;
 }
 
@@ -117,25 +121,60 @@ function addSystemMessage(msg) {
 //                  SUCH AS A NEW MESSAGE
 // ==========================================================
 
+async function f_saveConfig() {
+    try {
+        const config = getChatContext()
+
+        const body = JSON.stringify({ 
+            summary_list: config.all_summaries,
+            temperature: config.temperature,
+            system_msg: config.system_msg
+        })
+        
+        console.log(body)
+
+        const response = await fetch('/api/set-chat-config', {
+            method: 'POST',
+            headers: {  
+                'Content-Type': 'application/json',
+            },
+            body: body
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        return 'Lo siento, hubo un error al enviar.';
+    }
+}
+
 async function sendMessageToServer(message) {
     try {
         const context = getChatContext()
+
+        body = JSON.stringify({ 
+            temperature: context.temperature,
+            system_msg: context.system_msg,
+            context: context.texted_summaries, 
+            message: message })
+
+        console.log(body)
 
         const response = await fetch('/api/send-message', {
             method: 'POST',
             headers: {  
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
-                temperature: context.temperature,
-                system_msg: context.system_msg,
-                context: context.summaries, 
-                message: message })
+            body: body
         });
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
+
 
         const data = await response.json();
         if (data.sum == true) {
@@ -181,21 +220,43 @@ async function handleSendMessage() {
 }
 
 function getChatContext() {
-    
+
     const system_msg = document.getElementById("system-message").value;
     const temperature = parseFloat(document.getElementById("temperature-slider").value);
-    const summaryElements = document.querySelectorAll("#right-menu-content #summary-list.active-summary");
-    const summaries = Array.from(summaryElements).map(el => el.textContent.trim());
-    
-    // Construir el JSON
+    const summaryElements = Array.from(document.querySelectorAll("#right-menu-content .summary-list"));
+
+    // Crear una función para extraer los datos del resumen
+    const extractSummaryData = (el) => {
+        const id = el.querySelector(".summary-id")?.textContent.trim();
+        const activated = el.classList.contains("active-summary") ? "true" : "false";
+        
+        return {
+            id: id ? parseInt(id) : null,  // Aseguramos que el id sea un número (parseInt)
+            content: el.textContent.trim(),
+            activated: activated
+        };
+    };
+
+    // Usamos map para crear el array everySummary con los objetos generados por extractSummaryData
+    const everySummary = summaryElements.map(el => extractSummaryData(el));
+
+    // Filtrar solo los que tienen la clase .active-summary para la propiedad active_summaries
+    const activeSummaries = everySummary.filter(summary => summary.activated === "true");
+
+    // Crear la cadena texted_summaries a partir de los contenidos de activeSummaries
+    const textedSummaries = activeSummaries.map(summary => summary.content).join(" ");
+
     const configData = {
         system_msg: system_msg,
         temperature: temperature,
-        summaries: summaries
+        active_summaries: activeSummaries,
+        all_summaries: everySummary,
+        texted_summaries: textedSummaries
     };
     
     return configData;
 }
+
 
 // ======================================================================
 //           FUNCTIONS TO GET THE CHATS FROM THE SERVER AND
@@ -328,8 +389,7 @@ async function loadChatHistory(id) {
         console.log("mensajes cargados");
 
         data.summary.forEach((sum) => {
-            addSummaryToList(sum.content, sum.activated);
-            console.log("resúmenes cargados");
+            addSummaryToList(sum.content, sum.activated, sum.id);
         });
 
         addSystemMessage(data.system_msg);

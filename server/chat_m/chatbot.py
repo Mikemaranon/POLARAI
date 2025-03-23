@@ -159,7 +159,7 @@ class Chatbot:
     def get_target_chat(self, chat_id):
         
         for chat in self.chats:
-            if chat["id"] == chat_id:
+            if chat.id == chat_id:
                 return chat
 
         return "target chat is non-existent"
