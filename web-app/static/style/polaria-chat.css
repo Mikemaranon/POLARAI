@@ -9,7 +9,6 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    /*overflow: hidden;  Evita scroll en toda la página */
 }
 
 #title {
@@ -20,7 +19,7 @@ body {
 }
 
 #cursor {
-    display: none; /* Oculta el cursor */;
+    display: none; 
 }
 
 .general-container {

@@ -51,7 +51,7 @@ class Chatbot:
             
         return chat_list
         
-    def send_message(self, user, context, message, chat_id):
+    def send_message(self, user, system_msg, temperature, context, message, chat_id):
         
         # Sends a message to the chatbot and saves the conversation in the history.
         #
@@ -69,11 +69,11 @@ class Chatbot:
 
         payload = json.dumps({
             "messages": [
-                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "system", "content": system_msg},
                 {"role": "user", "content": context + '\n\n' + message}
             ],
             "max_tokens": 1000,
-            "temperature": 1.0
+            "temperature": temperature
         })
 
         # Buscar el chat correspondiente o crear uno nuevo
@@ -122,7 +122,12 @@ class Chatbot:
         finally:
             conn.close()
 
-        target_chat.save_messages(user, self.name, new)
+        target_chat.save_chat(user, self.name, new)
+        target_chat.save_chat_config(
+            user, self.name, 
+            target_chat.get_summary_list(),                    
+            temperature, system_msg
+        )
 
         return bot_response
     
@@ -150,6 +155,14 @@ class Chatbot:
 
     def get_last_summary(self, chat_id):
         return self.chats[chat_id].get_last_summary()
+    
+    def get_target_chat(self, chat_id):
+        
+        for chat in self.chats:
+            if chat["id"] == chat_id:
+                return chat
 
+        return "target chat is non-existent"
+    
     def __repr__(self):
         return f"Chatbot(user={self.user}, name={self.name}, endpoint={self.endpoint})"

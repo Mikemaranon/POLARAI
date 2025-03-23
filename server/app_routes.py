@@ -30,6 +30,8 @@ class AppRoutes:
         self.app.add_url_rule("/api/create-chat", "create_chat", self.API_create_chat, methods=["GET"])
         self.app.add_url_rule("/api/get-last-summary", "get_lastSummary", self.API_get_last_summary, methods=["GET"])
         
+        self.app.add_url_rule("/api/set-chat-config", "set_chatConfig", self.API_set_chat_config, methods=["POST"])
+        
     def get_home(self):
         if 'username' not in session:
             return redirect(url_for("login"))
@@ -153,6 +155,8 @@ class AppRoutes:
         data = request.get_json()
     
         bot_name = session[MODEL]
+        system_msg = data.get('system_msg') or "none"
+        temperature = data.get('temperature')
         context = data.get('context') or "none"
         message = data.get('message')
         chat_id = session[CHAT_ID]
@@ -161,7 +165,7 @@ class AppRoutes:
             return jsonify({"message": "Faltan parámetros necesarios"}), 400
         
         # Llamada al chatbot manager para procesar el mensaje
-        response = self.chatbot_manager.manager_send_message(bot_name, context, message, chat_id)
+        response = self.chatbot_manager.manager_send_message(bot_name, system_msg, temperature, context, message, chat_id)
         is_summary = self.chatbot_manager.is_summary(bot_name, chat_id)
         
         # Aquí puedes retornar la respuesta que desee el bot
@@ -221,4 +225,16 @@ class AppRoutes:
     def API_create_chat(self):
         
         session[CHAT_ID] = Chat._generate_chat_id()
+        return jsonify({"success": True}), 200
+    
+    def API_set_chat_config(self):
+        
+        data = request.get_json()
+        summary_list = data.get("summary_list")
+        temperature = data.get("temperature")
+        system_msg = data.get("system_msg")
+        
+        chat = self.chatbot_manager.get_chatbot(session[MODEL]).get_target_chat(session[CHAT_ID])
+        chat.save_chat_config(session[USERNAME], session[MODEL], summary_list, temperature, system_msg)
+        
         return jsonify({"success": True}), 200

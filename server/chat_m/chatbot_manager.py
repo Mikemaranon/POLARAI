@@ -55,12 +55,6 @@ class ChatbotManager:
             )
 
         return chatbots
-    
-    def update_chatbot(self):
-        
-        # update the user/chatbot.json file using Database module
-        
-        return 0
 
     def get_chatbot(self, bot_name):
          
@@ -73,7 +67,7 @@ class ChatbotManager:
             return self.chatbots[bot_name]
         return None
 
-    def manager_send_message(self, bot_name, context, message, chat_id):
+    def manager_send_message(self, bot_name, system_msg, temperature, context, message, chat_id):
          
         # Sends a message to a chatbot and returns the response.
         #
@@ -83,7 +77,7 @@ class ChatbotManager:
          
         chatbot = self.get_chatbot(bot_name)
         if chatbot:
-            return chatbot.send_message(self.session[USERNAME], context, message, chat_id)
+            return chatbot.send_message(self.session[USERNAME], system_msg, temperature, context, message, chat_id)
         else:
             return f"El chatbot '{bot_name}' no está disponible para el usuario '{self.user}'."
 
@@ -95,7 +89,6 @@ class ChatbotManager:
             self.set_user_bots()  # Si no están en la sesión, los carga
         return self.session["user_bots"]
     
-    # TODO: CREAR API PARA GESTIONAR LOS RESÚMENES
     def is_summary(self, model, chat_id):        
         return self.get_chatbot(model).is_summary(chat_id)
     

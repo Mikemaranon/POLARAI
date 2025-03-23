@@ -1,4 +1,4 @@
-// Elementos del DOM
+// DOM elements
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-btn');
 const chatHistory = document.getElementById('chat-history');
@@ -10,18 +10,6 @@ const sysMsg = document.getElementById('system-message');
 
 const showLeft = document.getElementById('showLeft')
 const showRight = document.getElementById('showRight')
-
-
-function toggleSection(sectionId, buttonId) {
-    const section = document.getElementById(sectionId);
-    const button = document.getElementById(buttonId);
-    section.classList.toggle('hidden');
-    if (section.classList.contains('hidden')) {
-        button.style.display = 'block'; // Muestra el botón flotante
-    } else {
-        button.style.display = 'none';  // Oculta el botón flotante
-    }
-}
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', initializeChat);
@@ -45,10 +33,10 @@ function initializeChat() {
 }
 
 function adjustInputHeight() {
-    // Guardar el contenido actual
+    // Store actual content
     const content = messageInput.textContent;
     
-    // Si está vacío, volver a la altura mínima
+    // if empty, return to minimal height
     if (!content.trim()) {
         messageInput.style.height = '20px';
         const chatInput = messageInput.closest('.chat-input');
@@ -56,15 +44,15 @@ function adjustInputHeight() {
         return;
     }
     
-    // Temporalmente establecer altura a auto para medir el contenido real
+    // Temporary auto height to calculate actual height
     messageInput.style.height = 'auto';
     
-    // Calcular nueva altura basada en el contenido
+    // calc new height based on content
     const scrollHeight = messageInput.scrollHeight;
     const newHeight = Math.max(20, Math.min(scrollHeight, 160));
     messageInput.style.height = newHeight + 'px';
     
-    // Ajustar contenedor
+    // Ajust container
     const chatInput = messageInput.closest('.chat-input');
     const containerHeight = newHeight + 40; // 40px for paddingss
     chatInput.style.height = Math.max(80, containerHeight) + 'px';
@@ -188,16 +176,16 @@ async function fetchChats() {
         if (!response.ok) throw new Error("Error al obtener los chats");
 
         const chats = await response.json();
-        localStorage.setItem("chats", JSON.stringify(chats)); // Guarda en localStorage
-        renderChats(chats); // Renderiza los chats en la UI
+        localStorage.setItem("chats", JSON.stringify(chats)); // Stores in localStorage
+        renderChatList(chats); // Render chat list
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-function renderChats(chats) {
+function renderChatList(chats) {
     const container = document.getElementById("left-menu-content");
-    container.innerHTML = ""; // Limpia el contenido anterior
+    container.innerHTML = ""; // clear previous content
 
     if (!chats || chats.length === 0) {
         container.innerHTML = "<p class='empty-message'>No hay chats disponibles</p>";
@@ -221,11 +209,11 @@ function renderChats(chats) {
         chatContent.textContent = `${chat.topic}`;
         chatDiv.appendChild(chatContent);
         
-        // Crear el menú de opciones
+        // Create menu
         const optionsMenu = document.createElement("div");
         optionsMenu.classList.add("options-menu");
         
-        // Crear botones del menú
+        // first button
         const summaryButton = document.createElement("button");
         summaryButton.classList.add("menu-button");
         summaryButton.textContent = "Hacer resumen de chat";
@@ -235,6 +223,7 @@ function renderChats(chats) {
             optionsMenu.classList.remove('active');
         };
 
+        // second button
         const renameButton = document.createElement("button");
         renameButton.classList.add("menu-button");
         renameButton.textContent = "Cambiar título";
@@ -244,6 +233,7 @@ function renderChats(chats) {
             optionsMenu.classList.remove('active');
         };
 
+        // third button
         const deleteButton = document.createElement("button");
         deleteButton.classList.add("menu-button", "delete");
         deleteButton.textContent = "Eliminar chat";
@@ -253,30 +243,29 @@ function renderChats(chats) {
             optionsMenu.classList.remove('active');
         };
 
-        // Agregar botones al menú
+        // add buttons to menu
         optionsMenu.appendChild(summaryButton);
         optionsMenu.appendChild(renameButton);
         optionsMenu.appendChild(deleteButton);
         
-        // Crear el botón de opciones (tres puntos)
+        // 3-point icon menu
         const optButton = document.createElement("button");
         optButton.classList.add("opt-button");
         optButton.addEventListener("click", (e) => {
             e.stopPropagation();
-            // Cerrar otros menús abiertos
+            // close other menus
             document.querySelectorAll('.options-menu.active').forEach(menu => {
                 if (menu !== optionsMenu) {
                     menu.classList.remove('active');
                 }
             });
-            // Toggle del menú actual
+            // Toggle actual menu
             optionsMenu.classList.toggle('active');
         });
 
         chatDiv.appendChild(optButton);
         chatDiv.appendChild(optionsMenu);
         
-        // Evento click para el chat-item
         chatDiv.addEventListener("click", () => {
             loadChatHistory(chat.id);
         });
@@ -286,20 +275,20 @@ function renderChats(chats) {
 }
 
 async function loadChatHistory(id) {
-    // Paso 1: Limpiar el historial del chat
+    // clear all history
     clearSumList()
     clearSysMsg()
     clearChat()
 
-    // Paso 2: Enviar el `chatId` al servidor y recibir el chat
+    // Send chat_id to server
     try {
         // Enviar el chatId al servidor
         await setChatId(id);
 
-        // Paso 3: Obtener la información del chat
-        const data = await getChatInfo();  // Usamos await para esperar la respuesta
+        // get chat info
+        const data = await getChatInfo();  // IMP: await needed
 
-        // Paso 4: Cargar los mensajes del historial y los resúmenes
+        // load messages and summaries
         data.messages.forEach((message) => {
             addMessageToChat(message.content, message.sender === 'user');
         });
@@ -354,7 +343,7 @@ async function getChatInfo() {
 
     } catch (error) {
         console.error(error);
-        return { messages: [], summary: [] };  // Retornar valores vacíos en caso de error
+        return { messages: [], summary: [] };  // empty values for error
     }
 }
 
@@ -373,6 +362,8 @@ async function setNewChatId() {
         console.error("Error al cargar el historial del chat:", error);
     }
 }
+
+// CLEAR FUNCTIONS
 
 function clearChat() {
     chatHistory.innerHTML = "";

@@ -15,6 +15,9 @@ CHAT_ID = 'chat-id'
 
 # DB PARAMS
 MESSAGES = "messages"
+SUMMARY = "summary"
+TEMP = "temperature"
+SYS_MSG = "system_msg"
 
 class Database:
     
@@ -122,6 +125,24 @@ class Database:
         chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
         with open(chat_history_path, "r") as f:
             return json.load(f)
+    
+    def save_chat_config(self, id, user, bot_name, summary_list, temperature, system_msg):
+        
+        chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")
+        
+        # Read existing chats
+        chats = self.load_chat_history(user, bot_name)
+        
+        for chat in chats:
+            if chat["id"] == id:
+                chat[SUMMARY] = summary_list
+                chat[TEMP] = temperature
+                chat[SYS_MSG] = system_msg
+                break
+        
+        # Save updated chats back to file
+        with open(chat_history_path, "w") as f:
+            json.dump(chats, f, indent=4)
     
     def save_chat_history(self, id, user, bot_name, new_messages):
         chat_history_path = os.path.join(self.chat_path, user, f"{bot_name}.json")

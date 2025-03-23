@@ -47,12 +47,12 @@ class Chat:
     def get_last_summary(self):
         return self.last_summary
     
-    def save_messages(self, user, name, new):
+    def save_chat(self, user, name, new):
         
         if new == True:
             info = self.to_dict()
             self.db.create_new_chat(user, name, info)
-            self.save_messages(user, name, False)
+            self.save_chat(user, name, False)
             
         else: 
             # Save new messages to the chat history.
@@ -60,6 +60,10 @@ class Chat:
         
             self.messages.extend(self.new_messages)
             self.new_messages = []
+
+    def save_chat_config(self, user, name, summary_list, temperature, system_msg):
+        
+        return 0
 
     def to_dict(self):
         return {
@@ -76,6 +80,9 @@ class Chat:
         sum = self.is_summary
         self.is_summary = False
         return sum
+    
+    def get_summary_list(self):
+        return self.summary
 
     @staticmethod
     def _generate_chat_id():
