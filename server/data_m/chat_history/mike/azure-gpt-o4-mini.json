@@ -109,6 +109,22 @@
             {
                 "sender": "bot",
                 "content": "Hello! How can I assist you today?"
+            },
+            {
+                "sender": "user",
+                "content": "Hiii!"
+            },
+            {
+                "sender": "bot",
+                "content": "Hello! How can I assist you today?"
+            },
+            {
+                "sender": "user",
+                "content": "Resume la computaci\u00f3n cuantica para un onvato"
+            },
+            {
+                "sender": "bot",
+                "content": "Claro, aqu\u00ed tienes un resumen sencillo de la computaci\u00f3n cu\u00e1ntica:\n\nLa computaci\u00f3n cu\u00e1ntica es un campo de la inform\u00e1tica que utiliza principios de la mec\u00e1nica cu\u00e1ntica para procesar informaci\u00f3n. A diferencia de las computadoras cl\u00e1sicas, que utilizan bits para representar datos en forma de 0s y 1s, las computadoras cu\u00e1nticas utilizan qubits. Los qubits pueden estar en m\u00faltiples estados a la vez debido a un fen\u00f3meno llamado superposici\u00f3n.\n\nAdem\u00e1s, los qubits pueden estar entrelazados, lo que significa que el estado de un qubit puede depender del estado de otro, sin importar la distancia entre ellos. Esto permite realizar c\u00e1lculos complejos de manera mucho m\u00e1s r\u00e1pida que las computadoras cl\u00e1sicas para ciertos problemas, como la factorizaci\u00f3n de n\u00fameros grandes o la simulaci\u00f3n de sistemas cu\u00e1nticos.\n\nEn resumen, la computaci\u00f3n cu\u00e1ntica es una forma avanzada de computaci\u00f3n que aprovecha las propiedades de la mec\u00e1nica cu\u00e1ntica para realizar tareas de procesamiento de informaci\u00f3n de manera m\u00e1s eficiente que las computadoras tradicionales."
             }
         ],
         "summary": [

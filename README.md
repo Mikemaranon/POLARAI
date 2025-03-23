@@ -29,3 +29,5 @@ Press CTRL+C to quit
  * Debugger is active!
  * Debugger PIN: [PIN]
 ```
+
+Nearly in a week, the summary system in the chat site will support `Flan-T5-base` in a locally runned model. every step will be added in the documentation for the `models` module 
