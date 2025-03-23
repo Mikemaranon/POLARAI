@@ -184,7 +184,7 @@ class AppRoutes:
         
         summary = self.chatbot_manager.get_last_summary(bot_name, chat_id)
         
-        return jsonify({summary})
+        return summary
         
     def API_get_models(self):
         

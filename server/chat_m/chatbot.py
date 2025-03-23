@@ -154,7 +154,9 @@ class Chatbot:
 
 
     def get_last_summary(self, chat_id):
-        return self.chats[chat_id].get_last_summary()
+        for chat in self.chats:
+            if chat.id == chat_id:
+                return chat.get_last_summary()
     
     def get_target_chat(self, chat_id):
         

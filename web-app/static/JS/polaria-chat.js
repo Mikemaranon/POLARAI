@@ -116,6 +116,11 @@ function addSystemMessage(msg) {
     sysMsg.innerHTML = msg;
 }
 
+function setTemperature(temp) {
+    tempSlider.value = temp;
+    tempValue.innerHTML = temp;
+}
+
 // ==========================================================
 //        FUNCTIONS TO SEND INFORMATION TO THE SERVER
 //                  SUCH AS A NEW MESSAGE
@@ -227,12 +232,15 @@ function getChatContext() {
 
     // Crear una función para extraer los datos del resumen
     const extractSummaryData = (el) => {
-        const id = el.querySelector(".summary-id")?.textContent.trim();
+        const id = el.querySelector(".summary-id")?.textContent.trim(); // Obtener el ID del span
         const activated = el.classList.contains("active-summary") ? "true" : "false";
-        
+    
+        // Obtener el texto del contenido, omitiendo el span con la clase .summary-id
+        const content = el.innerHTML.replace(el.querySelector(".summary-id").outerHTML, "").trim();
+    
         return {
             id: id ? parseInt(id) : null,  // Aseguramos que el id sea un número (parseInt)
-            content: el.textContent.trim(),
+            content: content,
             activated: activated
         };
     };
@@ -391,6 +399,8 @@ async function loadChatHistory(id) {
         data.summary.forEach((sum) => {
             addSummaryToList(sum.content, sum.activated, sum.id);
         });
+
+        setTemperature(data.temperature);
 
         addSystemMessage(data.system_msg);
 
