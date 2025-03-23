@@ -9,7 +9,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    overflow: hidden; /* Evita scroll en toda la página */
+    /*overflow: hidden;  Evita scroll en toda la página */
 }
 
 #title {
@@ -25,19 +25,27 @@ body {
 
 .general-container {
     display: flex;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 115px);
     margin-top: 60px;
+}
+
+.chat-container {
+    margin-top: 35px;
+    gap: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 1rem;
+    overflow: hidden;
 }
 
 .empty-message {
     text-align: center;
     color: gray;
     font-style: italic;
-}
-
-
-.left {
-    justify-content: flex-end; /* Empuja el botón a la derecha */
 }
 
 /* Contenedor para el botón de alternar */
@@ -60,19 +68,6 @@ body {
     font-size: 20px;
     cursor: pointer;
     display: none; /* Oculta el botón */
-}
-
-.chat-container {
-    margin-top: 35px;
-    gap: 20px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    background: white;
-    padding: 1rem;
-    overflow: hidden;
 }
 
 .chat-box {
@@ -178,6 +173,13 @@ body {
     margin-right: auto;
 }
 
+@media (max-width: 900px) {
+    #title {
+        font-size: 30px;
+        top: 25px;
+    }
+}
+
 @media (max-width: 768px) {
     #send-btn {
         width: 30px;
@@ -186,36 +188,15 @@ body {
     #message-input {        
         margin-right: 50px;
     }
-    .left-menu, .right-menu{
-        width: 30px;
-    }
-    .left-menu .toggle-btn {
-        transform: translateX(17%);
-        display: flex;
-    }
-    .right-menu .toggle-btn {
-        transform: translateX(-81%);
-        display: flex;
-    }
-    .menu-title {
-        display: none;
-    }
     #title {
-        font-size: 30px;
-        top: 25px;
-    }
-
-    .chat-item {
-        display: none;
+        font-size: 20px;
+        top: 30px;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     .chat-input input {
         font-size: 14px;
-    }
-    .left-menu, .right-menu {
-        display: none;  
     }
     #title {
         display: none;

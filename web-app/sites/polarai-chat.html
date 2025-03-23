@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/static/style/elements/header.css">
     <link rel="stylesheet" href="/static/style/elements/toggle-theme.css">
     <link rel="stylesheet" href="/static/style/elements/chat-menus.css">
+    <link rel="stylesheet" href="/static/style/elements/buttons-section.css">
     <link rel="stylesheet" href="/static/style/fonts/fonts.css">
     <link id="theme-style" rel="stylesheet" href="/static/style/themes/bright-theme.css">
 </head>
@@ -23,12 +24,17 @@
         <button onclick="window.location.href='/'">Return</button>
     </header>
 
+    <div class="button-bar">
+        <button id="showLeft" class="left">Toggle Left</button>
+        <div class="middle-void"></div>
+        <button id="showRight" class="right">Toggle Right</button>
+    </div>
+
     <div class="general-container">
         <main class="chat-container">
             <div class="left-menu" id="left-menu">
-                <div class="toggle-container left">
+                <div class="toggle-container">
                     <h2 class="menu-title">Chat History</h2>
-                    <button class="toggle-btn" id="toggle-left-main">☰</button>
                 </div>
                 <div class="content" id="left-menu-content">
                     <!-- dynamic generation -->
@@ -46,7 +52,6 @@
             <div class="right-menu" id="right-menu">
                 <div class="toggle-container">
                     <h2 class="menu-title">Fast Config</h2>
-                    <button class="toggle-btn" id="toggle-right-menu">☰</button>
                 </div>
                 <button class="save-sum-list">Save</button>
                 <div class="content" id="right-menu-content">
@@ -68,6 +73,7 @@
     <script src="/static/JS/polaria-chat.js"></script>
     <script src="/static/JS/elements/dynamic-title.js"></script>
     <script src="/static/JS/elements/toggle-theme.js"></script>
+    <script src="/static/JS/elements/chat-menus.js"></script>
     <script>
         write_text(50);
     </script>

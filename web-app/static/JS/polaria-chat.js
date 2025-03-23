@@ -8,6 +8,21 @@ const tempSlider = document.getElementById('temperature-slider');
 const tempValue = document.getElementById('temperature-value');
 const sysMsg = document.getElementById('system-message');
 
+const showLeft = document.getElementById('showLeft')
+const showRight = document.getElementById('showRight')
+
+
+function toggleSection(sectionId, buttonId) {
+    const section = document.getElementById(sectionId);
+    const button = document.getElementById(buttonId);
+    section.classList.toggle('hidden');
+    if (section.classList.contains('hidden')) {
+        button.style.display = 'block'; // Muestra el botón flotante
+    } else {
+        button.style.display = 'none';  // Oculta el botón flotante
+    }
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', initializeChat);
 document.addEventListener("DOMContentLoaded", fetchChats);
@@ -370,3 +385,4 @@ function clearSumList() {
 function clearSysMsg() {
     sysMsg.innerHTML = "";
 }
+
