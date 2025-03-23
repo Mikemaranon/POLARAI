@@ -248,13 +248,46 @@
             {
                 "sender": "bot",
                 "content": "\u00a1Claro! Estoy aqu\u00ed para ayudarte. \u00bfEn qu\u00e9 necesitas asistencia?"
+            },
+            {
+                "sender": "user",
+                "content": "prueba"
+            },
+            {
+                "sender": "bot",
+                "content": "\u00a1Hola! \u00bfEn qu\u00e9 puedo ayudarte hoy?"
+            },
+            {
+                "sender": "user",
+                "content": "si se\u00f1or"
+            },
+            {
+                "sender": "bot",
+                "content": "\u00a1Hola! \u00bfEn qu\u00e9 puedo ayudarte hoy?"
+            },
+            {
+                "sender": "user",
+                "content": "prueba"
+            },
+            {
+                "sender": "bot",
+                "content": "\u00a1Hola! \u00bfC\u00f3mo puedo ayudarte hoy?"
+            },
+            {
+                "sender": "user",
+                "content": "soso"
+            },
+            {
+                "sender": "bot",
+                "content": "It looks like your message may not have come through completely. How can I assist you today?"
             }
         ],
         "summary": [
             "",
-            ""
+            "",
+            null
         ],
-        "temperature": 0.7,
+        "temperature": 1,
         "system_msg": "none"
     }
 ]
