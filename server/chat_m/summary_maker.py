@@ -19,7 +19,7 @@ class SummaryMaker:
 
         # Verificar si se han acumulado 6 mensajes (3 del usuario y 3 del bot)
         if len(self.buffer) == 6:
-            self.generate_summary()
+            return self.generate_summary()
         else:
             return 0
 

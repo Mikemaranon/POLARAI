@@ -113,7 +113,7 @@ function addSummaryToList(summary, isActivated, id) {
 }
 
 function addSystemMessage(msg) {
-    sysMsg.innerHTML = msg;
+    sysMsg.value = msg;
 }
 
 function setTemperature(temp) {
@@ -203,7 +203,7 @@ async function getLatestSummary() {
             throw new Error('Network response was not ok');
         } else {
             const summary = await response.json()
-            addSummaryToList(summary, true)
+            addSummaryToList(summary.summary, true)
         }
     }
     catch (error) {
@@ -479,6 +479,6 @@ function clearSumList() {
 }
 
 function clearSysMsg() {
-    sysMsg.innerHTML = "";
+    sysMsg.value = "";
 }
 
