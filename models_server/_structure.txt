@@ -1,0 +1,14 @@
+models_server/
+├── api_m/
+│   └── api_system.py        # Comunicación entre el servidor Flask y los modelos
+├── handler_m/
+│   ├── message_processor.py # Procesamiento de mensajes para la API
+│   └── request_handler.py   # Gestión de solicitudes y respuestas
+├── main.py                  # Inicializa todos los componentes
+├── models_m/
+│   ├── deepseek_r1.py       # Lógica de DeepSeek-R1
+│   └── flan_t5_base.py      # Lógica de Flan-T5-base
+├── opti_m/
+│   ├── memory_manager.py    # Gestión de memoria de la GPU
+│   └── process_manager.py   # Gestión de procesos y concurrencia
+└── server.py                # Gestión de conexiones con clientes
