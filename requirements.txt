@@ -1,3 +1,5 @@
 flask
 werkzeug
 requests
+huggingface_hub
+flask-session

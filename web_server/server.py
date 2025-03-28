@@ -11,6 +11,7 @@ class Server:
     def __init__(self, app: Flask):
         self.app = app
         self.app.secret_key = os.urandom(24)
+        
         self.config = self.load_config()
         self.PORT = int(self.config["PORT"])
         self.IP = self.config["IP"]

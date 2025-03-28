@@ -1,8 +1,14 @@
-# Ignorar config.py
+# Ignore config.py
 server/data_m/config.json
-server/chat_m/*.env
-init.sh
+
+# Ignore Virtual Enviroment
 enviroment/
+
+# Ignore starting script
+init.sh
+
+# Ignore models files
+model_files/
 
 # Ignorar archivos compilados de Python
 *.pyc
