@@ -1,0 +1,24 @@
+{
+    "rober": {
+        "azure-gpt-35-turbo" : {
+            "API_KEY": "",
+            "API_ENDPOINT": "assistantforpcassistant.openai.azure.com",
+            "API_PATH": "/openai/deployments/gpt-35-turbo-16k/chat/completions?api-version=2025-01-01-preview",
+            "TEMP": 0.8
+        },
+        "deepseek-r1" : {
+            "API_KEY": "",
+            "API_ENDPOINT": "",
+            "API_PATH": "",
+            "TEMP": 1
+        }  
+    },
+
+    "smry": {
+        "API_KEY": "",
+        "API_ENDPOINT": "",
+        "API_PATH": "",
+        "SYS_MSG": "",
+        "TEMP": 0.9
+    }
+}
