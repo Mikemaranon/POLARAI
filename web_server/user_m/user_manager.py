@@ -21,7 +21,6 @@ class UserManager:
         # 1 hour expiration token
         expiration_time = datetime.datetime + datetime.timedelta(hours=1)
         token = jwt.encode({
-            'user_id': user_id,
             'username': username,
             'exp': expiration_time
         }, self.secret_key, algorithm='HS256')
@@ -49,6 +48,10 @@ class UserManager:
             return {'status': 'success'}, 200
         return {'status': 'not found'}, 404
 
+    def get_user(self, token):
+        if self.verify_token(token):
+            return self.users[token]
+
     def verify_token(self, token):
         # Verificar y decodificar el token, si es válido y no ha expirado
         try:
@@ -58,13 +61,13 @@ class UserManager:
                 # if token expired, call logout()
                 print("Token expired. Logging out user.")
                 self.logout(token)
-                return None
+                return False
             # El token es válido, verificamos si el usuario está en el mapa
             if token in self.users:
-                return self.users[token]  # return user
-            return None  # unexistent user
+                return True  # valid token, existent user
+            return False  # unexistent user
         
         except jwt.ExpiredSignatureError:
-            return None  # expired
+            return False  # expired
         except jwt.InvalidTokenError:
-            return None  # invalid
+            return False  # invalid

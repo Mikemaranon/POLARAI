@@ -1,14 +1,11 @@
 {
     "admin": {
-        "id": 1,
         "password": "$2b$12$KIX/YZQZ8EoX3fF5JVoObeOjQ5m.Y2wbU7bQgV16Phv1MIV0RTvO6"
     },
     "mike": {
-        "id": 2,
         "password": "scrypt:32768:8:1$xapZWRfkwJjeksqa$17bcda1329f8dbf8f71e8bd2a0c595ec832a88757c9646aca5c4acfabb849fff1d08dfe0638b7483ff164f19d522bbe69caaf8aeb631b9e51518a7a276cb8fa8"
     },
     "rober": {
-        "id": 3,
         "password": "scrypt:32768:8:1$YsHYbZVDR58HI2fP$c62f57eb8f3cb62613afe6f00122866fa3224379350236519921ca825de421bbf6d82ea6e58ca8fe6e40105e3985c81990c4a980a1b74075d01086fc16f99dc4"
     }
 }

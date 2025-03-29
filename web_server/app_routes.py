@@ -12,6 +12,70 @@ class AppRoutes:
         self.user_manager = user_manager
         self.chatbot_manager = chatbot_manager
         self._register_routes()
+        self._register_APIs()
+
+    # ==================================================================================
+    #                     BASIC CLASS FUNCTIONS
+    #
+    #           [get_chats_in_chatbot]     get the list of chats in the 
+    #                                      selected chatbot
+    #           [get_request_token]        read the token in the request
+    #                                      package and extract it
+    #           [check_auth]               checks if the token is still
+    #                                      available
+    #           [check_user]               checks if selected user is
+    #                                      available
+    # ================================================================================== 
+
+    def get_chats_in_chatbot(self, user):
+        
+        model = user.get_session_data(MODEL)
+        chatbot = self.chatbot_manager.get_chatbot(model)
+        chats = chatbot.load_chats()
+        return chats
+    
+    def get_request_token():
+        
+        # 1. token from header Authorization
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            return auth_header.split(" ")[1]
+
+        # 2. token from body JSON
+        if request.is_json:
+            json_data = request.get_json(silent=True) # Evita errores si no hay JSON
+            if json_data and "token" in json_data:
+                return json_data["token"]
+
+        # 3. token from URL params
+        token = request.args.get("token")
+        if token:
+            return token
+
+        return None
+    
+    def check_auth(self):
+        
+        token = self.get_request_token()
+        
+        if not token or token not in self.user_manager.users:
+            return redirect(url_for("login"))
+        return token
+
+    def check_user(self):
+        token = self.check_auth()
+        if token:
+            user = self.user_manager.get_user(token)
+            if user:
+                return user
+        return None
+    
+    # ==================================================================================
+    #                     REGISTERING ROUTES AND APIs
+    #
+    #            [_register_routes]     instance of every basic route 
+    #            [_register_APIs]       instance of every API
+    # ================================================================================== 
 
     def _register_routes(self):
         self.app.add_url_rule("/", "home", self.get_home, methods=["POST"])
@@ -19,7 +83,7 @@ class AppRoutes:
         self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
         
-        # API routes
+    def _register_APIs(self):
         self.app.add_url_rule("/sites/training", "get_trainingIndex", self.API_get_trainingIndex, methods=["GET", "POST"])
         self.app.add_url_rule("/sites/polarai", "polarai_chat", self.API_get_model_to_chat, methods=["GET", "POST"])
         self.app.add_url_rule("/api/get-chats", "get_chats", self.API_get_chats, methods=["GET"])
@@ -33,41 +97,23 @@ class AppRoutes:
         
         self.app.add_url_rule("/api/set-chat-config", "set_chatConfig", self.API_set_chat_config, methods=["POST"])
         
-    def get_request_token():
-        
-        # 1. Intentar obtener el token del header Authorization
-        auth_header = request.headers.get("Authorization")
-        if auth_header and auth_header.startswith("Bearer "):
-            return auth_header.split(" ")[1]
-
-        # 2. Intentar obtener el token del body JSON
-        if request.is_json:
-            json_data = request.get_json(silent=True)  # Evita errores si no hay JSON
-            if json_data and "token" in json_data:
-                return json_data["token"]
-
-        # 3. Intentar obtener el token desde los parámetros de la URL (query string)
-        token = request.args.get("token")
-        if token:
-            return token
-
-        # Si no se encontró el token, devolver None
-        return None
-
+    # ==================================================================================
+    #                           BASIC ROUTINGS URLs
+    #
+    #            [get_home]             go to index.html
+    #            [get_login]            log user and send his token
+    #            [get_logout]           log user out, send to index.html 
+    #            [get_userConfig]       redirect to users current condiguration
+    # ================================================================================== 
         
     def get_home(self):
         
-        data = request.get_json()
-        token = data.get("token")
-        
-        if not token or token not in self.user_manager.users:
-            return redirect(url_for("login"))
-        
-        user = self.user_manager.users[token]
-        user.model = None
-        user.chat_id = None
-        
-        return render_template("index.html", username=user.username)
+        token = self.check_auth()
+        if token:
+            user = self.user_manager.get_user(token)
+            user.model = None
+            user.chat_id = None
+            return render_template("index.html", username=user.username)
 
     def get_login(self, token=None):
         error_message = None
@@ -83,11 +129,9 @@ class AppRoutes:
         
         return render_template("login.html", error_message=error_message)
 
-
     def get_logout(self):
         
-        data = request.get_json()
-        token = data.get("token")
+        token = self.get_request_token()
         
         self.user_manager.logout(token)
         response = redirect(url_for("login"))
@@ -106,102 +150,101 @@ class AppRoutes:
         
         return render_template("sites/user-config.html")
     
-    def get_chats_in_chatbot(self):
-        chatbot = self.chatbot_manager.get_chatbot(session[MODEL])
-        chats = chatbot.load_chats()
-        return chats
-    
     # =========================================
     #       API protocols start from here
     # =========================================
     
     def API_get_trainingIndex(self):
         
-        if 'username' not in session:
-            return redirect(url_for("login"))
+        data = request.get_json()
+        user = self.check_user()
+                    
+        if user:
+            if request.method == "POST":
+                # Ensure request is a JSON
+                if request.content_type != "application/json":
+                    return "Unsupported Media Type", 415
 
-        if request.method == "POST":
-            # Asegura que el request es JSON
-            if request.content_type != "application/json":
-                return "Unsupported Media Type", 415
-            
-            data = request.get_json()
-            session[MODEL] = data.get('model')
-            session[CHAT_ID] = None  # training does not require chats
+                user.set_session_data(MODEL, data.get('model')) 
+                user.set_session_data(CHAT_ID, None)  # training does not require chats
 
-            # Redirige a la versión GET con el modelo
-            return redirect(url_for("get_trainingIndex", model=data.get('model')))
+                # redirects to GET version with model
+                return redirect(url_for("get_trainingIndex", model=data.get('model')))
 
-        elif request.method == "GET":
-            model = request.args.get("model", "default_model")  # Si no hay modelo, usa uno por defecto
-            return render_template("sites/training-index.html", bot_name=model)
+            elif request.method == "GET":
+                model = request.args.get("model", "default_model")  # default model if it is missing
+                return render_template("sites/training-index.html", bot_name=model)
+        
+        return redirect(url_for("login"))
     
     def API_get_model_to_chat(self):
         
-        if 'username' not in session:
-            return redirect(url_for("login"))
-
-        if request.method == "POST":
-            # Asegura que el request es JSON
-            if request.content_type != "application/json":
-                return "Unsupported Media Type", 415
+        data = request.get_json()
+        user = self.check_user()
             
-            data = request.get_json()
-            session[MODEL] = data.get('model')
-            session[CHAT_ID] = None  # Entra en un nuevo chat
+        if user:
+            if request.method == "POST":
+                # Ensure request is a JSON
+                if request.content_type != "application/json":
+                    return "Unsupported Media Type", 415
+                
+                user.set_session_data(MODEL, data.get('model')) 
+                user.set_session_data(CHAT_ID, None)  # Enters new chat
 
-            # Redirige a la versión GET con el modelo
-            return redirect(url_for("polarai_chat", model=data.get('model')))
+                # redirects to GET version with model
+                return redirect(url_for("polarai_chat", model=data.get('model')))
 
-        elif request.method == "GET":
-            model = request.args.get("model", "default_model")  # Si no hay modelo, usa uno por defecto
-            return render_template("/sites/polarai-chat.html", bot_name=model)
+            elif request.method == "GET":
+                model = request.args.get("model", "default_model")  # default model if it is missing
+                return render_template("/sites/polarai-chat.html", bot_name=model)
+            
+        return redirect(url_for("login"))
     
     def API_get_chats(self):
-        if 'username' not in session:
-            return redirect(url_for("login"))
         
-        chats = self.get_chats_in_chatbot()
+        user = self.check_user()
+        chats = self.get_chats_in_chatbot(user)
 
-        # Extraer solo 'id' y 'topic' de cada chat
-        chats_list = [{"id": chat.id, "topic": chat.topic} for chat in chats]
+        # only get 'id' and 'topic' from each chat
+        chats_index = [{"id": chat.id, "topic": chat.topic} for chat in chats]
 
-        return jsonify(chats_list)  # Devolver solo la información necesaria
+        return jsonify(chats_index)  # return chat index 
     
+    # TODO: UPDATE SESSION PROBLEM IN CHAT_M
     def API_send_message(self):
         
-        if 'username' not in session:
-            return jsonify({"message": "Usuario no autenticado"}), 401  # 401 = Unauthorized
-        
         data = request.get_json()
-    
-        bot_name = session[MODEL]
-        system_msg = data.get('system_msg') or "none"
-        temperature = data.get('temperature')
-        context = data.get('context') or "none"
-        message = data.get('message')
-        chat_id = session[CHAT_ID]
+        user = self.check_user()
+            
+        if user:
         
-        if not bot_name or not message or not chat_id:
-            return jsonify({"message": "Faltan parámetros necesarios"}), 400
-        
-        # Llamada al chatbot manager para procesar el mensaje
-        response = self.chatbot_manager.manager_send_message(bot_name, system_msg, temperature, context, message, chat_id)
-        is_summary = self.chatbot_manager.is_summary(bot_name, chat_id)
-        
-        # Aquí puedes retornar la respuesta que desee el bot
-        return jsonify({
-            "response": response, 
-            "sum": is_summary
-        })
+            bot_name = user.get_session_data(MODEL)
+            system_msg = data.get('system_msg') or "none"
+            temperature = data.get('temperature')
+            context = data.get('context') or "none"
+            message = data.get('message')
+            chat_id = user.get_session_data(CHAT_ID)
+            
+            if not bot_name or not message or not chat_id:
+                return jsonify({"message": "missing params"}), 400
+            
+            # chatbot_manager Call to process message
+            response = self.chatbot_manager.manager_send_message(bot_name, system_msg, temperature, context, message, chat_id)
+            is_summary = self.chatbot_manager.is_summary(bot_name, chat_id)
+            
+            # return bots response
+            return jsonify({
+                "response": response, 
+                "sum": is_summary
+            })
+        return jsonify({"message": "Unidentified user"}), 401  # 401 = Unauthorized
         
     def API_get_last_summary(self):
         
-        if 'username' not in session:
-            return jsonify({"message": "Usuario no autenticado"}), 401  # 401 = Unauthorized
+        user = self.check_user()
         
-        bot_name = session[MODEL]
-        chat_id = session[CHAT_ID]
+        bot_name = user.get_session_data(MODEL)
+        chat_id = user.get_session_data(CHAT_ID)
         
         summary = self.chatbot_manager.get_last_summary(bot_name, chat_id)
         print("summary received: ", summary)
@@ -210,31 +253,34 @@ class AppRoutes:
         
     def API_get_models(self):
         
-        if 'username' not in session:
-            return jsonify({"message": "Usuario no autenticado"}), 401  # 401 = Unauthorized
-    
-        try:
-            user_bots = self.chatbot_manager.get_user_bots()
-            return jsonify({"bots": user_bots})
-        except Exception as e:
-            return jsonify({"message": str(e)}), 500  # En caso de un error del servidor
+        user = self.check_user()
+            
+        if user:
+            try:
+                user_bots = self.chatbot_manager.get_user_bots()
+                return jsonify({"bots": user_bots})
+            except Exception as e:
+                return jsonify({"message": str(e)}), 500  # server error
+        
+        return jsonify({"message": "Unidentified user"}), 401  # 401 = Unauthorized
     
     def API_set_chatId(self):
         
         data = request.get_json()
+        user = self.check_user()
         chat_id = data.get("chatId")
     
-        session[CHAT_ID] = chat_id
+        chat_id = user.set_session_data(CHAT_ID, chat_id)
         
         return jsonify({"success": True}), 200
     
     def API_get_singleChat(self):
         
-        chats = self.get_chats_in_chatbot()
-        print(chats)
+        user = self.check_user()
+        chats = self.get_chats_in_chatbot(user)
         
         for chat in chats:
-            if chat.id == session[CHAT_ID]:                
+            if chat.id == user.get_session_data(CHAT_ID):                
                 return jsonify({
                     "messages": chat.messages,
                     "summary": chat.summary,
@@ -242,22 +288,28 @@ class AppRoutes:
                     "system_msg": chat.system_msg
                 })
         
-        return jsonify({"error": "Chat no encontrado"}), 404
+        return jsonify({"error": "Chat not found"}), 404
     
     def API_create_chat(self):
         
-        session[CHAT_ID] = Chat._generate_chat_id()
+        user = self.check_user()
+        user.set_session_data(CHAT_ID, chat_id) = Chat._generate_chat_id()
         return jsonify({"success": True}), 200
     
     def API_set_chat_config(self):
         
         data = request.get_json()
+        user = self.check_user()
         summary_list = data.get("summary_list")
         temperature = data.get("temperature")
         system_msg = data.get("system_msg")
         
-        chat = self.chatbot_manager.get_chatbot(session[MODEL]).get_target_chat(session[CHAT_ID])
+        model = user.get_session_data(MODEL)
+        chat_id = user.get_session_data(CHAT_ID)
+        username = user.get_session_data(USERNAME)
+        
+        chat = self.chatbot_manager.get_chatbot(model).get_target_chat(chat_id)
         print("[INFO]: chat object loaded - ", chat)
-        chat.save_chat_config(session[USERNAME], session[MODEL], summary_list, temperature, system_msg)
+        chat.save_chat_config(username, model, summary_list, temperature, system_msg)
         
         return jsonify({"success": True}), 200
