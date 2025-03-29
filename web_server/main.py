@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint
+from flask import Flask
 import server 
 
 app = Flask(__name__, template_folder='../web-app', static_folder='../web-app/static')

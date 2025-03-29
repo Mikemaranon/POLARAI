@@ -1,4 +1,5 @@
-from flask import render_template, redirect, request, url_for, session, Blueprint, jsonify
+import jwt
+from flask import render_template, redirect, request, url_for, jsonify
 from user_m.user_manager import UserManager
 from chat_m.chatbot_manager import ChatbotManager
 from chat_m.chat import Chat
@@ -13,10 +14,10 @@ class AppRoutes:
         self._register_routes()
 
     def _register_routes(self):
-        self.app.add_url_rule("/", "home", self.get_home)
+        self.app.add_url_rule("/", "home", self.get_home, methods=["POST"])
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
-        self.app.add_url_rule("/logout", "logout", self.get_logout)
-        self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig)
+        self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
+        self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
         
         # API routes
         self.app.add_url_rule("/sites/training", "get_trainingIndex", self.API_get_trainingIndex, methods=["GET", "POST"])
@@ -32,39 +33,63 @@ class AppRoutes:
         
         self.app.add_url_rule("/api/set-chat-config", "set_chatConfig", self.API_set_chat_config, methods=["POST"])
         
+    def get_request_token():
+        
+        # 1. Intentar obtener el token del header Authorization
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            return auth_header.split(" ")[1]
+
+        # 2. Intentar obtener el token del body JSON
+        if request.is_json:
+            json_data = request.get_json(silent=True)  # Evita errores si no hay JSON
+            if json_data and "token" in json_data:
+                return json_data["token"]
+
+        # 3. Intentar obtener el token desde los parámetros de la URL (query string)
+        token = request.args.get("token")
+        if token:
+            return token
+
+        # Si no se encontró el token, devolver None
+        return None
+
+        
     def get_home(self):
-        if 'username' not in session:
+        
+        data = request.get_json()
+        token = data.get("token")
+        
+        if not token or token not in self.user_manager.users:
             return redirect(url_for("login"))
         
-        session[MODEL] = None
-        session[CHAT_ID] = None
+        user = self.user_manager.users[token]
+        user.model = None
+        user.chat_id = None
         
-        return render_template("index.html", username=session[USERNAME])
+        return render_template("index.html", username=user.username)
 
-    def get_login(self):
+    def get_login(self, token=None):
         error_message = None
         if request.method == "POST":
             username = request.form["username"]
             password = request.form["password"]
-            user = self.user_manager.login(username, password)
-            if user:
-                session[USERNAME] = user 
-                self._send_session_to_managers(session)
-                self.chatbot_manager.set_user_bots()
-                
-                # jwt_token = create_jwt_token(user)
-                # MIRAR ESTO
-                
-                return redirect(url_for("home"))
+            token = self.user_manager.login(username, password)
+            if token:
+                # render home with token
+                return render_template("index.html", token=token)
             else:
                 error_message = "incorrect user data, try again"  # error message
         
         return render_template("login.html", error_message=error_message)
 
+
     def get_logout(self):
         
-        self.user_manager.logout()
-        # force a refresh
+        data = request.get_json()
+        token = data.get("token")
+        
+        self.user_manager.logout(token)
         response = redirect(url_for("login"))
         response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
         response.headers["Pragma"] = "no-cache"
@@ -73,17 +98,13 @@ class AppRoutes:
     
     def get_userConfig(self):
         
-        if 'username' not in session:
+        data = request.get_json()
+        token = data.get("token")
+        user = self.user_manager.verify_token(token)
+        if user:
             return redirect(url_for("login"))
         
-        # the user config page must allow the user to configure the model
-        # and his profile with custom parameters (wannabe like ChatGPT).
-        
         return render_template("sites/user-config.html")
-    
-    def _send_session_to_managers(self, session):
-        self.user_manager.set_session(session)
-        self.chatbot_manager.set_session(session)
     
     def get_chats_in_chatbot(self):
         chatbot = self.chatbot_manager.get_chatbot(session[MODEL])
