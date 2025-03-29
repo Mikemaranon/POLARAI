@@ -5,10 +5,22 @@ from data_m.database import Database
 from user_m.user import User
 
 class UserManager:
+    
+    # static ini
+    _instance = None
+    
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(UserManager, cls).__new__(cls, *args, **kwargs)
+            cls._instance.__init__(*args, **kwargs)
+        return cls._instance
+    
     def __init__(self, secret_key="your-secret-key"):
         self.db = Database()
-        self.users = {}  # Aquí almacenaremos los usuarios por su token
-        self.secret_key = secret_key  # Clave secreta para generar y verificar el JWT
+        self.users = {}  # store users by token
+        self.secret_key = secret_key  # key to handle and generate JWT
+        
+    # ================ class content ================ #
 
     def authenticate(self, username: str, password: str):
         # Autenticación del usuario con nombre de usuario y contraseña

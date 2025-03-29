@@ -122,7 +122,9 @@ class AppRoutes:
             password = request.form["password"]
             token = self.user_manager.login(username, password)
             if token:
-                # render home with token
+                # User must have all his models data initialized when login takes place
+                self.chatbot_manager.set_session(username)
+                
                 return render_template("index.html", token=token)
             else:
                 error_message = "incorrect user data, try again"  # error message
@@ -257,7 +259,7 @@ class AppRoutes:
             
         if user:
             try:
-                user_bots = self.chatbot_manager.get_user_bots()
+                user_bots = self.chatbot_manager.get_user_bots(user)
                 return jsonify({"bots": user_bots})
             except Exception as e:
                 return jsonify({"message": str(e)}), 500  # server error
@@ -293,7 +295,7 @@ class AppRoutes:
     def API_create_chat(self):
         
         user = self.check_user()
-        user.set_session_data(CHAT_ID, chat_id) = Chat._generate_chat_id()
+        user.set_session_data(CHAT_ID, Chat._generate_chat_id())
         return jsonify({"success": True}), 200
     
     def API_set_chat_config(self):

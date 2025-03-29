@@ -2,7 +2,7 @@ import os
 import json
 
 USER_FILE = "users.json"
-BOTS_FILE = "bots_ownership/"
+BOTS_PATH = "bots_ownership/"
 CHAT_PATH = "chat_history/"
 
 BOTS_PATH = "chatbots/bot_ownership/"
@@ -21,7 +21,7 @@ SYS_MSG = "system_msg"
 
 class Database:
     
-    # Inicialización estática
+    # static ini
     _instance = None
     
     def __new__(cls, *args, **kwargs):
@@ -32,11 +32,11 @@ class Database:
     
     def __init__(self):
         self.users_file = os.path.join(os.path.dirname(__file__), USER_FILE)
-        self.bots_file = os.path.join(os.path.dirname(__file__), BOTS_FILE)
+        self.bots_path = os.path.join(os.path.dirname(__file__), BOTS_PATH)
         self.chat_path = os.path.join(os.path.dirname(__file__), CHAT_PATH)
         self.chat_history_path = None
     
-    # ================= USERS =================
+    # ================= USERS ================= #
     
     def load_users(self):
         with open(self.users_file, "r") as f:
@@ -75,16 +75,16 @@ class Database:
     # ================= CHATBOTS =================
     
     # def load_chatbots_file(self):
-    #     with open(self.bots_file, "r") as f:
+    #     with open(self.bots_path, "r") as f:
     #         return json.load(f)
         
     def load_chatbots_file(self, user):
-        chatbot_file = os.path.join(self.bots_file, f"{user}.json")
+        chatbot_file = os.path.join(self.bots_path, f"{user}.json")
         with open(chatbot_file, "r") as f:
             return json.load(f)    
         
     def save_chatbots_file(self, user, chatbots):
-        chatbot_file = os.path.join(self.bots_file, f"{user}.json")
+        chatbot_file = os.path.join(self.bots_path, f"{user}.json")
         with open(chatbot_file, "w") as f:
             json.dump(chatbots, f, indent=4)
             
