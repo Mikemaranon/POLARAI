@@ -231,7 +231,7 @@ class AppRoutes:
                 return jsonify({"message": "missing params"}), 400
             
             # chatbot_manager Call to process message
-            response = self.chatbot_manager.manager_send_message(bot_name, system_msg, temperature, context, message, chat_id)
+            response = self.chatbot_manager.manager_send_message(bot_name, user.username, system_msg, temperature, context, message, chat_id)
             is_summary = self.chatbot_manager.is_summary(bot_name, chat_id)
             
             # return bots response
