@@ -1,29 +1,5 @@
 const TOKEN_KEY = "auth_token";
 
-async function get_tokenFromServer(authEndpoint, credentials) {
-    try {
-        const response = await fetch(authEndpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(credentials)
-        });
-
-        if (!response.ok) {
-            throw new Error("Failed to retrieve token.");
-        }
-
-        const data = await response.json();
-        if (data.token) {
-            store_token(data.token);
-        } else {
-            throw new Error("No token received.");
-        }
-    } catch (error) {
-        console.error("Error fetching token:", error);
-        throw error;
-    }
-}
-
 function store_token(token) {
     localStorage.setItem(TOKEN_KEY, token);
 }
@@ -53,6 +29,7 @@ async function send_API_request(method, endpoint, body = null) {
             throw new Error(`Request failed: ${response.status}`);
         }
 
+        console.log("hasta aqui llega, la funcion esta bien")
         return response.json();
     } catch (error) {
         console.error("Error in API request:", error);

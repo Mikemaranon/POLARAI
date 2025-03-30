@@ -78,7 +78,7 @@ class AppRoutes:
     # ================================================================================== 
 
     def _register_routes(self):
-        self.app.add_url_rule("/", "home", self.get_home, methods=["GET", "POST"])
+        self.app.add_url_rule("/home", "home", self.get_home, methods=["GET", "POST"])
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
@@ -110,16 +110,19 @@ class AppRoutes:
         
         token = self.check_auth()
         if not token:
+            print("No token")
             return render_template("login.html")
         
         user = self.user_manager.get_user(token)
         if not user:
+            print("no user")
             return render_template("login.html")
         
         user.set_session_data(MODEL, None) 
         user.set_session_data(CHAT_ID, None) 
             
-        return render_template("index.html", username=user.username)
+        print("welcome!")
+        return render_template("index.html")
 
     def get_login(self):
         error_message = None
@@ -127,16 +130,18 @@ class AppRoutes:
             data = request.get_json()
             username = data.get("username")
             password = data.get("password")
+
+            print("username: ", username, "\npassword:", password)
             
             token = self.user_manager.login(username, password)
             if token:
-                # User must have all his models data initialized when login takes place
                 self.chatbot_manager.set_session(username)
-                
-                return render_template("index.html", token=token)
+                print("si ha funcionado")
+                return jsonify({"token": token})
             else:
                 error_message = "incorrect user data, try again"  # error message
         
+        print("no ha funcionado")
         return render_template("login.html", error_message=error_message)
 
     def get_logout(self):
