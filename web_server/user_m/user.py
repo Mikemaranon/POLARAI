@@ -1,6 +1,5 @@
 class User:
-    def __init__(self, user_id, username, session_data=None):
-        self.user_id = user_id
+    def __init__(self, username, session_data=None):
         self.username = username
         self.session_data = session_data or {}
 

@@ -21,9 +21,9 @@ class ChatbotManager:
     # ================ class content ================ #
         
     def set_session(self, user):
-        self.user_ownership_list = self.load_chatbots(user)
+        self.user_ownership_list[user] = self.load_user_chatbots(user)
 
-    def load_chatbots(self, user):
+    def load_user_chatbots(self, user):
          
         # Loads the chatbots for a user from `bot-ownership.json`.
         # 

@@ -34,7 +34,7 @@ class AppRoutes:
         chats = chatbot.load_chats()
         return chats
     
-    def get_request_token():
+    def get_request_token(self):
         
         # 1. token from header Authorization
         auth_header = request.headers.get("Authorization")
@@ -78,7 +78,7 @@ class AppRoutes:
     # ================================================================================== 
 
     def _register_routes(self):
-        self.app.add_url_rule("/", "home", self.get_home, methods=["POST"])
+        self.app.add_url_rule("/", "home", self.get_home, methods=["GET", "POST"])
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
@@ -109,17 +109,25 @@ class AppRoutes:
     def get_home(self):
         
         token = self.check_auth()
-        if token:
-            user = self.user_manager.get_user(token)
-            user.model = None
-            user.chat_id = None
-            return render_template("index.html", username=user.username)
+        if not token:
+            return render_template("login.html")
+        
+        user = self.user_manager.get_user(token)
+        if not user:
+            return render_template("login.html")
+        
+        user.set_session_data(MODEL, None) 
+        user.set_session_data(CHAT_ID, None) 
+            
+        return render_template("index.html", username=user.username)
 
-    def get_login(self, token=None):
+    def get_login(self):
         error_message = None
         if request.method == "POST":
-            username = request.form["username"]
-            password = request.form["password"]
+            data = request.get_json()
+            username = data.get("username")
+            password = data.get("password")
+            
             token = self.user_manager.login(username, password)
             if token:
                 # User must have all his models data initialized when login takes place
@@ -148,9 +156,8 @@ class AppRoutes:
         token = data.get("token")
         user = self.user_manager.verify_token(token)
         if user:
-            return redirect(url_for("login"))
-        
-        return render_template("sites/user-config.html")
+            return render_template("sites/user-config.html")
+        return redirect(url_for("login"))
     
     # =========================================
     #       API protocols start from here

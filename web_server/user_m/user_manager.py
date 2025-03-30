@@ -29,9 +29,9 @@ class UserManager:
             return True
         return False
     
-    def generate_token(self, user_id: int, username: str):
+    def generate_token(self, username: str):
         # 1 hour expiration token
-        expiration_time = datetime.datetime + datetime.timedelta(hours=1)
+        expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)
         token = jwt.encode({
             'username': username,
             'exp': expiration_time
@@ -40,14 +40,11 @@ class UserManager:
 
     def login(self, username: str, password: str):
         if self.authenticate(username, password):
-            user_data = self.db.get_user(username)
-            user_id = user_data["id"]
-
             # generate token
-            token = self.generate_token(user_id, username)
+            token = self.generate_token(username)
 
             if token not in self.users:
-                self.users[token] = User(user_id, username)
+                self.users[token] = User(username)
 
             return token # return the token
         return None

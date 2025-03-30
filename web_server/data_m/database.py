@@ -5,8 +5,6 @@ USER_FILE = "users.json"
 BOTS_PATH = "bots_ownership/"
 CHAT_PATH = "chat_history/"
 
-BOTS_PATH = "chatbots/bot_ownership/"
-
 # SESSION PARAMS
 USERNAME = 'username'
 PASSWORD = 'password'

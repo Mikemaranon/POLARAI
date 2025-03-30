@@ -5,7 +5,7 @@ from data_m.database import Database  # Importar la instancia del gestor de base
 class SummaryMaker:
     
     def __init__(self):
-        self.buffer = []  # n-message Buffer
+        self.buffer = [] # n-message Buffer
         self.db = Database()     
         
     def set_session_info(self, user, bot_name, chat_id):
@@ -14,20 +14,20 @@ class SummaryMaker:
         self.chat_id = chat_id
 
     def add_message(self, sender, content):
-        # Añadir mensaje al buffer
+        # add msg to buffer
         self.buffer.append({"sender": sender, "content": content})
 
-        # Verificar si se han acumulado 6 mensajes (3 del usuario y 3 del bot)
+        # verify if 6 messages have been stored (3 user y 3 bot)
         if len(self.buffer) == 6:
             return self.generate_summary()
         else:
             return 0
 
     def generate_summary(self):
-        # Crear un texto con los mensajes para enviar al modelo
+        # create a text to send to summary-maker model
         chat_text = "\n".join([f"{msg['sender']}: {msg['content']}" for msg in self.buffer])
 
-        # Generar el resumen llamando a la API
+        # call API to get the summary
         summary = [
             {
                 "summary_text": "?"
