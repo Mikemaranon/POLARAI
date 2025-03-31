@@ -45,8 +45,9 @@ class UserManager:
 
             if token not in self.users:
                 self.users[token] = User(username)
-
-            print(self.users[token])
+                print("user created: ", self.users[token].username)
+                print("with exp: ", jwt.decode(token, self.secret_key, algorithms=['HS256'])['exp'])
+                print("with token: ", token)
             return token # return the token
         return None
 
@@ -59,14 +60,20 @@ class UserManager:
         return {'status': 'not found'}, 404
 
     def get_user(self, token):
+        
+        print("token:", token)
+        
         if self.verify_token(token):
             return self.users[token]
 
     def verify_token(self, token):
         try:
+            print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
             payload = jwt.decode(token, self.secret_key, algorithms=['HS256'])
-            
+            print("alo")
             exp_time = datetime.datetime.fromtimestamp(payload['exp'], tz=datetime.timezone.utc)
+            print("aloooooooooooooo")
+            
             if exp_time < datetime.datetime.now(datetime.timezone.utc):
                 # if token expired, call logout()
                 print("Token expired. Logging out user.")

@@ -13,6 +13,8 @@ class AppRoutes:
         self.chatbot_manager = chatbot_manager
         self._register_routes()
         self._register_APIs()
+        
+        self.tempToken = None
 
     # ==================================================================================
     #                     BASIC CLASS FUNCTIONS
@@ -108,11 +110,13 @@ class AppRoutes:
         
     def get_home(self):
         
-        token = self.check_auth()
+        # token = self.check_auth()
+        token = self.tempToken
         if not token:
             print("No token")
             return render_template("login.html")
         
+        print("ROUTES token:", token)
         user = self.user_manager.get_user(token)
         if not user:
             print("no user")
@@ -137,6 +141,7 @@ class AppRoutes:
             if token:
                 self.chatbot_manager.set_session(username)
                 print("si ha funcionado")
+                self.tempToken = token
                 return jsonify({"token": token})
             else:
                 error_message = "incorrect user data, try again"  # error message
