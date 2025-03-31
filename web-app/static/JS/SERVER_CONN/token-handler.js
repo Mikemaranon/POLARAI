@@ -14,13 +14,15 @@ async function send_API_request(method, endpoint, body = null) {
         method: method.toUpperCase(),
         headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": "Bearer " + token
         }
     };
-
+    
     if (body && method.toUpperCase() !== "GET") {
         options.body = JSON.stringify(body);
     }
+
+    console.log("Fetching:", endpoint, options);
 
     try {
         const response = await fetch(endpoint, options);
@@ -28,11 +30,17 @@ async function send_API_request(method, endpoint, body = null) {
         if (!response.ok) {
             throw new Error(`Request failed: ${response.status}`);
         }
-
-        console.log("hasta aqui llega, la funcion esta bien")
-        return response.json();
+        return response;
     } catch (error) {
         console.error("Error in API request:", error);
         throw error;
     }
+}
+
+function API_POST() {
+
+}
+
+function API_GET() {
+
 }

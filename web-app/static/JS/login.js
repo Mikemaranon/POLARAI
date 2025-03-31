@@ -6,20 +6,16 @@ async function handleLoginSubmit(event) {
     const errorMessage = document.getElementById("error-message");
 
     try {
-        // Sending credentials via fetch
-        const response = await fetch("/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username: username, password: password })
-        });
+        const response = await send_API_request("POST", "/login", { "username": username, "password": password })
 
         const data = await response.json();
 
         if (response.ok && data.token) {
             store_token(data.token);
             try {
-                const homeResponse = await send_API_request("POST", "/home");
-                // window.location.href = "/home";
+                store_token(data.token);
+                console.log("Login successful, redirecting to home...");
+                window.location.href = "/";
             } catch (error) {
                 errorMessage.textContent = "Failed to access home. Please try again.";
                 errorMessage.style.display = "block";

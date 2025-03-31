@@ -78,7 +78,7 @@ class AppRoutes:
     # ================================================================================== 
 
     def _register_routes(self):
-        self.app.add_url_rule("/home", "home", self.get_home, methods=["GET", "POST"])
+        self.app.add_url_rule("/", "home", self.get_home, methods=["GET"])
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
