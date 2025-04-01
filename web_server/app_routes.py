@@ -62,9 +62,7 @@ class AppRoutes:
         
         token = self.get_request_token()
         
-        if not token or token not in self.user_manager.users:
-            return redirect(url_for("login"))
-        print("USER ACTUALLY EXIST LOL: ", token)
+        print("token exist after header: ", token)
         return token
 
     def check_user(self):
@@ -83,9 +81,7 @@ class AppRoutes:
     # ================================================================================== 
 
     def _register_routes(self):
-        self.app.add_url_rule("/home", "home", self.get_home, methods=["GET"])
-        self.app.add_url_rule("/", "index_ini", self.send_creds, methods=["GET"])
-        self.app.add_url_rule("/index", "index", self.send_creds, methods=["GET"])
+        self.app.add_url_rule("/", "home", self.get_home, methods=["GET"])
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
@@ -113,8 +109,7 @@ class AppRoutes:
     #            [get_userConfig]       redirect to users current condiguration
     # ================================================================================== 
         
-    def send_creds(self):
-          
+    def get_home(self):
         user = self.check_user()
         if user:
             user.set_session_data(MODEL, None) 
@@ -122,27 +117,28 @@ class AppRoutes:
         
             return render_template("index.html")
         return render_template("login.html")
-        
-    def get_home(self):
-        return render_template("index.html")  
 
     def get_login(self):
         error_message = None
         if request.method == "POST":
             data = request.get_json()
+
             username = data.get("username")
             password = data.get("password")
 
-            print("username: ", username, "\npassword:", password)
-            
             token = self.user_manager.login(username, password)
             if token:
                 self.chatbot_manager.set_session(username)
-                self.tempToken = token
-                return jsonify({"token": token})
-            else:
-                error_message = "incorrect user data, try again"  # error message
-        
+                response = jsonify({"token": token})
+                response.headers["Location"] = url_for("home")  # Redirige a index.html
+
+                response.headers["Authorization"] = f"Bearer {token}"
+                response.headers["Content-Type"] = "application/json"
+
+                return response, 302  # Código 302 para redirección
+            
+            error_message = "incorrect user data, try again"
+
         return render_template("login.html", error_message=error_message)
 
     def get_logout(self):

@@ -12,16 +12,16 @@ async function handleLoginSubmit(event) {
 
         if (response.ok && data.token) {
             store_token(data.token);
-            try {
+            /*try {
                 store_token(data.token);
                 console.log("Login successful, redirecting to home...");
                 const home = await send_API_request("GET", "/index")
                 console.log(home)
-                window.location.href = "/home";
+                // window.location.href = "/home";
             } catch (error) {
                 errorMessage.textContent = "Failed to access home. Please try again.";
                 errorMessage.style.display = "block";
-            }
+            }*/
         } else {
             // Manejar el error si el login falla
             errorMessage.textContent = data.error || "An error occurred.";

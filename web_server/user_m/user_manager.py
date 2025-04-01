@@ -40,7 +40,6 @@ class UserManager:
 
     def login(self, username: str, password: str):
         if self.authenticate(username, password):
-            # generate token
             token = self.generate_token(username)
 
             if token not in self.users:
@@ -66,7 +65,7 @@ class UserManager:
 
     def verify_token(self, token):
         try:
-            print("token: ", token)
+            print("VERIFYING TOKEN: ", token)
             if token in self.users:
                 return True  # valid token, existent user
             print("USER DONT EXIST")
@@ -81,4 +80,7 @@ class UserManager:
 
     def print_user(self, token):
         print("token lmao: ", token)
-        print("username lmao: ", self.users[token].username)
+        print("username lmao: ", self.users[token.strip()].username)
+
+    def get_users(self):
+        return self.users
