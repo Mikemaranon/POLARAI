@@ -36,11 +36,3 @@ async function send_API_request(method, endpoint, body = null) {
         throw error;
     }
 }
-
-function API_POST() {
-
-}
-
-function API_GET() {
-
-}

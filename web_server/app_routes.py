@@ -41,7 +41,9 @@ class AppRoutes:
         # 1. token from header Authorization
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
-            return auth_header.split(" ")[1]
+            token = auth_header.split(" ")[1]
+            print("token exist in header: ", token)
+            return token
 
         # 2. token from body JSON
         if request.is_json:
@@ -62,6 +64,7 @@ class AppRoutes:
         
         if not token or token not in self.user_manager.users:
             return redirect(url_for("login"))
+        print("USER ACTUALLY EXIST LOL: ", token)
         return token
 
     def check_user(self):
@@ -80,7 +83,9 @@ class AppRoutes:
     # ================================================================================== 
 
     def _register_routes(self):
-        self.app.add_url_rule("/", "home", self.get_home, methods=["GET"])
+        self.app.add_url_rule("/home", "home", self.get_home, methods=["GET"])
+        self.app.add_url_rule("/", "index_ini", self.send_creds, methods=["GET"])
+        self.app.add_url_rule("/index", "index", self.send_creds, methods=["GET"])
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
@@ -108,25 +113,18 @@ class AppRoutes:
     #            [get_userConfig]       redirect to users current condiguration
     # ================================================================================== 
         
+    def send_creds(self):
+          
+        user = self.check_user()
+        if user:
+            user.set_session_data(MODEL, None) 
+            user.set_session_data(CHAT_ID, None) 
+        
+            return render_template("index.html")
+        return render_template("login.html")
+        
     def get_home(self):
-        
-        # token = self.check_auth()
-        token = self.tempToken
-        if not token:
-            print("No token")
-            return render_template("login.html")
-        
-        print("ROUTES token:", token)
-        user = self.user_manager.get_user(token)
-        if not user:
-            print("no user")
-            return render_template("login.html")
-        
-        user.set_session_data(MODEL, None) 
-        user.set_session_data(CHAT_ID, None) 
-            
-        print("welcome!")
-        return render_template("index.html")
+        return render_template("index.html")  
 
     def get_login(self):
         error_message = None
@@ -140,13 +138,11 @@ class AppRoutes:
             token = self.user_manager.login(username, password)
             if token:
                 self.chatbot_manager.set_session(username)
-                print("si ha funcionado")
                 self.tempToken = token
                 return jsonify({"token": token})
             else:
                 error_message = "incorrect user data, try again"  # error message
         
-        print("no ha funcionado")
         return render_template("login.html", error_message=error_message)
 
     def get_logout(self):

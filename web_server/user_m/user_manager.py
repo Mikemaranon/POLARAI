@@ -45,9 +45,7 @@ class UserManager:
 
             if token not in self.users:
                 self.users[token] = User(username)
-                print("user created: ", self.users[token].username)
-                print("with exp: ", jwt.decode(token, self.secret_key, algorithms=['HS256'])['exp'])
-                print("with token: ", token)
+                
             return token # return the token
         return None
 
@@ -60,34 +58,27 @@ class UserManager:
         return {'status': 'not found'}, 404
 
     def get_user(self, token):
-        
-        print("token:", token)
-        
-        if self.verify_token(token):
+        x = self.verify_token(token)
+        if x:
+            print("TRUE")
+            self.print_user(token)
             return self.users[token]
 
     def verify_token(self, token):
         try:
-            print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-            payload = jwt.decode(token, self.secret_key, algorithms=['HS256'])
-            print("alo")
-            exp_time = datetime.datetime.fromtimestamp(payload['exp'], tz=datetime.timezone.utc)
-            print("aloooooooooooooo")
-            
-            if exp_time < datetime.datetime.now(datetime.timezone.utc):
-                # if token expired, call logout()
-                print("Token expired. Logging out user.")
-                self.logout(token)
-                return False
+            print("token: ", token)
             if token in self.users:
-                print("TOKEN EXIST")
                 return True  # valid token, existent user
             print("USER DONT EXIST")
             return False  # unexistent user
         
         except jwt.ExpiredSignatureError:
-            print("ERROR 1")
-            return False  # expired
+            print("ERROR: Token expired")
+            return False  
         except jwt.InvalidTokenError:
-            print("ERROR 2")
-            return False  # invalid
+            print("ERROR: Invalid token")
+            return False  
+
+    def print_user(self, token):
+        print("token lmao: ", token)
+        print("username lmao: ", self.users[token].username)
