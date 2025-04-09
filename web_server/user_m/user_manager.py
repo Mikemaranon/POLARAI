@@ -41,9 +41,7 @@ class UserManager:
     def login(self, username: str, password: str):
         if self.authenticate(username, password):
             token = self.generate_token(username)
-
-            if token not in self.users:
-                self.users[token] = User(username)
+            self.users[username] = User(token)
                 
             return token # return the token
         return None
@@ -60,14 +58,17 @@ class UserManager:
         x = self.verify_token(token)
         if x:
             print("TRUE")
-            self.print_user(token)
-            return self.users[token]
+            return x
+        return None
 
     def verify_token(self, token):
         try:
             print("VERIFYING TOKEN: ", token)
-            if token in self.users:
-                return True  # valid token, existent user
+            for user in self.users.values():
+                print("user TOKEN: ", user.token)
+                if token == user.token:
+                    print("USER EXIST")
+                    return user  # valid token, existent user
             print("USER DONT EXIST")
             return False  # unexistent user
         
@@ -77,10 +78,6 @@ class UserManager:
         except jwt.InvalidTokenError:
             print("ERROR: Invalid token")
             return False  
-
-    def print_user(self, token):
-        print("token lmao: ", token)
-        print("username lmao: ", self.users[token.strip()].username)
 
     def get_users(self):
         return self.users

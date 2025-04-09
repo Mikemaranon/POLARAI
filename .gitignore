@@ -2,7 +2,7 @@
 server/data_m/config.json
 
 # Ignore Virtual Enviroment
-enviroment/
+virt/
 
 # Ignore starting script
 init.sh

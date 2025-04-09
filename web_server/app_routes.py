@@ -38,24 +38,21 @@ class AppRoutes:
     
     def get_request_token(self):
         
+        print("get_request_token")
+        # 2. token from URL params
+        token = request.args.get("token")
+        if token:
+            print("token exist in URL: ", token)
+            return token
+        
+        print("get_request_token - no token found")
         # 1. token from header Authorization
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
             token = auth_header.split(" ")[1]
             print("token exist in header: ", token)
             return token
-
-        # 2. token from body JSON
-        if request.is_json:
-            json_data = request.get_json(silent=True) # Evita errores si no hay JSON
-            if json_data and "token" in json_data:
-                return json_data["token"]
-
-        # 3. token from URL params
-        token = request.args.get("token")
-        if token:
-            return token
-
+    
         return None
     
     def check_auth(self):
@@ -82,13 +79,14 @@ class AppRoutes:
 
     def _register_routes(self):
         self.app.add_url_rule("/", "home", self.get_home, methods=["GET"])
+        self.app.add_url_rule("/index", "index", self.get_index)
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
         self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
-        
-    def _register_APIs(self):
         self.app.add_url_rule("/sites/training", "get_trainingIndex", self.API_get_trainingIndex, methods=["GET", "POST"])
         self.app.add_url_rule("/sites/polarai", "polarai_chat", self.API_get_model_to_chat, methods=["GET", "POST"])
+        
+    def _register_APIs(self):
         self.app.add_url_rule("/api/get-chats", "get_chats", self.API_get_chats, methods=["GET"])
         self.app.add_url_rule("/api/send-message", "send_message", self.API_send_message, methods=["POST"])
         self.app.add_url_rule("/api/get-models", "get_models", self.API_get_models, methods=["POST"])
@@ -108,14 +106,20 @@ class AppRoutes:
     #            [get_logout]           log user out, send to index.html 
     #            [get_userConfig]       redirect to users current condiguration
     # ================================================================================== 
-        
+    
+    def get_index(self):
+        return render_template("index.html")
+    
     def get_home(self):
         user = self.check_user()
         if user:
+                
+            print("user in home: ", user)
+            print("username: ", user.token)
             user.set_session_data(MODEL, None) 
             user.set_session_data(CHAT_ID, None) 
-        
-            return render_template("index.html")
+
+            return redirect(url_for("index"))  # Redirect to index.html
         return render_template("login.html")
 
     def get_login(self):
@@ -130,12 +134,12 @@ class AppRoutes:
             if token:
                 self.chatbot_manager.set_session(username)
                 response = jsonify({"token": token})
-                response.headers["Location"] = url_for("home")  # Redirige a index.html
+                # response.headers["Location"] = url_for("home")  # Redirige a index.html
 
-                response.headers["Authorization"] = f"Bearer {token}"
-                response.headers["Content-Type"] = "application/json"
+                # response.headers["Authorization"] = f"Bearer {token}"
+                # response.headers["Content-Type"] = "application/json"
 
-                return response, 302  # Código 302 para redirección
+                return response  #, 302 Código 302 para redirección
             
             error_message = "incorrect user data, try again"
 
@@ -155,7 +159,8 @@ class AppRoutes:
     def get_userConfig(self):
         
         data = request.get_json()
-        token = data.get("token")
+        token = self.get_request_token()
+        
         user = self.user_manager.verify_token(token)
         if user:
             return render_template("sites/user-config.html")

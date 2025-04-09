@@ -6,24 +6,19 @@ async function handleLoginSubmit(event) {
     const errorMessage = document.getElementById("error-message");
 
     try {
-        const response = await send_API_request("POST", "/login", { "username": username, "password": password })
+        const response = await login(username, password)
 
         const data = await response.json();
+        console.log(data);
 
         if (response.ok && data.token) {
             store_token(data.token);
-            /*try {
-                store_token(data.token);
-                console.log("Login successful, redirecting to home...");
-                const home = await send_API_request("GET", "/index")
-                console.log(home)
-                // window.location.href = "/home";
-            } catch (error) {
-                errorMessage.textContent = "Failed to access home. Please try again.";
-                errorMessage.style.display = "block";
-            }*/
+            console.log("token: ", data.token);
+
+            loadPage("/");
+            // const home = await send_API_request("GET", "/")
+            // window.location.href = home.url
         } else {
-            // Manejar el error si el login falla
             errorMessage.textContent = data.error || "An error occurred.";
             errorMessage.style.display = "block";
         }

@@ -20,7 +20,7 @@
             <input type="checkbox" id="theme-toggle-checkbox">
             <span class="slider"></span>
         </label>
-        <button onclick="window.location.href='/sites/user-config'">⚙️</button>
+        <button onclick="loadPage('/sites/user-config')">⚙️</button>
     </header>
 
     <main>
@@ -32,7 +32,7 @@
             <!-- <div onclick="window.location.href='/sites/polarai'"> -->
                 <p>POLAR.AI Chat</p>
             </div>
-            <div onclick="window.location.href='/sites/training'">
+            <div onclick="loadPage('/sites/training')">
                 <p>Training playground</p>
             </div>
         </div>
@@ -61,6 +61,7 @@
     <script src="/static/JS/elements/dynamic-title.js"></script>
     <script src="/static/JS/elements/toggle-theme.js"></script>
     <script src="/static/JS/elements/modal.js"></script>
+    <script src="/static/JS/SERVER_CONN/token-handler.js"></script>
     <script>
         write_text(200);
     </script>
