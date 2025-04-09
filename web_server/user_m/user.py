@@ -1,6 +1,7 @@
 class User:
-    def __init__(self, token, session_data=None):
+    def __init__(self, token, username, session_data=None):
         self.token = token
+        self.username = username
         self.session_data = session_data or {}
 
     def set_session_data(self, key, value):

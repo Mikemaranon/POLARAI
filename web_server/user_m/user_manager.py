@@ -41,7 +41,7 @@ class UserManager:
     def login(self, username: str, password: str):
         if self.authenticate(username, password):
             token = self.generate_token(username)
-            self.users[username] = User(token)
+            self.users[username] = User(token, username)
                 
             return token # return the token
         return None

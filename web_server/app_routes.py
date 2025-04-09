@@ -82,7 +82,7 @@ class AppRoutes:
         self.app.add_url_rule("/index", "index", self.get_index)
         self.app.add_url_rule("/login", "login", self.get_login, methods=["GET", "POST"])
         self.app.add_url_rule("/logout", "logout", self.get_logout, methods=["POST"])
-        self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["POST"])
+        self.app.add_url_rule("/sites/user-config", "get_userConfig", self.get_userConfig, methods=["GET"])
         self.app.add_url_rule("/sites/training", "get_trainingIndex", self.API_get_trainingIndex, methods=["GET", "POST"])
         self.app.add_url_rule("/sites/polarai", "polarai_chat", self.API_get_model_to_chat, methods=["GET", "POST"])
         
@@ -134,12 +134,7 @@ class AppRoutes:
             if token:
                 self.chatbot_manager.set_session(username)
                 response = jsonify({"token": token})
-                # response.headers["Location"] = url_for("home")  # Redirige a index.html
-
-                # response.headers["Authorization"] = f"Bearer {token}"
-                # response.headers["Content-Type"] = "application/json"
-
-                return response  #, 302 Código 302 para redirección
+                return response
             
             error_message = "incorrect user data, try again"
 
@@ -157,12 +152,12 @@ class AppRoutes:
         return response
     
     def get_userConfig(self):
-        
-        data = request.get_json()
         token = self.get_request_token()
         
+        print("token in userConfig: ", token)
         user = self.user_manager.verify_token(token)
         if user:
+            print("user in userConfig: ", user)
             return render_template("sites/user-config.html")
         return redirect(url_for("login"))
     
