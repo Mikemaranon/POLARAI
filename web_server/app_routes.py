@@ -45,7 +45,7 @@ class AppRoutes:
             print("token exist in URL: ", token)
             return token
         
-        print("get_request_token - no token found")
+        print("get_request_token - no token found in URL")
         # 1. token from header Authorization
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
@@ -66,6 +66,7 @@ class AppRoutes:
         token = self.check_auth()
         if token:
             user = self.user_manager.get_user(token)
+            print("user in check_user: ", user)
             if user:
                 return user
         return None
@@ -268,7 +269,8 @@ class AppRoutes:
             
         if user:
             try:
-                user_bots = self.chatbot_manager.get_user_bots(user)
+                user_bots = self.chatbot_manager.get_user_bots(user.username)
+                print("user_bots: ", user_bots)
                 return jsonify({"bots": user_bots})
             except Exception as e:
                 return jsonify({"message": str(e)}), 500  # server error

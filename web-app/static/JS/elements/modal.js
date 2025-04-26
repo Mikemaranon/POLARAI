@@ -45,32 +45,18 @@ window.onclick = function(event) {
 
 // Función para obtener la lista de bots desde la API
 async function fetchBots() {
-    try {
-        // Realiza una solicitud POST a la API
-        const response = await fetch('/api/get-models', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
 
-        // Si la respuesta no es exitosa, lanza un error
-        if (!response.ok) {
-            console.log("aqui esta el error")
-            const errorData = await response.json();
-            alert(errorData.message || 'Error al obtener los bots');
-            return;
-        }
-        // Obtiene los datos en formato JSON
-        const data = await response.json();
-
-        // Llama a la función para insertar los bots en la interfaz
-        chat_displayBots(data.bots);
-
-    } catch (error) {
-        console.error('Error al obtener los bots:', error);
-        alert('Error al obtener los bots');
+    response = send_API_request("POST", "/api/get-models", null)
+    
+    if (!response.ok) {
+        console.log("aqui esta el error")
+        const errorData = await response.json();
+        alert(errorData.message || 'ERROR: bots could not be loaded');
+        return;
     }
+    //console.log("response: ", response)
+    const data = await response.json();
+    chat_displayBots(data.bots);
 }
 
 // Función para insertar los bots en el HTML como divs

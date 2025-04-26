@@ -5,79 +5,83 @@ from data_m.database import Database
 from user_m.user import User
 
 class UserManager:
-    
-    # static ini
     _instance = None
-    
+
     def __new__(cls, *args, **kwargs):
-        if not cls._instance:
-            cls._instance = super(UserManager, cls).__new__(cls, *args, **kwargs)
-            cls._instance.__init__(*args, **kwargs)
+        if cls._instance is None:
+            cls._instance = super(UserManager, cls).__new__(cls)
         return cls._instance
-    
+
     def __init__(self, secret_key="your-secret-key"):
-        self.db = Database()
-        self.users = {}  # store users by token
-        self.secret_key = secret_key  # key to handle and generate JWT
+        if hasattr(self, 'initialized') and self.initialized:
+            return # Already initialized
+        # Initialize the singleton instance
         
-    # ================ class content ================ #
+        self.db = Database()
+        self.users = {}  # store users by username
+        self.secret_key = secret_key
+        self.initialized = True
 
     def authenticate(self, username: str, password: str):
-        # Autenticación del usuario con nombre de usuario y contraseña
         user = self.db.get_user(username)
         if user and check_password_hash(user["password"], password):
             return True
         return False
-    
+
     def generate_token(self, username: str):
-        # 1 hour expiration token
-        expiration_time = datetime.datetime.now() + datetime.timedelta(hours=1)
-        token = jwt.encode({
+        expiration_time = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        payload = {
             'username': username,
             'exp': expiration_time
-        }, self.secret_key, algorithm='HS256')
+        }
+        token = jwt.encode(payload, self.secret_key, algorithm='HS256')
         return token
 
     def login(self, username: str, password: str):
         if self.authenticate(username, password):
             token = self.generate_token(username)
-            self.users[username] = User(token, username)
-                
-            return token # return the token
+            user = User(token=token, username=username)
+            self.users[username] = user
+            return token
         return None
 
     def logout(self, token):
-        # delete user by his token
-        if token in self.users:
-            del self.users[token]
-            print(f"User's session with token {token} cleared")
+        username = self._get_username_from_token(token)
+        if username and username in self.users:
+            del self.users[username]
+            print(f"User '{username}' logged out.")
             return {'status': 'success'}, 200
         return {'status': 'not found'}, 404
 
     def get_user(self, token):
-        x = self.verify_token(token)
-        if x:
-            print("TRUE")
-            return x
+        username = self._get_username_from_token(token)
+        if username:
+            user = self.users.get(username)
+            if user:
+                print(f"User '{username}' found.")
+                return user
+            else:
+                print(f"User '{username}' NOT found.")
         return None
 
-    def verify_token(self, token):
+    
+
+    # ========================================================
+    #     working with the tokens to extract the username
+    # ========================================================
+
+    def _get_username_from_token(self, token):
         try:
-            print("VERIFYING TOKEN: ", token)
-            for user in self.users.values():
-                print("user TOKEN: ", user.token)
-                if token == user.token:
-                    print("USER EXIST")
-                    return user  # valid token, existent user
-            print("USER DONT EXIST")
-            return False  # unexistent user
+            payload = jwt.decode(token, self.secret_key, algorithms=["HS256"])
+            username = payload.get('username')
+            return username
         
         except jwt.ExpiredSignatureError:
             print("ERROR: Token expired")
-            return False  
+            return None
         except jwt.InvalidTokenError:
             print("ERROR: Invalid token")
-            return False  
+            return None
 
     def get_users(self):
         return self.users
