@@ -82,17 +82,11 @@ async function send_API_request(method, endpoint, body = null) {
 
 async function loadPage(url) {
     const token = getToken();
-    // if (!token) {
-    //     console.log("No token found, redirecting to login...");
-    //     window.location.href = "/login";
-    //     return;
-    // }
-
     try {
         const response = await send_API_request("GET", url);
         window.location.href = response.url
     } catch (error) {
         console.error("Error loading page:", error);
-        window.location.href = "/login";
+        // window.location.href = "/login";
     }
 }

@@ -14,10 +14,7 @@ async function handleLoginSubmit(event) {
         if (response.ok && data.token) {
             store_token(data.token);
             console.log("token: ", data.token);
-
             loadPage("/");
-            // const home = await send_API_request("GET", "/")
-            // window.location.href = home.url
         } else {
             errorMessage.textContent = data.error || "An error occurred.";
             errorMessage.style.display = "block";
