@@ -46,10 +46,10 @@ window.onclick = function(event) {
 // Función para obtener la lista de bots desde la API
 async function fetchBots() {
 
-    response = send_API_request("POST", "/api/get-models", null)
+    response = await send_API_request("POST", "/api/get-models", null)
     
     if (!response.ok) {
-        console.log("aqui esta el error")
+        // console.log("error right here")
         const errorData = await response.json();
         alert(errorData.message || 'ERROR: bots could not be loaded');
         return;
@@ -92,7 +92,15 @@ function chat_displayBots(bots) {
 }
 
 async function goToModelChat(bot) {
-    try {
+
+    response = await send_API_request("POST", "/sites/polarai", { model: bot })
+
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+
+    window.location.href = response.url;
+    /*try {
         const response = await fetch('/sites/polarai', {
             method: 'POST',
             headers: {
@@ -110,5 +118,5 @@ async function goToModelChat(bot) {
     } catch (error) {
         console.error('Error:', error);
         return 'Lo siento, hubo un error al procesar tu mensaje.';
-    }
+    }*/
 }

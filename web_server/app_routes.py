@@ -191,11 +191,16 @@ class AppRoutes:
     
     def API_get_model_to_chat(self):
         
-        data = request.get_json()
+        if request.method == "GET":
+            model = request.args.get("model", "default_model")
+            return render_template("/sites/polarai-chat.html", bot_name=model)
+
         user = self.check_user()
             
         if user:
             if request.method == "POST":
+
+                data = request.get_json()
                 # Ensure request is a JSON
                 if request.content_type != "application/json":
                     return "Unsupported Media Type", 415
@@ -270,7 +275,6 @@ class AppRoutes:
         if user:
             try:
                 user_bots = self.chatbot_manager.get_user_bots(user.username)
-                print("user_bots: ", user_bots)
                 return jsonify({"bots": user_bots})
             except Exception as e:
                 return jsonify({"message": str(e)}), 500  # server error
