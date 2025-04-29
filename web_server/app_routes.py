@@ -32,7 +32,7 @@ class AppRoutes:
     def get_chats_in_chatbot(self, user):
         
         model = user.get_session_data(MODEL)
-        chatbot = self.chatbot_manager.get_chatbot(model)
+        chatbot = self.chatbot_manager.get_chatbot(user, model)
         chats = chatbot.load_chats()
         return chats
     
@@ -178,7 +178,7 @@ class AppRoutes:
                     return "Unsupported Media Type", 415
 
                 user.set_session_data(MODEL, data.get('model')) 
-                user.set_session_data(CHAT_ID, None)  # training does not require chats
+                user.set_session_data(CHAT_ID, None) # training does not require chats
 
                 # redirects to GET version with model
                 return redirect(url_for("get_trainingIndex", model=data.get('model')))
@@ -196,7 +196,7 @@ class AppRoutes:
             return render_template("/sites/polarai-chat.html", bot_name=model)
 
         user = self.check_user()
-            
+        
         if user:
             if request.method == "POST":
 

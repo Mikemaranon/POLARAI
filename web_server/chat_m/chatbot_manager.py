@@ -57,11 +57,14 @@ class ChatbotManager:
         #
         # :param bot_name: Name of the chatbot.
         # :return: `Chatbot` object if it exists, otherwise `None`.
+        
+        self.load_user_chatbots(user)
+
         if user in self.user_ownership_list:
             chatbots = self.user_ownership_list[user]
-        
-        if bot_name in chatbots:
-            return chatbots[bot_name]
+            
+            if bot_name in chatbots:
+                return chatbots[bot_name]
         return None
 
     def manager_send_message(self, user, bot_name, system_msg, temperature, context, message, chat_id):
