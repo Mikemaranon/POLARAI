@@ -312,7 +312,7 @@ function renderChatList(chats) {
         // first button
         const summaryButton = document.createElement("button");
         summaryButton.classList.add("menu-button");
-        summaryButton.textContent = "Hacer resumen de chat";
+        summaryButton.textContent = "Resumir chat";
         summaryButton.onclick = (e) => {
             e.stopPropagation();
             console.log("Resumen del chat:", chat.id);

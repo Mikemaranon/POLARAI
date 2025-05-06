@@ -32,7 +32,7 @@ class AppRoutes:
     def get_chats_in_chatbot(self, user):
         
         model = user.get_session_data(MODEL)
-        chatbot = self.chatbot_manager.get_chatbot(user, model)
+        chatbot = self.chatbot_manager.get_chatbot(user.username, model)
         chats = chatbot.load_chats()
         return chats
     
@@ -214,7 +214,7 @@ class AppRoutes:
     def API_get_chats(self):
         
         user = self.check_user()
-        print("user in get_chats: ", user)
+        print("user in get_chats: ", user.username)
         chats = self.get_chats_in_chatbot(user)
 
         # only get 'id' and 'topic' from each chat

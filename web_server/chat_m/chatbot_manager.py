@@ -33,13 +33,11 @@ class ChatbotManager:
         # bot_ownership = self.db.load_chatbots_file()
         
         bot_ownership = self.db.load_chatbots_file(user)
-        ownership_list = self.user_ownership_list
-
         user_bots = bot_ownership[user]
-        ownership_list[user] = []
+        ownership_list = []
         
         for bot_name, bot_data in user_bots.items():
-            ownership_list[user].append(
+            ownership_list.append(
                 Chatbot(
                     user=user,
                     name=bot_name,
@@ -60,11 +58,16 @@ class ChatbotManager:
         
         # self.load_user_chatbots(user)
 
+        print("username: ", user)
+        print("bot name: ", bot_name)
+
         if user in self.user_ownership_list:
             chatbots = self.user_ownership_list[user]
-            
-            if bot_name in chatbots:
-                return chatbots[bot_name]
+
+            for chatbot in chatbots:
+
+                if bot_name == chatbot.name:
+                    return chatbot
         return None
 
     def manager_send_message(self, user, bot_name, system_msg, temperature, context, message, chat_id):
