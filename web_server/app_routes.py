@@ -38,14 +38,8 @@ class AppRoutes:
     
     def get_request_token(self):
         
-        print("get_request_token")
-        # 2. token from URL params
-        token = request.args.get("token")
-        if token:
-            print("token exist in URL: ", token)
-            return token
-        
-        print("get_request_token - no token found in URL")
+        print("Request headers:", dict(request.headers))
+
         # 1. token from header Authorization
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
@@ -220,6 +214,7 @@ class AppRoutes:
     def API_get_chats(self):
         
         user = self.check_user()
+        print("user in get_chats: ", user)
         chats = self.get_chats_in_chatbot(user)
 
         # only get 'id' and 'topic' from each chat

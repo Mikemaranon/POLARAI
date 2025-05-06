@@ -277,17 +277,6 @@ async function fetchChats() {
     const chats = await response.json();
     localStorage.setItem("chats", JSON.stringify(chats)); // Stores in localStorage
     renderChatList(chats); // Render chat list
-
-    /*try {
-        const response = await fetch("/api/get-chats");
-        if (!response.ok) throw new Error("Error al obtener los chats");
-
-        const chats = await response.json();
-        localStorage.setItem("chats", JSON.stringify(chats)); // Stores in localStorage
-        renderChatList(chats); // Render chat list
-    } catch (error) {
-        console.error("Error:", error);
-    }*/
 }
 
 function renderChatList(chats) {
@@ -422,20 +411,6 @@ async function setChatId(id) {
     if (!response_1.ok) {
         throw new Error("Error al establecer el chatId");
     }  
-    /*try {
-        const response_1 = await fetch("/api/set-chatId", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ chatId: id })
-        });
-        if (!response_1.ok) {
-            throw new Error("Error al establecer el chatId");
-        }  
-    } catch (error) {
-        console.error(error);
-    }*/
 }
 
 async function getChatInfo() {
@@ -451,25 +426,6 @@ async function getChatInfo() {
         throw new Error("La respuesta del servidor no contiene un historial de mensajes válido");
     }
     return data;
-    /*try {
-        const response_2 = await fetch("/api/get-singleChat", {
-            method: "GET",
-        });
-        if (!response_2.ok) {
-            throw new Error("Error al obtener la información del chat");
-        }
-
-        const data = await response_2.json();
-
-        if (!data.messages || !Array.isArray(data.messages)) {
-            throw new Error("La respuesta del servidor no contiene un historial de mensajes válido");
-        }
-        return data;
-
-    } catch (error) {
-        console.error(error);
-        return { messages: [], summary: [] };  // empty values for error
-    }*/
 }
 
 async function setNewChatId() {
@@ -480,20 +436,6 @@ async function setNewChatId() {
     } else {
         console.log("Nuevo chat creado con éxito");
     }
-
-    /*try {
-        const response = await fetch("/api/create-chat", {
-            method: "GET"
-        });
-
-        if (!response.ok) {
-            throw new Error("Error al establecer nuevo chat");
-        } else {
-            console.log("Nuevo chat creado con éxito");
-        }
-    } catch (error) {
-        console.error("Error al cargar el historial del chat:", error);
-    }*/
 }
 
 // ==========================

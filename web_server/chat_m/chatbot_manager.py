@@ -58,7 +58,7 @@ class ChatbotManager:
         # :param bot_name: Name of the chatbot.
         # :return: `Chatbot` object if it exists, otherwise `None`.
         
-        self.load_user_chatbots(user)
+        # self.load_user_chatbots(user)
 
         if user in self.user_ownership_list:
             chatbots = self.user_ownership_list[user]
