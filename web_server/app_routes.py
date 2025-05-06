@@ -38,7 +38,7 @@ class AppRoutes:
     
     def get_request_token(self):
         
-        print("Request headers:", dict(request.headers))
+        # print("Request headers:", dict(request.headers))
 
         # 1. token from header Authorization
         auth_header = request.headers.get("Authorization")
