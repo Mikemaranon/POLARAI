@@ -408,7 +408,7 @@ async function loadChatHistory(id) {
 async function setChatId(id) {
 
     response = await send_API_request("POST", "/api/set-chatId", { chatId: id })
-    if (!response_1.ok) {
+    if (!response.ok) {
         throw new Error("Error al establecer el chatId");
     }  
 }
@@ -416,11 +416,11 @@ async function setChatId(id) {
 async function getChatInfo() {
 
     response = await send_API_request("GET", "/api/get-singleChat", null)
-    if (!response_2.ok) {
+    if (!response.ok) {
         throw new Error("Error al obtener la información del chat");
     }
 
-    const data = await response_2.json();
+    const data = await response.json();
 
     if (!data.messages || !Array.isArray(data.messages)) {
         throw new Error("La respuesta del servidor no contiene un historial de mensajes válido");

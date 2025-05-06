@@ -282,8 +282,9 @@ class AppRoutes:
         user = self.check_user()
         chat_id = data.get("chatId")
     
-        chat_id = user.set_session_data(CHAT_ID, chat_id)
-        
+        user.set_session_data(CHAT_ID, chat_id)
+        print("chat-id changed: ", chat_id)
+
         return jsonify({"success": True}), 200
     
     def API_get_singleChat(self):
@@ -292,7 +293,10 @@ class AppRoutes:
         chats = self.get_chats_in_chatbot(user)
         
         for chat in chats:
-            if chat.id == user.get_session_data(CHAT_ID):                
+            if chat.id == user.get_session_data(CHAT_ID):  
+
+                print("chat to be loaded found")
+
                 return jsonify({
                     "messages": chat.messages,
                     "summary": chat.summary,
