@@ -91,8 +91,8 @@ class ChatbotManager:
     def save_user_bots(self, user):
         return 0
     
-    def is_summary(self, model, chat_id):        
-        return self.get_chatbot(model).is_summary(chat_id)
+    def is_summary(self, user, model, chat_id):        
+        return self.get_chatbot(user, model).is_summary(chat_id)
     
-    def get_last_summary(self, model, chat_id):
-        return self.get_chatbot(model).get_last_summary(chat_id)
+    def get_last_summary(self, user, model, chat_id):
+        return self.get_chatbot(user, model).get_last_summary(chat_id)

@@ -1,6 +1,1 @@
-SET CHAT ID (polaria-chat.js --> line 408)
-    fix the server side logic to adapt to the new session system
-
-GET CHAT INFO (polaria-chat.js --> line 416)
-    fix the server side logic to adapt to the new session system
-    do it after SET CHAT ID
+SEND MESSAGE NOT WORKING (FILE???)

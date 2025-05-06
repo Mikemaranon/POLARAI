@@ -238,11 +238,14 @@ class AppRoutes:
             chat_id = user.get_session_data(CHAT_ID)
             
             if not bot_name or not message or not chat_id:
+                print("bot_name: ", bot_name)
+                print("message: ", message)
+                print("chat_id: ", chat_id)
                 return jsonify({"message": "missing params"}), 400
             
             # chatbot_manager Call to process message
-            response = self.chatbot_manager.manager_send_message(bot_name, user.username, system_msg, temperature, context, message, chat_id)
-            is_summary = self.chatbot_manager.is_summary(bot_name, chat_id)
+            response = self.chatbot_manager.manager_send_message(user.username, bot_name, system_msg, temperature, context, message, chat_id)
+            is_summary = self.chatbot_manager.is_summary(user.username, bot_name, chat_id)
             
             # return bots response
             return jsonify({

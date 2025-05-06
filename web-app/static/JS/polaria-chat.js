@@ -138,13 +138,7 @@ async function f_saveConfig() {
         
         console.log(body)
 
-        const response = await fetch('/api/set-chat-config', {
-            method: 'POST',
-            headers: {  
-                'Content-Type': 'application/json',
-            },
-            body: body
-        });
+        const response = await send_API_request("POST", "/api/set-chat-config", { body: body })
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -160,21 +154,16 @@ async function sendMessageToServer(message) {
     try {
         const context = getChatContext()
 
-        body = JSON.stringify({ 
+        body = { 
             temperature: context.temperature,
             system_msg: context.system_msg,
             context: context.texted_summaries, 
-            message: message })
+            message: message 
+        }
 
         console.log(body)
 
-        const response = await fetch('/api/send-message', {
-            method: 'POST',
-            headers: {  
-                'Content-Type': 'application/json',
-            },
-            body: body
-        });
+        const response = await send_API_request("POST", "/api/send-message", body)
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -195,9 +184,7 @@ async function sendMessageToServer(message) {
 
 async function getLatestSummary() {
     try {
-        const response = await fetch('/api/get-last-summary', {
-            method: 'GET'
-        });
+        const response = await send_API_request("GET", "/api/get-last-summary", null)
 
         if (!response.ok) {
             throw new Error('Network response was not ok');
