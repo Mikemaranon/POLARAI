@@ -1,0 +1,18 @@
+├── gen_models_m
+│   ├── available_models
+│   │   ├── deepseek_r1
+│   │   └── flan_t5_base
+│   ├── base_model.py
+│   ├── model_loader.py
+│   └── model_registry.py
+
+- model_loader.py: carga los modelos disponibles en el servidor, se encarga de la carga y descarga de los modelos 
+en cache usando los modelos descargados en sus carpetas. Recibe de la API un nombre de modelo junto con el input.
+Si el modelo esta cargado, llama a base_model.py para realizar la prediccion. Si no esta cargado, lo carga y luego llama a base_model.py.
+- model_registry.py: se encarga de registrar los modelos disponibles en el servidor, se encarga de la carga y descarga
+de modelos desde plataformas como huggingface, 
+- base_model.py: objeto generico para los modelos, se comunica con los modelos dandoles el input para 
+realizar las predicciones.
+
+no puede haber ningun archivo adicional. base_model.py es el ultimo archivo del flujo y debe ser capaz de comunicarse con los modelos
+independientemente de su formato.
