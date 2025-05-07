@@ -58,9 +58,6 @@ class ChatbotManager:
         
         # self.load_user_chatbots(user)
 
-        print("username: ", user)
-        print("bot name: ", bot_name)
-
         if user in self.user_ownership_list:
             chatbots = self.user_ownership_list[user]
 

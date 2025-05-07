@@ -30,37 +30,28 @@ class AppRoutes:
     # ================================================================================== 
 
     def get_chats_in_chatbot(self, user):
-        
         model = user.get_session_data(MODEL)
         chatbot = self.chatbot_manager.get_chatbot(user.username, model)
         chats = chatbot.load_chats()
         return chats
     
     def get_request_token(self):
-        
-        # print("Request headers:", dict(request.headers))
-
         # 1. token from header Authorization
         auth_header = request.headers.get("Authorization")
         if auth_header and auth_header.startswith("Bearer "):
             token = auth_header.split(" ")[1]
-            print("token exist in header: ", token)
             return token
     
         return None
     
     def check_auth(self):
-        
         token = self.get_request_token()
-        
-        print("token exist after header: ", token)
         return token
 
     def check_user(self):
         token = self.check_auth()
         if token:
             user = self.user_manager.get_user(token)
-            print("user in check_user: ", user)
             if user:
                 return user
         return None
@@ -106,14 +97,12 @@ class AppRoutes:
         return render_template("index.html")
     
     def get_home(self):
+        
         user = self.check_user()
         if user:
-                
-            print("user in home: ", user)
-            print("username: ", user.token)
             user.set_session_data(MODEL, None) 
             user.set_session_data(CHAT_ID, None) 
-
+            
             return redirect(url_for("index"))  # Redirect to index.html
         return render_template("login.html")
 
@@ -149,10 +138,8 @@ class AppRoutes:
     def get_userConfig(self):
         token = self.get_request_token()
         
-        print("token in userConfig: ", token)
         user = self.user_manager.verify_token(token)
         if user:
-            print("user in userConfig: ", user)
             return render_template("sites/user-config.html")
         return redirect(url_for("login"))
     
@@ -172,7 +159,7 @@ class AppRoutes:
                     return "Unsupported Media Type", 415
 
                 user.set_session_data(MODEL, data.get('model')) 
-                user.set_session_data(CHAT_ID, None) # training does not require chats
+                user.set_session_data(CHAT_ID, None)
 
                 # redirects to GET version with model
                 return redirect(url_for("get_trainingIndex", model=data.get('model')))
@@ -214,7 +201,6 @@ class AppRoutes:
     def API_get_chats(self):
         
         user = self.check_user()
-        print("user in get_chats: ", user.username)
         chats = self.get_chats_in_chatbot(user)
 
         # only get 'id' and 'topic' from each chat
@@ -238,9 +224,6 @@ class AppRoutes:
             chat_id = user.get_session_data(CHAT_ID)
             
             if not bot_name or not message or not chat_id:
-                print("bot_name: ", bot_name)
-                print("message: ", message)
-                print("chat_id: ", chat_id)
                 return jsonify({"message": "missing params"}), 400
             
             # chatbot_manager Call to process message
@@ -262,7 +245,6 @@ class AppRoutes:
         chat_id = user.get_session_data(CHAT_ID)
         
         summary = self.chatbot_manager.get_last_summary(bot_name, chat_id)
-        print("summary received: ", summary)
         
         return jsonify({"summary": summary})
         
@@ -286,7 +268,6 @@ class AppRoutes:
         chat_id = data.get("chatId")
     
         user.set_session_data(CHAT_ID, chat_id)
-        print("chat-id changed: ", chat_id)
 
         return jsonify({"success": True}), 200
     
@@ -297,8 +278,6 @@ class AppRoutes:
         
         for chat in chats:
             if chat.id == user.get_session_data(CHAT_ID):  
-
-                print("chat to be loaded found")
 
                 return jsonify({
                     "messages": chat.messages,
@@ -328,7 +307,6 @@ class AppRoutes:
         username = user.get_session_data(USERNAME)
         
         chat = self.chatbot_manager.get_chatbot(model).get_target_chat(chat_id)
-        print("[INFO]: chat object loaded - ", chat)
         chat.save_chat_config(username, model, summary_list, temperature, system_msg)
         
         return jsonify({"success": True}), 200

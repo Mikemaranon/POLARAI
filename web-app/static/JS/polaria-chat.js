@@ -23,6 +23,10 @@ document.addEventListener('click', (e) => {
         });
     }
 });
+document.addEventListener("DOMContentLoaded", () => {
+    addReturnHomeListener();
+});
+
 saveSumList.addEventListener('click', f_saveConfig)
 tempSlider.addEventListener('input', function() {
     tempValue.textContent = this.value;
@@ -32,6 +36,21 @@ function initializeChat() {
     sendButton.addEventListener('click', handleSendMessage);
     messageInput.addEventListener('keypress', handleKeyPress);
     messageInput.addEventListener('input', adjustInputHeight);
+}
+
+function addReturnHomeListener() {
+    const button = document.getElementById("return-home");
+
+    if (!button) {
+        console.error('El botón con id "return-home" no existe en el DOM.');
+        return;
+    }
+
+    button.addEventListener("click", () => {
+        send_API_request("GET", "/", null);
+        loadPage("/");
+        
+    });
 }
 
 function adjustInputHeight() {

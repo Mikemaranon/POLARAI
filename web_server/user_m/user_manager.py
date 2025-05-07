@@ -49,7 +49,6 @@ class UserManager:
         username = self._get_username_from_token(token)
         if username and username in self.users:
             del self.users[username]
-            print(f"User '{username}' logged out.")
             return {'status': 'success'}, 200
         return {'status': 'not found'}, 404
 
@@ -58,10 +57,7 @@ class UserManager:
         if username:
             user = self.users.get(username)
             if user:
-                print(f"User '{username}' found.")
                 return user
-            else:
-                print(f"User '{username}' NOT found.")
         return None
 
     
@@ -77,10 +73,8 @@ class UserManager:
             return username
         
         except jwt.ExpiredSignatureError:
-            print("ERROR: Token expired")
             return None
         except jwt.InvalidTokenError:
-            print("ERROR: Invalid token")
             return None
 
     def get_users(self):
