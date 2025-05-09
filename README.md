@@ -1,6 +1,6 @@
 # POLAR.AI: A project for locally hosted Models
 
-![POLAR.AI Logo](/assets/POLAR.AI-logo-small.png)
+![POLAR.AI Logo](/assets/POLAR.AI-t-small.png)
 
 POLAR.AI is an open-source project accesible for everyone. This is meant to be a personal project to learn how to train a foundational model in different ways such as fine-tunning and LLM Inference among others.
 
