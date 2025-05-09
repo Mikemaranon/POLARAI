@@ -9,12 +9,6 @@ class ModelLoader:
     """
     
     def __init__(self, models_dir: str = "available_models"):
-        """
-        Inicializa el cargador de modelos
-        
-        Args:
-            models_dir: Directorio donde se encuentran los modelos
-        """
         self.models_dir = models_dir
         self.loaded_models: Dict[str, BaseModel] = {}  # Modelos cargados en memoria
         self.model_configs: Dict[str, Dict] = {

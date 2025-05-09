@@ -1,4 +1,6 @@
-# POLAR.AI: A project for a locally hosted LLM
+# POLAR.AI: A project for locally hosted Models
+
+![POLAR.AI Logo](/assets/POLAR.AI-logo-small.png)
 
 POLAR.AI is an open-source project accesible for everyone. This is meant to be a personal project to learn how to train a foundational model in different ways such as fine-tunning and LLM Inference among others.
 
@@ -31,3 +33,4 @@ Press CTRL+C to quit
 ```
 
 Nearly in a week, the summary system in the chat site will support `Flan-T5-base` in a locally runned model. every step will be added in the documentation for the `models` module 
+
